@@ -8,7 +8,8 @@ nothing else, so moving hosts is an env var change, not a code change.
 
 Contract
 --------
-POST /            (and /synthesize, /generate — aliases for host conventions)
+POST /            (and /synthesize, /generate, /api/v1/tts — aliases for host
+                   conventions; /api/v1/tts is what the Nuxt app posts to)
     { "inputs": "<amharic text>",              # HF convention
       "text":   "<amharic text>",              # plain-container convention
       "parameters": { "voice", "language", "speed", "format", "sample_rate" } }
@@ -57,6 +58,13 @@ ADAPTER = os.environ.get("AMHARICAI_ADAPTER")  # None → base model, no fine-tu
 DEVICE = os.environ.get("AMHARICAI_DEVICE", "cuda")
 SAMPLE_RATE = int(os.environ.get("AMHARICAI_SAMPLE_RATE", "24000"))
 DEFAULT_VOICE = os.environ.get("AMHARICAI_VOICE", "amharicai-native-f")
+
+# Off by default, and loud when on. This synthesizes an obviously-synthetic
+# placeholder tone so the full HTTP chain (app → /api/tts → this server →
+# playable audio) can be exercised without a GPU or adapter weights. It is NOT
+# speech and must never be mistakable for the trained native voice: serving
+# something unannounced is worse than failing honestly.
+DEV_VOICE = os.environ.get("AMHARICAI_DEV_VOICE", "").strip().lower() in {"1", "true", "yes", "on"}
 
 app = FastAPI(title="AmharicAI native voice")
 
@@ -107,7 +115,30 @@ def to_wav(samples, sample_rate: int) -> bytes:
     return buf.getvalue()
 
 
+def dev_voice_wav(text: str, speed: float, sample_rate: int) -> bytes:
+    """An obviously-synthetic placeholder: one short beep per token, pitched by
+    character. Deliberately does not resemble speech — its only job is to prove
+    that bytes travel end to end. Never enabled unless AMHARICAI_DEV_VOICE=1."""
+    import math
+
+    tokens = [t for t in text.split() if t] or ["x"]
+    tokens = tokens[:24]
+    samples: list[float] = []
+    per = max(0.08, min(0.22, 0.16 / max(speed, 0.1)))
+    for tok in tokens:
+        freq = 220.0 + (sum(ord(c) for c in tok) % 12) * 40.0
+        n = int(per * sample_rate)
+        for i in range(n):
+            # short fade in/out so the beeps do not click
+            env = min(1.0, i / 240.0, (n - i) / 240.0) * 0.25
+            samples.append(env * math.sin(2 * math.pi * freq * (i / sample_rate)))
+        samples.extend([0.0] * int(0.04 * sample_rate))
+    return to_wav(samples, sample_rate)
+
+
 def synthesize(text: str, voice: str, speed: float, sample_rate: int) -> bytes:
+    if DEV_VOICE:
+        return dev_voice_wav(text, speed, sample_rate)
     bundle = load_model()
     if bundle is None:
         raise RuntimeError(_load_error or "model not loaded")
@@ -123,7 +154,7 @@ def synthesize(text: str, voice: str, speed: float, sample_rate: int) -> bytes:
 
 @app.get("/health")
 def health() -> dict:
-    loaded = load_model() is not None
+    loaded = False if DEV_VOICE else (load_model() is not None)
     return {
         "ok": True,
         "model_loaded": loaded,
@@ -132,7 +163,16 @@ def health() -> dict:
         "adapter": ADAPTER,
         # Honest by default: with no adapter this is the *base* model, not the
         # native voice the course was recorded for.
-        "is_finetuned": bool(ADAPTER),
+        "is_finetuned": bool(ADAPTER) and not DEV_VOICE,
+        # Loud on purpose. If this is true the audio is placeholder beeps, not
+        # Amharic speech, and nothing downstream should treat it as a voice.
+        "dev_voice": DEV_VOICE,
+        "synthetic": DEV_VOICE,
+        "warning": (
+            "AMHARICAI_DEV_VOICE is on: responses are synthetic placeholder tones, not speech."
+            if DEV_VOICE
+            else None
+        ),
         "sample_rate": SAMPLE_RATE,
         "default_voice": DEFAULT_VOICE,
         "device": DEVICE,
@@ -142,6 +182,7 @@ def health() -> dict:
 @app.post("/")
 @app.post("/synthesize")
 @app.post("/generate")
+@app.post("/api/v1/tts")
 async def handle(request: Request) -> Response:
     body = await request.json()
     params = body.get("parameters") or {}
@@ -167,9 +208,10 @@ async def handle(request: Request) -> Response:
             "normalized": normalized,
             "voice": voice,
             "duration_ms": duration_ms,
+            "is_finetuned": bool(ADAPTER) and not DEV_VOICE,
+            "synthetic": DEV_VOICE,
         })
-    return Response(
-        content=wav,
-        media_type="audio/wav",
-        headers={"x-amharicai-voice": voice, "x-amharicai-duration-ms": str(duration_ms)},
-    )
+    headers = {"x-amharicai-voice": voice, "x-amharicai-duration-ms": str(duration_ms)}
+    if DEV_VOICE:
+        headers["x-amharicai-synthetic"] = "true"
+    return Response(content=wav, media_type="audio/wav", headers=headers)
