@@ -1,0 +1,427 @@
+clip_id,domain,amharic,english,speaker_id,target_seconds,register,ejectives,chars,source
+greetings_0001,greetings,ደህና,dähna,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+greetings_0002,greetings,ሰላም,,,1-4,"teacher, warm, unhurried",0,3,[].content.hello
+greetings_0003,greetings,ሰላምታ,,,1-4,"teacher, warm, unhurried",0,4,units.[].title_am
+greetings_0004,greetings,ደህና ዋይ,dähna way(i),,1-4,"teacher, warm, unhurried",0,6,content.leave_takings.[]
+greetings_0005,greetings,ደህና እደሩ,dähna ïdäru,,1-4,"teacher, warm, unhurried",0,7,content.leave_takings.[]
+greetings_0006,greetings,ደህና አምሽ,dähna amš,,1-4,"teacher, warm, unhurried",0,7,content.leave_takings.[]
+greetings_0007,greetings,ደህና ዋልሽ?,dähna walš?,,1-4,"teacher, warm, unhurried",0,8,content.time_greetings.[]
+greetings_0008,greetings,እኔ ደህና ነኝ,ïne dähna näň,,1-4,"teacher, warm, unhurried",0,9,[].grammar.example
+greetings_0009,greetings,እንደምን አደርክ?,ïndämïn addärk?,,1-4,"teacher, warm, unhurried",0,11,content.time_greetings.[]
+greetings_0010,greetings,እንደምን አመሻችሁ?,ïndämïn amäššaččïhu?,,1-4,"teacher, warm, unhurried",0,12,content.time_greetings.[]
+greetings_0011,greetings,ሰላምታ እና መሰናበቻ,,,1-4,"teacher, warm, unhurried",0,13,lessons.[].title_am
+introductions_0001,introductions,ስሜ,sïme,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+introductions_0002,introductions,አገር,agär,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+introductions_0003,introductions,አስተማሪ,astämari,,1-4,"teacher, warm, unhurried",0,5,[].vocabulary.[]
+introductions_0004,introductions,እኔ ተማሪ ነኝ,I am a student.,,1-4,"teacher, warm, unhurried",0,9,grammar.examples.[]
+introductions_0005,introductions,ስምህ ማን ነው?,sïmïh man näw?,,1-4,"teacher, warm, unhurried",0,10,[].vocabulary.[]
+introductions_0006,introductions,ስምሽ ማን ነው?,sïmïš man näw?,,1-4,"teacher, warm, unhurried",0,10,[].vocabulary.[]
+introductions_0007,introductions,ተማሪዎች ናችሁ?,,,1-4,"teacher, warm, unhurried",0,10,grammar.negative_examples.[]
+classroom_instructions_0001,classroom_instructions,ዝጋ።,Close.,,1-4,"teacher, warm, unhurried",0,3,authored
+classroom_instructions_0002,classroom_instructions,ጻፍ።,Write.,,1-4,"teacher, warm, unhurried",1,3,authored
+classroom_instructions_0003,classroom_instructions,ክፈት።,Open.,,1-4,"teacher, warm, unhurried",0,4,authored
+classroom_instructions_0004,classroom_instructions,ጠይቅ።,Ask.,,1-4,"teacher, warm, unhurried",2,4,authored
+classroom_instructions_0005,classroom_instructions,መልስ።,Answer.,,1-4,"teacher, warm, unhurried",0,4,authored
+classroom_instructions_0006,classroom_instructions,ተነስ።,Stand up.,,1-4,"teacher, warm, unhurried",0,4,authored
+classroom_instructions_0007,classroom_instructions,አንብብ።,Read.,,1-4,"teacher, warm, unhurried",0,5,authored
+classroom_instructions_0008,classroom_instructions,ተመልከት።,Look.,,1-4,"teacher, warm, unhurried",0,6,authored
+classroom_instructions_0009,classroom_instructions,ቁጭ በል።,Sit down.,,1-4,"teacher, warm, unhurried",2,6,authored
+classroom_instructions_0010,classroom_instructions,ቀስ ብለህ አንብብ።,Read slowly.,,1-4,"teacher, warm, unhurried",1,12,authored
+fidel_pronunciation_0001,fidel_pronunciation,ሸ,,,1-4,"teacher, warm, unhurried",0,1,content.special_consonants.[]
+fidel_pronunciation_0002,fidel_pronunciation,ጰ,,,1-4,"teacher, warm, unhurried",1,1,content.special_consonants.[]
+fidel_pronunciation_0003,fidel_pronunciation,ዠ,,,1-4,"teacher, warm, unhurried",0,1,content.special_consonants.[]
+fidel_pronunciation_0004,fidel_pronunciation,ጸ,,,1-4,"teacher, warm, unhurried",1,1,content.special_consonants.[]
+fidel_pronunciation_0005,fidel_pronunciation,ጠ,,,1-4,"teacher, warm, unhurried",1,1,content.special_consonants.[]
+fidel_pronunciation_0006,fidel_pronunciation,ጨ,,,1-4,"teacher, warm, unhurried",1,1,content.special_consonants.[]
+fidel_pronunciation_0007,fidel_pronunciation,ሏ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0008,fidel_pronunciation,ሟ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0009,fidel_pronunciation,ሧ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0010,fidel_pronunciation,ሯ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0011,fidel_pronunciation,ሷ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0012,fidel_pronunciation,ሿ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0013,fidel_pronunciation,ቋ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0014,fidel_pronunciation,ኋ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0015,fidel_pronunciation,ኗ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0016,fidel_pronunciation,ኟ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0017,fidel_pronunciation,ኳ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0018,fidel_pronunciation,ዟ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0019,fidel_pronunciation,ዧ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0020,fidel_pronunciation,ዷ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0021,fidel_pronunciation,ጇ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0022,fidel_pronunciation,ጓ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+fidel_pronunciation_0023,fidel_pronunciation,ጧ,,,1-4,"teacher, warm, unhurried",1,1,content.wa_combinations.[]
+fidel_pronunciation_0024,fidel_pronunciation,ጯ,,,1-4,"teacher, warm, unhurried",1,1,content.wa_combinations.[]
+fidel_pronunciation_0025,fidel_pronunciation,ጿ,,,1-4,"teacher, warm, unhurried",1,1,content.wa_combinations.[]
+fidel_pronunciation_0026,fidel_pronunciation,ፏ,,,1-4,"teacher, warm, unhurried",0,1,content.wa_combinations.[]
+vocabulary_0001,vocabulary,ኣ,,,1-4,"teacher, warm, unhurried",0,1,grammar.vowel_hierarchy.[]
+vocabulary_0002,vocabulary,ኤ,,,1-4,"teacher, warm, unhurried",0,1,grammar.vowel_hierarchy.[]
+vocabulary_0003,vocabulary,ኢ,,,1-4,"teacher, warm, unhurried",0,1,grammar.vowel_hierarchy.[]
+vocabulary_0004,vocabulary,ኦ,,,1-4,"teacher, warm, unhurried",0,1,grammar.vowel_hierarchy.[]
+vocabulary_0005,vocabulary,ኡ,,,1-4,"teacher, warm, unhurried",0,1,grammar.vowel_hierarchy.[]
+vocabulary_0006,vocabulary,አ,,,1-4,"teacher, warm, unhurried",0,1,grammar.vowel_hierarchy.[]
+vocabulary_0007,vocabulary,እ,,,1-4,"teacher, warm, unhurried",0,1,grammar.vowel_hierarchy.[]
+vocabulary_0008,vocabulary,ያ,that (male),,1-4,"teacher, warm, unhurried",0,1,grammar.demonstratives.[]
+vocabulary_0009,vocabulary,ስም,Noun,,1-4,"teacher, warm, unhurried",0,2,content.grammar_terms.[]
+vocabulary_0010,vocabulary,ግስ,Verb,,1-4,"teacher, warm, unhurried",0,2,content.grammar_terms.[]
+vocabulary_0011,vocabulary,ቃል,Word,,1-4,"teacher, warm, unhurried",1,2,content.grammar_terms.[]
+vocabulary_0012,vocabulary,እኔ,ïne,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0013,vocabulary,እሱ,ïssu,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0014,vocabulary,እሷ,ïsswa,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0015,vocabulary,እኛ,ïňňa,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0016,vocabulary,ባል,bal,,1-4,"teacher, warm, unhurried",0,2,[].kinship_vocabulary.[]
+vocabulary_0017,vocabulary,ይህ,this (male/masculine),,1-4,"teacher, warm, unhurried",0,2,grammar.demonstratives.[]
+vocabulary_0018,vocabulary,ያች,that (feminine),,1-4,"teacher, warm, unhurried",0,2,grammar.demonstratives.[]
+vocabulary_0019,vocabulary,ማን,man,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0020,vocabulary,የቱ,yätu,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0021,vocabulary,ሻማ,šama,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0022,vocabulary,ጨው,č’äw,,1-4,"teacher, warm, unhurried",1,2,[].vocabulary.[]
+vocabulary_0023,vocabulary,ቆሎ,k’olo,,1-4,"teacher, warm, unhurried",1,2,[].vocabulary.[]
+vocabulary_0024,vocabulary,ጤፍ,t’eff,,1-4,"teacher, warm, unhurried",1,2,[].vocabulary.[]
+vocabulary_0025,vocabulary,ውድ,wïdd,,1-4,"teacher, warm, unhurried",0,2,[].vocabulary.[]
+vocabulary_0026,vocabulary,ሃያ,,,1-4,"teacher, warm, unhurried",0,2,numbers.[].[]
+vocabulary_0027,vocabulary,ሰባ,,,1-4,"teacher, warm, unhurried",0,2,numbers.[].[]
+vocabulary_0028,vocabulary,መቶ,,,1-4,"teacher, warm, unhurried",0,2,numbers.[].[]
+vocabulary_0029,vocabulary,ሩብ,rub,,1-4,"teacher, warm, unhurried",0,2,[].fractions.[]
+vocabulary_0030,vocabulary,ሲሶ,siso,,1-4,"teacher, warm, unhurried",0,2,[].fractions.[]
+vocabulary_0031,vocabulary,አንተ,antä,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0032,vocabulary,አንቺ,anči,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0033,vocabulary,እነሱ,ïnnässu,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0034,vocabulary,አገሬ,agäre,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0035,vocabulary,ሃኪም,hakim,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0036,vocabulary,ጸሃፊ,s'ähafi,,1-4,"teacher, warm, unhurried",1,3,[].vocabulary.[]
+vocabulary_0037,vocabulary,ዘፋኝ,zäfañ,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0038,vocabulary,ገበሬ,gäbäre,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0039,vocabulary,ነጋዴ,nägade,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0040,vocabulary,ረዳት,rädat,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0041,vocabulary,አናጺ,anas'i,,1-4,"teacher, warm, unhurried",1,3,[].vocabulary.[]
+vocabulary_0042,vocabulary,ፖሊስ,polis,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0043,vocabulary,ነርስ,närs,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0044,vocabulary,ሾፌር,šofer,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0045,vocabulary,አባት,abbat,,1-4,"teacher, warm, unhurried",0,3,[].kinship_vocabulary.[]
+vocabulary_0046,vocabulary,እናት,ïnnat,,1-4,"teacher, warm, unhurried",0,3,[].kinship_vocabulary.[]
+vocabulary_0047,vocabulary,ሚስት,mist,,1-4,"teacher, warm, unhurried",0,3,[].kinship_vocabulary.[]
+vocabulary_0048,vocabulary,እህት,ïhït,,1-4,"teacher, warm, unhurried",0,3,[].kinship_vocabulary.[]
+vocabulary_0049,vocabulary,ወላጅ,wälaj,,1-4,"teacher, warm, unhurried",0,3,[].kinship_vocabulary.[]
+vocabulary_0050,vocabulary,አጎት,aggot,,1-4,"teacher, warm, unhurried",0,3,[].kinship_vocabulary.[]
+vocabulary_0051,vocabulary,መኖር,,,1-4,"teacher, warm, unhurried",0,3,lessons.[].title_am
+vocabulary_0052,vocabulary,ይህች,this (feminine),,1-4,"teacher, warm, unhurried",0,3,grammar.demonstratives.[]
+vocabulary_0053,vocabulary,እጮኛ,ïč'oňňa,,1-4,"teacher, warm, unhurried",1,3,[].vocabulary.[]
+vocabulary_0054,vocabulary,ጓደኛ,gwadäňňa,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0055,vocabulary,መሆን,,,1-4,"teacher, warm, unhurried",0,3,lessons.[].title_am
+vocabulary_0056,vocabulary,የለም,yälläm,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0057,vocabulary,ለምን,lämïn,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0058,vocabulary,የማን,yäman,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0059,vocabulary,ስንት,sïnt,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0060,vocabulary,ሶፍት,soft,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0061,vocabulary,ስኳር,sïkwar,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0062,vocabulary,መቀስ,mäk’ās,,1-4,"teacher, warm, unhurried",1,3,[].vocabulary.[]
+vocabulary_0063,vocabulary,ሳሙና,samuna,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0064,vocabulary,ዘይት,zäyt,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0065,vocabulary,ፓስታ,pasta,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0066,vocabulary,ድንች,dïnïč,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0067,vocabulary,ገብስ,gäbs,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0068,vocabulary,ስንዴ,sïnde,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0069,vocabulary,በቆሎ,bäk’olo,,1-4,"teacher, warm, unhurried",1,3,[].vocabulary.[]
+vocabulary_0070,vocabulary,ባቄላ,bak’ela,,1-4,"teacher, warm, unhurried",1,3,[].vocabulary.[]
+vocabulary_0071,vocabulary,አተር,atär,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0072,vocabulary,ምስር,mïsïr,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0073,vocabulary,ይኸው,yïhäw,,1-4,"teacher, warm, unhurried",0,3,[].vocabulary.[]
+vocabulary_0074,vocabulary,ቅናሽ,k’ïnaš,,1-4,"teacher, warm, unhurried",1,3,[].vocabulary.[]
+vocabulary_0075,vocabulary,አስር,,,1-4,"teacher, warm, unhurried",0,3,numbers.[].[]
+vocabulary_0076,vocabulary,ሰላሣ,,,1-4,"teacher, warm, unhurried",0,3,numbers.[].[]
+vocabulary_0077,vocabulary,አርባ,,,1-4,"teacher, warm, unhurried",0,3,numbers.[].[]
+vocabulary_0078,vocabulary,ሃምሳ,,,1-4,"teacher, warm, unhurried",0,3,numbers.[].[]
+vocabulary_0079,vocabulary,ስልሣ,,,1-4,"teacher, warm, unhurried",0,3,numbers.[].[]
+vocabulary_0080,vocabulary,ዘጠና,,,1-4,"teacher, warm, unhurried",1,3,numbers.[].[]
+vocabulary_0081,vocabulary,አንድ,andäňña,,1-4,"teacher, warm, unhurried",0,3,[].ordinals.[]
+vocabulary_0082,vocabulary,ሁለት,hulätäňña,,1-4,"teacher, warm, unhurried",0,3,[].ordinals.[]
+vocabulary_0083,vocabulary,ሶስት,sosttäňña,,1-4,"teacher, warm, unhurried",0,3,[].ordinals.[]
+vocabulary_0084,vocabulary,ዘጠኝ,zät'änäňña,,1-4,"teacher, warm, unhurried",1,3,[].ordinals.[]
+vocabulary_0085,vocabulary,ግማሽ,gïmaš,,1-4,"teacher, warm, unhurried",0,3,[].fractions.[]
+vocabulary_0086,vocabulary,አንቀፅ,Paragraph,,1-4,"teacher, warm, unhurried",1,4,content.grammar_terms.[]
+vocabulary_0087,vocabulary,እርስዎ,ïrswo,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0088,vocabulary,እሳቸው,ïsaččäw,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0089,vocabulary,እናንተ,ïnnantä,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0090,vocabulary,ዜግነት,,,1-4,"teacher, warm, unhurried",0,4,lessons.[].title_am
+vocabulary_0091,vocabulary,ኬንያዊ,kenyawi,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0092,vocabulary,ጡረተኛ,t'urätäña,,1-4,"teacher, warm, unhurried",1,4,[].vocabulary.[]
+vocabulary_0093,vocabulary,አማካሪ,amakari,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0094,vocabulary,ወታደር,wätadär,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0095,vocabulary,ሞግዚት,mogzit,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0096,vocabulary,ጋዜጠኛ,gazet'äňa,,1-4,"teacher, warm, unhurried",1,4,[].vocabulary.[]
+vocabulary_0097,vocabulary,ወንድም,wändïm,,1-4,"teacher, warm, unhurried",0,4,[].kinship_vocabulary.[]
+vocabulary_0098,vocabulary,አክስት,akïst,,1-4,"teacher, warm, unhurried",0,4,[].kinship_vocabulary.[]
+vocabulary_0099,vocabulary,እነዚህ,these,,1-4,"teacher, warm, unhurried",0,4,grammar.demonstratives.[]
+vocabulary_0100,vocabulary,እነዚያ,those,,1-4,"teacher, warm, unhurried",0,4,grammar.demonstratives.[]
+vocabulary_0101,vocabulary,ፍቅረኛ,fïk'räňňa,,1-4,"teacher, warm, unhurried",1,4,[].vocabulary.[]
+vocabulary_0102,vocabulary,ባለቤት,baläbet,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0103,vocabulary,እርሳስ,ïrsas,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0104,vocabulary,ቲማቲም,timatim,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0105,vocabulary,ሽንብራ,šïnbïra,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0106,vocabulary,ኦቾሎኒ,očoloni,,1-4,"teacher, warm, unhurried",0,4,[].vocabulary.[]
+vocabulary_0107,vocabulary,ጠቅላላ,t’äk’lala,,1-4,"teacher, warm, unhurried",2,4,[].vocabulary.[]
+vocabulary_0108,vocabulary,መቀነስ,mäkänäs,,1-4,"teacher, warm, unhurried",1,4,[].vocabulary.[]
+vocabulary_0109,vocabulary,ሰማንያ,,,1-4,"teacher, warm, unhurried",0,4,numbers.[].[]
+vocabulary_0110,vocabulary,ኢትዮጵያ,ityop'ya,,1-4,"teacher, warm, unhurried",1,5,[].vocabulary.[]
+vocabulary_0111,vocabulary,አሜሪካዊ,amerikawi,,1-4,"teacher, warm, unhurried",0,5,[].vocabulary.[]
+vocabulary_0112,vocabulary,ኬንያዊት,kenyawit,,1-4,"teacher, warm, unhurried",0,5,[].vocabulary.[]
+vocabulary_0113,vocabulary,መሃንዲስ,mähandis,,1-4,"teacher, warm, unhurried",0,5,[].vocabulary.[]
+vocabulary_0114,vocabulary,እኳ/እኛ,,,1-4,"teacher, warm, unhurried",0,5,grammar.affirmative_negative.[]
+vocabulary_0115,vocabulary,መጥረጊያ,mät’rägiya,,1-4,"teacher, warm, unhurried",1,5,[].vocabulary.[]
+vocabulary_0116,vocabulary,መወልወያ,mäwälïwäya,,1-4,"teacher, warm, unhurried",0,5,[].vocabulary.[]
+vocabulary_0117,vocabulary,ዳቦ ቆሎ,dabo k’olo,,1-4,"teacher, warm, unhurried",1,5,[].vocabulary.[]
+vocabulary_0118,vocabulary,አግብቻለሁ,agïbïčallähu,,1-4,"teacher, warm, unhurried",0,6,[].vocabulary.[]
+vocabulary_0119,vocabulary,አላገባሁም,alagäbahum,,1-4,"teacher, warm, unhurried",0,6,[].vocabulary.[]
+vocabulary_0120,vocabulary,ኢትዮጵያዊ,ityop'yawi,,1-4,"teacher, warm, unhurried",1,6,[].vocabulary.[]
+vocabulary_0121,vocabulary,አሜሪካዊት,amerikawit,,1-4,"teacher, warm, unhurried",0,6,[].vocabulary.[]
+vocabulary_0122,vocabulary,ኬንያውያን,kenyawïyan,,1-4,"teacher, warm, unhurried",0,6,[].vocabulary.[]
+vocabulary_0123,vocabulary,አስተናጋጅ,astänagaj,,1-4,"teacher, warm, unhurried",0,6,[].vocabulary.[]
+vocabulary_0124,vocabulary,ሴት አያት,set ayat,,1-4,"teacher, warm, unhurried",0,6,[].kinship_vocabulary.[]
+vocabulary_0125,vocabulary,የልጅ ልጅ,yälïj lïj,,1-4,"teacher, warm, unhurried",0,6,[].kinship_vocabulary.[]
+vocabulary_0126,vocabulary,የ + እኔ,,,1-4,"teacher, warm, unhurried",0,6,grammar.vowel_change.[]
+vocabulary_0127,vocabulary,የ + እሱ,,,1-4,"teacher, warm, unhurried",0,6,grammar.vowel_change.[]
+vocabulary_0128,vocabulary,የ + እሷ,,,1-4,"teacher, warm, unhurried",0,6,grammar.vowel_change.[]
+vocabulary_0129,vocabulary,ሻይ ቅጠል,šay k'ït'äl,,1-4,"teacher, warm, unhurried",2,6,[].vocabulary.[]
+vocabulary_0130,vocabulary,ማስታጠቢያ,mastat’äbiya,,1-4,"teacher, warm, unhurried",1,6,[].vocabulary.[]
+vocabulary_0131,vocabulary,ይቀንሱልኝ,yïk’änïsulïñ,,1-4,"teacher, warm, unhurried",1,6,[].vocabulary.[]
+vocabulary_0132,vocabulary,አይቀንስም,ayk'änïsïm,,1-4,"teacher, warm, unhurried",1,6,[].vocabulary.[]
+vocabulary_0133,vocabulary,ሃያ አንድ,,,1-4,"teacher, warm, unhurried",0,6,numbers.[].[]
+vocabulary_0134,vocabulary,ሁለት መቶ,,,1-4,"teacher, warm, unhurried",0,6,numbers.[].[]
+vocabulary_0135,vocabulary,አንድ ሺህ,,,1-4,"teacher, warm, unhurried",0,6,numbers.[].[]
+vocabulary_0136,vocabulary,አራት ነጥብ,Period/Full stop,,1-4,"teacher, warm, unhurried",1,7,content.punctuation.[]
+vocabulary_0137,vocabulary,ነጠላ ሰረዝ,Comma,,1-4,"teacher, warm, unhurried",1,7,content.punctuation.[]
+vocabulary_0138,vocabulary,ኢትዮጵያዊት,ityop'yawit,,1-4,"teacher, warm, unhurried",1,7,[].vocabulary.[]
+vocabulary_0139,vocabulary,አሜሪካውያን,amerikawïyan,,1-4,"teacher, warm, unhurried",0,7,[].vocabulary.[]
+vocabulary_0140,vocabulary,ወንድ አያት,wänd ayat,,1-4,"teacher, warm, unhurried",0,7,[].kinship_vocabulary.[]
+vocabulary_0141,vocabulary,የ + አንተ,,,1-4,"teacher, warm, unhurried",0,7,grammar.vowel_change.[]
+vocabulary_0142,vocabulary,ጠቋሚ ቃላት,,,1-4,"teacher, warm, unhurried",2,7,lessons.[].title_am
+vocabulary_0143,vocabulary,የሴት ጓደኛ,yäset gwadäňňa,,1-4,"teacher, warm, unhurried",0,7,[].vocabulary.[]
+vocabulary_0144,vocabulary,የገላ ሳሙና,yägäla samuna,,1-4,"teacher, warm, unhurried",0,7,[].vocabulary.[]
+vocabulary_0145,vocabulary,የእቃ ሳሙና,yä ïk’a mat’äbiya,,1-4,"teacher, warm, unhurried",1,7,[].vocabulary.[]
+vocabulary_0146,vocabulary,አምስት ብር,amist bïrr,,1-4,"teacher, warm, unhurried",0,7,[].vocabulary.[]
+vocabulary_0147,vocabulary,አስራ አንድ,,,1-4,"teacher, warm, unhurried",0,7,numbers.[].[]
+vocabulary_0148,vocabulary,አስራ ሁለት,,,1-4,"teacher, warm, unhurried",0,7,numbers.[].[]
+vocabulary_0149,vocabulary,አስራ ዘጠኝ,,,1-4,"teacher, warm, unhurried",1,7,numbers.[].[]
+vocabulary_0150,vocabulary,አረፍተ ነገር,Sentence,,1-4,"teacher, warm, unhurried",0,8,content.grammar_terms.[]
+vocabulary_0151,vocabulary,ጥያቄ ምልክት,Question mark,,1-4,"teacher, warm, unhurried",2,8,content.punctuation.[]
+vocabulary_0152,vocabulary,ኢትዮጵያውያን,ityop'yawïyan,,1-4,"teacher, warm, unhurried",1,8,[].vocabulary.[]
+vocabulary_0153,vocabulary,የህግ ባለሙያ,yähïg balämuya,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+vocabulary_0154,vocabulary,የቤት እመቤት,yäbet ïmäbet,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+vocabulary_0155,vocabulary,ቧንቧ ሰራተኛ,bwanbwa säratäňa,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+vocabulary_0156,vocabulary,እንጀራ አባት,ïnjära abbat,,1-4,"teacher, warm, unhurried",0,8,[].kinship_vocabulary.[]
+vocabulary_0157,vocabulary,እንጀራ እናት,ïnjära ïnnat,,1-4,"teacher, warm, unhurried",0,8,[].kinship_vocabulary.[]
+vocabulary_0158,vocabulary,የ + እሳቸው,,,1-4,"teacher, warm, unhurried",0,8,grammar.vowel_change.[]
+vocabulary_0159,vocabulary,የ + አሜሪካ,,,1-4,"teacher, warm, unhurried",0,8,grammar.vowel_change.[]
+vocabulary_0160,vocabulary,መኖር [ኖረ],,,1-4,"teacher, warm, unhurried",0,8,[].grammar.verb
+vocabulary_0161,vocabulary,የወንድ ጓደኛ,yäwänd gwadäňňa,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+vocabulary_0162,vocabulary,መሆን / ሆነ,,,1-4,"teacher, warm, unhurried",0,8,lessons.[].title_am
+vocabulary_0163,vocabulary,የጥያቄ ቃላት,,,1-4,"teacher, warm, unhurried",3,8,lessons.[].title_am
+vocabulary_0164,vocabulary,የገበያ ቃላት,,,1-4,"teacher, warm, unhurried",1,8,lessons.[].title_am
+vocabulary_0165,vocabulary,ቲማቲም ሳልሳ,timatim salsa,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+vocabulary_0166,vocabulary,የልብስ ሳሙና,yälïbs samuna,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+vocabulary_0167,vocabulary,የጥርስ ሳሙና,yät’ïrs samuna,,1-4,"teacher, warm, unhurried",1,8,[].vocabulary.[]
+vocabulary_0168,vocabulary,ስም እና መባል,,,1-4,"teacher, warm, unhurried",0,9,lessons.[].title_am
+vocabulary_0169,vocabulary,የሒሳብ ሰራተኛ,yähisab säratäña,,1-4,"teacher, warm, unhurried",0,9,[].vocabulary.[]
+vocabulary_0170,vocabulary,የጽዳት ሰራተኛ,yäs'dat säratäña,,1-4,"teacher, warm, unhurried",1,9,[].vocabulary.[]
+vocabulary_0171,vocabulary,አለ እና የለም,,,1-4,"teacher, warm, unhurried",0,9,lessons.[].title_am
+vocabulary_0172,vocabulary,የአማርኛ ግሶች,,,1-4,"teacher, warm, unhurried",0,9,units.[].title_am
+vocabulary_0173,vocabulary,ምን / ምንድን,mïn / mïndïn,,1-4,"teacher, warm, unhurried",0,9,[].vocabulary.[]
+vocabulary_0174,vocabulary,ራስን ማስተዋወቅ,,,1-4,"teacher, warm, unhurried",1,10,units.[].title_am
+vocabulary_0175,vocabulary,ስለሌሎች መጠየቅ,,,1-4,"teacher, warm, unhurried",2,10,lessons.[].title_am
+vocabulary_0176,vocabulary,የተወሰነ አንቀጽ,,,1-4,"teacher, warm, unhurried",2,10,lessons.[].title_am
+vocabulary_0177,vocabulary,እሺ አራት ስጠኝ,ïšši arrat sït'äñ,,1-4,"teacher, warm, unhurried",1,10,[].vocabulary.[]
+vocabulary_0178,vocabulary,ሌሎችን ማስተዋወቅ,,,1-4,"teacher, warm, unhurried",1,11,units.[].title_am
+vocabulary_0179,vocabulary,የሴት ቅድመ አያት,yäset k’ïdïmä ayat,,1-4,"teacher, warm, unhurried",1,11,[].kinship_vocabulary.[]
+vocabulary_0180,vocabulary,የቃል አጋኖ ምልክት,Exclamation mark,,1-4,"teacher, warm, unhurried",1,12,content.punctuation.[]
+vocabulary_0181,vocabulary,የወንድ ቅድመ አያት,yäwänd k’ïdïmä ayat,,1-4,"teacher, warm, unhurried",1,12,[].kinship_vocabulary.[]
+vocabulary_0182,vocabulary,የባለቤትነት ቅርጾች,,,1-4,"teacher, warm, unhurried",2,12,lessons.[].title_am
+vocabulary_0183,vocabulary,ልምምዶች እና ምዘና,,,1-4,"teacher, warm, unhurried",0,12,lessons.[].title_am
+vocabulary_0184,vocabulary,ሥራ እና የጋብቻ ሁኔታ,,,1-4,"teacher, warm, unhurried",0,14,lessons.[].title_am
+vocabulary_0185,vocabulary,የአማርኛ አጠራር መመሪያ,,,1-4,"teacher, warm, unhurried",1,15,units.[].title_am
+vocabulary_0186,vocabulary,የአማርኛ ፊደላት ምድቦች,,,1-4,"teacher, warm, unhurried",0,15,lessons.[].title_am
+vocabulary_0187,vocabulary,ተውላጠ ስሞች እና መሆን,,,1-4,"teacher, warm, unhurried",1,15,lessons.[].title_am
+vocabulary_0188,vocabulary,የአጎት / የአክስት ልጅ,yag’got / yakïst lïj,,1-4,"teacher, warm, unhurried",0,15,[].kinship_vocabulary.[]
+vocabulary_0189,vocabulary,አለኝ፣ ነበረኝ እና አለ,,,1-4,"teacher, warm, unhurried",0,15,lessons.[].title_am
+vocabulary_0190,vocabulary,የግስ ግንድ ማውጫ ሕጎች,,,1-4,"teacher, warm, unhurried",1,15,lessons.[].title_am
+vocabulary_0191,vocabulary,ግዢ / መሠረታዊ ግብይት,,,1-4,"teacher, warm, unhurried",0,15,units.[].title_am
+vocabulary_0192,vocabulary,የዋጋ ንጽጽር እና ምዘና,,,1-4,"teacher, warm, unhurried",2,15,lessons.[].title_am
+vocabulary_0193,vocabulary,የቤተሰብ ተግባራዊ ልምምድ,,,1-4,"teacher, warm, unhurried",0,16,lessons.[].title_am
+vocabulary_0194,vocabulary,ዋጋ መከራከር / መደራደር,,,1-4,"teacher, warm, unhurried",0,16,lessons.[].title_am
+vocabulary_0195,vocabulary,የግስ ግንድ እና ያለፈ ጊዜ,,,1-4,"teacher, warm, unhurried",0,17,lessons.[].title_am
+vocabulary_0196,vocabulary,አማርኛ ለመማር ቀላል ዘዴዎች,,,1-4,"teacher, warm, unhurried",1,18,course.title_am
+vocabulary_0197,vocabulary,ገቢር ግሶች እና ሥርወ-ቃላት,,,1-4,"teacher, warm, unhurried",1,18,lessons.[].title_am
+vocabulary_0198,vocabulary,ዕቃ መግዛት እና ዋጋ መጠየቅ,,,1-4,"teacher, warm, unhurried",3,18,lessons.[].title_am
+vocabulary_0199,vocabulary,እሺ ሶስት ብር ከሃምሳ ውሰድ,ïšši sost bïrr kähamsa wïsäd,,1-4,"teacher, warm, unhurried",0,18,[].vocabulary.[]
+vocabulary_0200,vocabulary,የሰዋሰው እና ሥነ-ቋንቋ ቃላት,,,1-4,"teacher, warm, unhurried",1,19,lessons.[].title_am
+vocabulary_0201,vocabulary,ልዩ ተነባቢዎች እና -ዋ ጥምረቶች,,,1-4,"teacher, warm, unhurried",1,21,lessons.[].title_am
+vocabulary_0202,vocabulary,የደስታ ቤተሰብ እና የዝምድና ቃላት,,,1-4,"teacher, warm, unhurried",1,22,lessons.[].title_am
+vocabulary_0203,vocabulary,የአማርኛ ዓረፍተ ነገር ቅደም ተከተል,,,1-4,"teacher, warm, unhurried",1,23,lessons.[].title_am
+vocabulary_0204,vocabulary,ቁጥሮች፣ ተራ ቁጥሮች እና ክፍልፋዮች,,,1-4,"teacher, warm, unhurried",4,23,lessons.[].title_am
+vocabulary_0205,vocabulary,Add -ዊ for male singular.,,,1-4,"teacher, warm, unhurried",0,25,[].grammar.rule
+vocabulary_0206,vocabulary,የአናባቢ ድምፆች እና ሰባቱ ቅደም ተከተሎች,,,1-4,"teacher, warm, unhurried",1,27,lessons.[].title_am
+vocabulary_0207,vocabulary,ባለቤትነት፣ ብዙ ቁጥር እና አሉታዊ መልሶች,,,1-4,"teacher, warm, unhurried",2,27,lessons.[].title_am
+vocabulary_0208,vocabulary,የ + noun/pronoun = possessive phrase.,,,1-4,"teacher, warm, unhurried",0,37,[].grammar.second_method
+vocabulary_0209,vocabulary,"መባል, source note: pronounced as täbalä",,,1-4,"teacher, warm, unhurried",0,38,[].grammar.verb
+vocabulary_0210,vocabulary,አማርኛ ለመማር ቀላል ዘዴዎች / Amharic Language Book,,,1-4,"teacher, warm, unhurried",1,42,specification.source.title
+vocabulary_0211,vocabulary,"If the cardinal ends in a vowel, add –ኛ–ňa.",,,1-4,"teacher, warm, unhurried",0,43,[].ordinal_rules.[]
+vocabulary_0212,vocabulary,"Examples include አባቴ, አባትህ, አባትሽ, አባትዎ, አባቱ, አባቷ, አባታቸው.",,,1-4,"teacher, warm, unhurried",0,56,[].grammar.direct_suffix_method
+vocabulary_0213,vocabulary,"If the cardinal ends in ኝ, change ኝ to n and add –ኛ äňa.",,,1-4,"teacher, warm, unhurried",0,56,[].ordinal_rules.[]
+vocabulary_0214,vocabulary,"If the cardinal ends in a consonant other than ኝ, add –ኛ äña.",,,1-4,"teacher, warm, unhurried",0,61,[].ordinal_rules.[]
+vocabulary_0215,vocabulary,"Recognize special consonant sounds such as ሸ, ጰ, ዠ, ጸ, ጠ and ጨ.",,,1-4,"teacher, warm, unhurried",4,63,[].learning_objectives.[]
+vocabulary_0216,vocabulary,አለኝ / አለህ / አለሽ / አለዎት / አለው / አላት / አላቸው with source negative forms.,,,1-4,"teacher, warm, unhurried",0,69,[].grammar.to_have_present
+vocabulary_0217,vocabulary,The source advises that ባለቤት can be used as a relatively formal/polite term for spouse.,,,1-4,"teacher, warm, unhurried",0,87,lessons.[].notes
+vocabulary_0218,vocabulary,The source explains that አለ is irregular in the negative and uses የ- plus -ም in the negative form.,,,1-4,"teacher, warm, unhurried",0,98,[].grammar.presence_rule
+vocabulary_0219,vocabulary,The source says ይህች and ያች can also show smallness/endearment or can function as diminutives marking disrespect.,,,1-4,"teacher, warm, unhurried",0,112,[].grammar.note
+questions_answers_0001,questions_answers,ነሽ,,,1-4,"teacher, warm, unhurried",0,2,[].answer.affirmative
+questions_answers_0002,questions_answers,ነኝ,,,1-4,"teacher, warm, unhurried",0,2,[].options.[]
+questions_answers_0003,questions_answers,ነው,,,1-4,"teacher, warm, unhurried",0,2,[].options.[]
+questions_answers_0004,questions_answers,አለ,,,1-4,"teacher, warm, unhurried",0,2,[].options.[]
+questions_answers_0005,questions_answers,ዋጋ,Price,,1-4,"teacher, warm, unhurried",0,2,[].pairs.[]
+questions_answers_0006,questions_answers,ይዜ,,,1-4,"teacher, warm, unhurried",0,2,[].options.[]
+questions_answers_0007,questions_answers,ሀያ,,,1-4,"teacher, warm, unhurried",0,2,[].options.[]
+questions_answers_0008,questions_answers,ዕድሜ,,,1-4,"teacher, warm, unhurried",0,3,[].options.[]
+questions_answers_0009,questions_answers,ሮጥ-ኩ,,,1-4,"teacher, warm, unhurried",1,4,questions.[].answer
+questions_answers_0010,questions_answers,አላት.,,,1-4,"teacher, warm, unhurried",0,4,questions.[].answer
+questions_answers_0011,questions_answers,አለሽ.,,,1-4,"teacher, warm, unhurried",0,4,questions.[].answer
+questions_answers_0012,questions_answers,አለው.,,,1-4,"teacher, warm, unhurried",0,4,questions.[].answer
+questions_answers_0013,questions_answers,እንዴት,,,1-4,"teacher, warm, unhurried",0,4,[].options.[]
+questions_answers_0014,questions_answers,ታንባር,Tomato,,1-4,"teacher, warm, unhurried",0,4,[].pairs.[]
+questions_answers_0015,questions_answers,ሮጥ-ሂይ,,,1-4,"teacher, warm, unhurried",1,5,[].options.[]
+questions_answers_0016,questions_answers,የለህም.,,,1-4,"teacher, warm, unhurried",0,5,questions.[].answer
+questions_answers_0017,questions_answers,የት ነው?,yät näw?,,1-4,"teacher, warm, unhurried",0,6,[].vocabulary.[]
+questions_answers_0018,questions_answers,ማን ነው?,man näw?,,1-4,"teacher, warm, unhurried",0,6,[].vocabulary.[]
+questions_answers_0019,questions_answers,አይደለሽም,,,1-4,"teacher, warm, unhurried",0,6,[].answer.negative
+questions_answers_0020,questions_answers,እሱ በላ.,,,1-4,"teacher, warm, unhurried",0,6,questions.[].answer
+questions_answers_0021,questions_answers,እሱ አየ.,,,1-4,"teacher, warm, unhurried",0,6,questions.[].answer
+questions_answers_0022,questions_answers,እሷ ነች.,,,1-4,"teacher, warm, unhurried",0,6,questions.[].answer
+questions_answers_0023,questions_answers,አንድ ብር,,,1-4,"teacher, warm, unhurried",0,6,[].options.[]
+questions_answers_0024,questions_answers,ባለ ሃምሳ,,,1-4,"teacher, warm, unhurried",0,6,[].options.[]
+questions_answers_0025,questions_answers,አይደለሁም.,,,1-4,"teacher, warm, unhurried",0,7,questions.[].answer
+questions_answers_0026,questions_answers,እሱ ጫወተ.,,,1-4,"teacher, warm, unhurried",1,7,questions.[].answer
+questions_answers_0027,questions_answers,ትቀንሱልኝ?,,,1-4,"teacher, warm, unhurried",1,7,questions.[].answer
+questions_answers_0028,questions_answers,ምንድን ነው?,mïndïn näw?,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+questions_answers_0029,questions_answers,እኔ ሮጥ-ኩ.,,,1-4,"teacher, warm, unhurried",1,8,questions.[].answer
+questions_answers_0030,questions_answers,እባክህ ነኝ.,,,1-4,"teacher, warm, unhurried",0,8,questions.[].answer
+questions_answers_0031,questions_answers,ምን አይነት?,mïn aynät?,,1-4,"teacher, warm, unhurried",0,8,[].vocabulary.[]
+questions_answers_0032,questions_answers,እንዴት ነው?,,,1-4,"teacher, warm, unhurried",0,8,[].options.[]
+questions_answers_0033,questions_answers,ለምን ገዛሽ?,,,1-4,"teacher, warm, unhurried",0,8,questions.[].answer
+questions_answers_0034,questions_answers,ቱሪስት ናችሁ?,,,1-4,"teacher, warm, unhurried",0,9,grammar.negative_examples.[]
+questions_answers_0035,questions_answers,እሱ እሏንበሩ.,,,1-4,"teacher, warm, unhurried",0,9,questions.[].answer
+questions_answers_0036,questions_answers,ሮጥ- rot’ä,,,1-4,"teacher, warm, unhurried",1,9,[].options.[]
+questions_answers_0037,questions_answers,ሮጥ- rot’u,,,1-4,"teacher, warm, unhurried",1,9,[].options.[]
+questions_answers_0038,questions_answers,እሱ አይደለም.,,,1-4,"teacher, warm, unhurried",0,9,questions.[].answer
+questions_answers_0039,questions_answers,ሃኪም ነህ/ነሽ?,,,1-4,"teacher, warm, unhurried",0,10,grammar.negative_examples.[]
+questions_answers_0040,questions_answers,ለምን አትበላም?,Why don't you eat? (male),,1-4,"teacher, warm, unhurried",0,10,[].examples.[]
+questions_answers_0041,questions_answers,ኣባትህ/ሽ ናቸው?,,,1-4,"teacher, warm, unhurried",0,11,grammar.negative_examples.[]
+questions_answers_0042,questions_answers,ገበያው የት ነው?,Where is the market?,,1-4,"teacher, warm, unhurried",0,11,[].examples.[]
+questions_answers_0043,questions_answers,ይህ ምንድን ነው?,What's this?,,1-4,"teacher, warm, unhurried",0,11,[].examples.[]
+questions_answers_0044,questions_answers,ለምን አትጫወትም?,Why don't you talk? (male),,1-4,"teacher, warm, unhurried",1,11,[].examples.[]
+questions_answers_0045,questions_answers,አንዱ ስንት ነው?,andu sïnt näw?,,1-4,"teacher, warm, unhurried",0,11,[].vocabulary.[]
+questions_answers_0046,questions_answers,ዋጋው ስንት ነው?,,,1-4,"teacher, warm, unhurried",0,11,[].options.[]
+questions_answers_0047,questions_answers,እሺ አራት ስጠኝ.,,,1-4,"teacher, warm, unhurried",1,11,questions.[].answer
+questions_answers_0048,questions_answers,ስራህ ምንድን ነው?,What is your job? (male),,1-4,"teacher, warm, unhurried",0,12,[].examples.[]
+questions_answers_0049,questions_answers,ይህች ምንድን ነች?,What's this? (feminine),,1-4,"teacher, warm, unhurried",0,12,[].examples.[]
+questions_answers_0050,questions_answers,ባለሱቅ ሳሙና አለ?,,,1-4,"teacher, warm, unhurried",1,12,[].options.[]
+questions_answers_0051,questions_answers,እነሱ ፈቃደኞች ሆኑ.,,,1-4,"teacher, warm, unhurried",1,13,questions.[].answer
+questions_answers_0052,questions_answers,ይህ የማን ቤት ነው?,Whose house is this?,,1-4,"teacher, warm, unhurried",0,13,[].examples.[]
+questions_answers_0053,questions_answers,ውድ ነው አይቀንስም?,wïdd näw. ayk'änïsm?,,1-4,"teacher, warm, unhurried",1,13,[].vocabulary.[]
+questions_answers_0054,questions_answers,መጨረሻው ስንት ነው?,mäčäräšaw sïnt näw?,,1-4,"teacher, warm, unhurried",1,13,[].vocabulary.[]
+questions_answers_0055,questions_answers,ሚኖ means Why?,,,1-4,"teacher, warm, unhurried",0,13,questions.[].question
+questions_answers_0056,questions_answers,እኛ አሜሪካውያን ነን.,,,1-4,"teacher, warm, unhurried",0,14,questions.[].answer
+questions_answers_0057,questions_answers,እናንተ ሃኪሞች ሆነች.,,,1-4,"teacher, warm, unhurried",0,14,questions.[].answer
+questions_answers_0058,questions_answers,ይህ የማን እርሳስ ነው?,Whose pencil is this?,,1-4,"teacher, warm, unhurried",0,15,[].examples.[]
+questions_answers_0059,questions_answers,እንግሊዛዊ/ዊት ነህ/ነሽ?,,,1-4,"teacher, warm, unhurried",0,16,grammar.negative_examples.[]
+questions_answers_0060,questions_answers,ተሰናዳት ሞቃየታ የለውም.,,,1-4,"teacher, warm, unhurried",1,16,questions.[].answer
+questions_answers_0061,questions_answers,እንጀራ እንዴት ይጋገራል?,How is injera made?,,1-4,"teacher, warm, unhurried",0,16,[].examples.[]
+questions_answers_0062,questions_answers,እኔ ሶስት ወንድሞች ነበረኝ.,,,1-4,"teacher, warm, unhurried",0,18,questions.[].answer
+questions_answers_0063,questions_answers,እሱ ባለፈው አመት ሁለት ...,,,1-4,"teacher, warm, unhurried",0,19,questions.[].answer
+questions_answers_0064,questions_answers,What does እንዴት mean?,,,1-4,"teacher, warm, unhurried",0,20,questions.[].question
+questions_answers_0065,questions_answers,ደምበኛ means customer.,,,1-4,"teacher, warm, unhurried",0,20,questions.[].question
+questions_answers_0066,questions_answers,ክርክር means to bargain.,,,1-4,"teacher, warm, unhurried",0,22,questions.[].question
+questions_answers_0067,questions_answers,ደምበኛ means storekeeper.,,,1-4,"teacher, warm, unhurried",0,23,questions.[].question
+questions_answers_0068,questions_answers,ስንት ነው? means What is it?,,,1-4,"teacher, warm, unhurried",0,25,questions.[].question
+questions_answers_0069,questions_answers,Conjugate to have for አንቺ.,,,1-4,"teacher, warm, unhurried",0,26,questions.[].question
+questions_answers_0070,questions_answers,What does ዋጋው ስንት ነው? mean?,,,1-4,"teacher, warm, unhurried",0,27,questions.[].question
+questions_answers_0071,questions_answers,What does ውድ ነው አይቀንስም? mean?,,,1-4,"teacher, warm, unhurried",1,29,questions.[].question
+questions_answers_0072,questions_answers,What does ምን mean in English?,,,1-4,"teacher, warm, unhurried",0,29,questions.[].question
+questions_answers_0073,questions_answers,እርሳሰ አለ? means Do you have it?,,,1-4,"teacher, warm, unhurried",0,30,questions.[].question
+questions_answers_0074,questions_answers,What does መቀነስ mean in English?,,,1-4,"teacher, warm, unhurried",1,31,questions.[].question
+questions_answers_0075,questions_answers,What is the negative form of እሱ ነው?,,,1-4,"teacher, warm, unhurried",0,35,questions.[].question
+questions_answers_0076,questions_answers,Explain ውድ ነው አይቀንስም? in bargaining.,,,1-4,"teacher, warm, unhurried",1,36,questions.[].question
+questions_answers_0077,questions_answers,Conjugate to run for the pronoun እንዴት.,,,1-4,"teacher, warm, unhurried",0,38,questions.[].question
+questions_answers_0078,questions_answers,Give an example of a question using ለምን.,,,1-4,"teacher, warm, unhurried",0,40,questions.[].question
+questions_answers_0079,questions_answers,What is the present form of to be for እኔ?,,,1-4,"teacher, warm, unhurried",0,41,questions.[].question
+questions_answers_0080,questions_answers,Create a sentence for to possess using እርስዎ.,,,1-4,"teacher, warm, unhurried",0,44,questions.[].question
+questions_answers_0081,questions_answers,ነው is used to indicate definiteness in nouns.,,,1-4,"teacher, warm, unhurried",0,45,questions.[].question
+questions_answers_0082,questions_answers,The expression እርሳሰ አለ? means Do you have it?,,,1-4,"teacher, warm, unhurried",0,45,questions.[].question
+questions_answers_0083,questions_answers,Conjugate to have in the negative form for አንተ.,,,1-4,"teacher, warm, unhurried",0,47,questions.[].question
+questions_answers_0084,questions_answers,What is the affirmative form of 'to have' for እሷ?,,,1-4,"teacher, warm, unhurried",0,49,questions.[].question
+questions_answers_0085,questions_answers,What is the conjugated present form of to be for እሷ?,,,1-4,"teacher, warm, unhurried",0,52,questions.[].question
+questions_answers_0086,questions_answers,What is the past tense form of the verb to run for እሱ?,,,1-4,"teacher, warm, unhurried",0,54,questions.[].question
+questions_answers_0087,questions_answers,Customer: አንዱ ስንት ነው የሾኮይ? Storekeeper: ለርዳ ሶስት ብር ...,,,1-4,"teacher, warm, unhurried",0,54,questions.[].answer
+questions_answers_0088,questions_answers,ስንት ነው? means how much/how many in the source examples.,,,1-4,"teacher, warm, unhurried",0,55,[].grammar.question
+questions_answers_0089,questions_answers,You might say አንዱ ስንት ነው? while holding up the tomatoes.,,,1-4,"teacher, warm, unhurried",0,56,questions.[].answer
+questions_answers_0090,questions_answers,"For mähon, provide the affirmative and negative forms for አንቺ.",,,1-4,"teacher, warm, unhurried",0,62,questions.[].question
+questions_answers_0091,questions_answers,Complete the sentence: ተሰናዳት ሞቃየታ የለውም using the verb 'to have.',,,1-4,"teacher, warm, unhurried",1,64,questions.[].question
+questions_answers_0092,questions_answers,What is the conjugated past tense form of the verb to run for እኔ?,,,1-4,"teacher, warm, unhurried",0,65,questions.[].question
+questions_answers_0093,questions_answers,Construct a sentence using the past tense form of 'to have' for እኔ.,,,1-4,"teacher, warm, unhurried",0,67,questions.[].question
+questions_answers_0094,questions_answers,Write a sentence using the verb to become for እናንተ in the past tense.,,,1-4,"teacher, warm, unhurried",0,69,questions.[].question
+questions_answers_0095,questions_answers,Formulate a sentence using the present tense of to be for the pronoun እንዴት.,,,1-4,"teacher, warm, unhurried",0,75,questions.[].question
+questions_answers_0096,questions_answers,Fill in the blank with the correct form of 'to become' for እሱ in present tense.,,,1-4,"teacher, warm, unhurried",0,79,questions.[].question
+questions_answers_0097,questions_answers,Create a sentence in Amharic using the verb to be for the pronoun እኛ in the present tense.,,,1-4,"teacher, warm, unhurried",0,90,questions.[].question
+questions_answers_0098,questions_answers,Transform the sentence እሱ ባለፈው አመት ድመት ነበረው to indicate that the subject had two cats last year.,,,1-4,"teacher, warm, unhurried",0,96,questions.[].question
+dialogues_0001,dialogues,ገዢ,Do you have soap?,,1-4,"teacher, warm, unhurried",0,2,[].lines.[]
+dialogues_0002,dialogues,ደምበኛ,Do you have it?,,1-4,"teacher, warm, unhurried",0,4,[].lines.[]
+dialogues_0003,dialogues,ባለሱቅ,Yes.,,1-4,"teacher, warm, unhurried",1,4,[].lines.[]
+exercises_0001,exercises,Conjugate ሮጥ in past tense,,,1-4,"teacher, warm, unhurried",1,26,activities.[].title
+exercises_0002,exercises,Match subjects with forms of መኖር,,,1-4,"teacher, warm, unhurried",0,32,activities.[].title
+tutor_feedback_0001,tutor_feedback,ጎበዝ!,Well done!,,1-4,"teacher, warm, unhurried",0,4,authored
+tutor_feedback_0002,tutor_feedback,አዳምጥ።,Listen.,,1-4,"teacher, warm, unhurried",1,5,authored
+tutor_feedback_0003,tutor_feedback,ድገመው።,Repeat it.,,1-4,"teacher, warm, unhurried",0,5,authored
+tutor_feedback_0004,tutor_feedback,በጣም ጥሩ!,Very good!,,1-4,"teacher, warm, unhurried",2,7,authored
+tutor_feedback_0005,tutor_feedback,ተቃርበሃል።,You're close.,,1-4,"teacher, warm, unhurried",1,7,authored
+tutor_feedback_0006,tutor_feedback,ትክክል ነው።,That's correct.,,1-4,"teacher, warm, unhurried",0,8,authored
+tutor_feedback_0007,tutor_feedback,ጥሩ አጠራር።,Good pronunciation.,,1-4,"teacher, warm, unhurried",2,8,authored
+tutor_feedback_0008,tutor_feedback,እንደገና ሞክር።,Try again.,,1-4,"teacher, warm, unhurried",0,10,authored
+tutor_feedback_0009,tutor_feedback,ቀስ ብለህ ተናገር።,Speak slowly.,,1-4,"teacher, warm, unhurried",1,12,authored
+tutor_feedback_0010,tutor_feedback,አሁን አንተ ተናገር።,Now you say it.,,1-4,"teacher, warm, unhurried",0,13,authored
+tutor_feedback_0011,tutor_feedback,ይህን ቃል በድጋሚ አዳምጥ።,Listen to this word again.,,1-4,"teacher, warm, unhurried",2,17,authored
+tutor_feedback_0012,tutor_feedback,አትጨነቅ፤ እንደገና እንሞክር።,"Don't worry, let's try again.",,1-4,"teacher, warm, unhurried",2,19,authored
+everyday_conversation_0001,everyday_conversation,ለ,,,1-4,"teacher, warm, unhurried",0,1,alphabet_categories.[].examples
+everyday_conversation_0002,everyday_conversation,ሐ,,,1-4,"teacher, warm, unhurried",0,1,alphabet_categories.[].examples
+everyday_conversation_0003,everyday_conversation,ሀ,,,1-4,"teacher, warm, unhurried",0,1,alphabet_categories.[].examples
+everyday_conversation_0004,everyday_conversation,ቀ,,,1-4,"teacher, warm, unhurried",1,1,alphabet_categories.[].examples
+everyday_conversation_0005,everyday_conversation,ውሻ,,,1-4,"teacher, warm, unhurried",0,2,grammar.plural_examples.[]
+everyday_conversation_0006,everyday_conversation,ልጅ,,,1-4,"teacher, warm, unhurried",0,2,grammar.plural_examples.[]
+everyday_conversation_0007,everyday_conversation,ቤት,,,1-4,"teacher, warm, unhurried",0,2,grammar.plural_examples.[]
+everyday_conversation_0008,everyday_conversation,ሙዝ,,,1-4,"teacher, warm, unhurried",0,2,grammar.examples.[]
+everyday_conversation_0009,everyday_conversation,ፖም,,,1-4,"teacher, warm, unhurried",0,2,grammar.examples.[]
+everyday_conversation_0010,everyday_conversation,ሎሚ,,,1-4,"teacher, warm, unhurried",0,2,grammar.examples.[]
+everyday_conversation_0011,everyday_conversation,ድመት,,,1-4,"teacher, warm, unhurried",0,3,grammar.plural_examples.[]
+everyday_conversation_0012,everyday_conversation,አባቴ,,,1-4,"teacher, warm, unhurried",0,3,grammar.examples.[]
+everyday_conversation_0013,everyday_conversation,እናቴ,,,1-4,"teacher, warm, unhurried",0,3,grammar.examples.[]
+everyday_conversation_0014,everyday_conversation,ወይን,,,1-4,"teacher, warm, unhurried",0,3,grammar.examples.[]
+everyday_conversation_0015,everyday_conversation,ፓፓያ,,,1-4,"teacher, warm, unhurried",0,3,grammar.examples.[]
+everyday_conversation_0016,everyday_conversation,ማንጎ,,,1-4,"teacher, warm, unhurried",0,3,grammar.examples.[]
+everyday_conversation_0017,everyday_conversation,ቤተሰብ,,,1-4,"teacher, warm, unhurried",0,4,grammar.examples.[]
+everyday_conversation_0018,everyday_conversation,ኣናናስ,,,1-4,"teacher, warm, unhurried",0,4,grammar.examples.[]
+everyday_conversation_0019,everyday_conversation,ብርቱካን,,,1-4,"teacher, warm, unhurried",0,5,grammar.examples.[]
+everyday_conversation_0020,everyday_conversation,የሱ ቤተሰብ,,,1-4,"teacher, warm, unhurried",0,7,grammar.examples.[]
+everyday_conversation_0021,everyday_conversation,አባት አለኝ,I have a father. (Literally: A father is to me.),,1-4,"teacher, warm, unhurried",0,7,grammar.examples.[]
+everyday_conversation_0022,everyday_conversation,ልጆች የሉኝም,We don't have children.,,1-4,"teacher, warm, unhurried",0,8,grammar.examples.[]
+everyday_conversation_0023,everyday_conversation,ወንድም የለኝም,I have no brother. (Literally: A brother is not to me.),,1-4,"teacher, warm, unhurried",0,9,grammar.examples.[]
+everyday_conversation_0024,everyday_conversation,ሔኖክ ሃኪም ነው,Henok is a doctor.,,1-4,"teacher, warm, unhurried",0,10,grammar.examples.[]
+everyday_conversation_0025,everyday_conversation,ሄለን ቆንጆ ናት,Helen is beautiful.,,1-4,"teacher, warm, unhurried",1,10,grammar.examples.[]
+everyday_conversation_0026,everyday_conversation,ብዙ ጓደኞች አሉሽ,You (female) have many friends!,,1-4,"teacher, warm, unhurried",0,11,grammar.examples.[]
+everyday_conversation_0027,everyday_conversation,ሁለት ድመቶች አሉኝ,I have two cats.,,1-4,"teacher, warm, unhurried",0,12,grammar.examples.[]
+everyday_conversation_0028,everyday_conversation,ሶስት ልጆች አሏቸው,They have three children.,,1-4,"teacher, warm, unhurried",0,12,grammar.examples.[]
+everyday_conversation_0029,everyday_conversation,የኔ ቦርሳ ትልቅ ነው,,,1-4,"teacher, warm, unhurried",1,13,[].grammar.contrast_example
+everyday_conversation_0030,everyday_conversation,እኛ አሜሪካውያን ነን,We are Americans.,,1-4,"teacher, warm, unhurried",0,13,grammar.examples.[]
+everyday_conversation_0031,everyday_conversation,ዮናታን እህት የለውም,Yonatan has no sister.,,1-4,"teacher, warm, unhurried",0,13,[].examples.[]
+everyday_conversation_0032,everyday_conversation,ክሪስ በጎ ፈቃደኛ ሆነ,Chris became a volunteer.,,1-4,"teacher, warm, unhurried",1,14,grammar.examples.[]
+everyday_conversation_0033,everyday_conversation,አለም ፕሬዝዳንት ሆነች,Alem became the president.,,1-4,"teacher, warm, unhurried",0,14,grammar.examples.[]
+everyday_conversation_0034,everyday_conversation,ራሄል ቆንጆ ጫማ አላት,Rahel has a beautiful pair of shoes.,,1-4,"teacher, warm, unhurried",2,14,[].examples.[]
+everyday_conversation_0035,everyday_conversation,አቶ ጌታቸው መኪና አለው,Ato Getachew has a car.,,1-4,"teacher, warm, unhurried",0,15,[].examples.[]
+everyday_conversation_0036,everyday_conversation,እኔ ሶስት ወንድሞች አሉኝ,I have three brothers.,,1-4,"teacher, warm, unhurried",0,16,[].examples.[]
+everyday_conversation_0037,everyday_conversation,ዮናስ እና ሃና ሾፌሮች ሆኑ,Yonas and Hanna became drivers.,,1-4,"teacher, warm, unhurried",0,17,grammar.examples.[]
+everyday_conversation_0038,everyday_conversation,ከሁለት አመት በኋላ ነርስ እሆናለሁ,I will become a nurse after two years.,,1-4,"teacher, warm, unhurried",0,22,grammar.examples.[]

@@ -1,0 +1,1110 @@
+{
+  "units": [
+    {
+      "number": 7,
+      "titleAm": "ምግብ እና መጠጥ",
+      "titleEn": "Food & Drink",
+      "objectives": [
+        "Name food and drink",
+        "Express wants and preferences",
+        "Order in a simple food setting",
+        "Read a short menu / ሜኑ"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ምግብ",
+          "transliteration": "mïgïb",
+          "english": "food"
+        },
+        {
+          "amharic": "ውሃ",
+          "transliteration": "wïha",
+          "english": "water"
+        },
+        {
+          "amharic": "ቡና",
+          "transliteration": "bunna",
+          "english": "coffee"
+        },
+        {
+          "amharic": "ሻይ",
+          "transliteration": "šay",
+          "english": "tea"
+        },
+        {
+          "amharic": "ወተት",
+          "transliteration": "wätät",
+          "english": "milk"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "A",
+          "amharic": "ምን ትፈልጋለህ?",
+          "english": "What do you want?"
+        },
+        {
+          "speaker": "B",
+          "amharic": "ቡና እፈልጋለሁ።",
+          "english": "I want coffee."
+        },
+        {
+          "speaker": "A",
+          "amharic": "ውሃ ትፈልጋለህ?",
+          "english": "Do you want water?"
+        },
+        {
+          "speaker": "B",
+          "amharic": "አዎ።",
+          "english": "Yes."
+        }
+      ],
+      "practice": "Choose three foods/drinks and make three spoken requests.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 8,
+      "titleAm": "ሰዓት መጠየቅ",
+      "titleEn": "Telling Time",
+      "objectives": [
+        "Ask and tell the time",
+        "Use today/now and daily periods",
+        "Connect time with routines and appointments"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ሰዓት",
+          "transliteration": "sä’at",
+          "english": "time/hour"
+        },
+        {
+          "amharic": "ዛሬ",
+          "transliteration": "zare",
+          "english": "today"
+        },
+        {
+          "amharic": "አሁን",
+          "transliteration": "ahun",
+          "english": "now"
+        },
+        {
+          "amharic": "መቼ",
+          "transliteration": "mäče",
+          "english": "when"
+        },
+        {
+          "amharic": "ጠዋት",
+          "transliteration": "t’äwat",
+          "english": "morning"
+        },
+        {
+          "amharic": "ምሽት",
+          "transliteration": "mïšït",
+          "english": "evening"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "A",
+          "amharic": "ስንት ሰዓት ነው?",
+          "english": "What time is it?"
+        },
+        {
+          "speaker": "B",
+          "amharic": "… ሰዓት ነው።",
+          "english": "It is … o’clock."
+        },
+        {
+          "speaker": "A",
+          "amharic": "መቼ እንገናኝ?",
+          "english": "When shall we meet?"
+        }
+      ],
+      "practice": "Ask five time questions and answer aloud.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 9,
+      "titleAm": "ታሪክ መናገር",
+      "titleEn": "Telling a Story",
+      "objectives": [
+        "Tell a short sequence of events",
+        "Use past-time vocabulary",
+        "Connect events with then/after that"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ትናንት",
+          "transliteration": "tïnant",
+          "english": "yesterday"
+        },
+        {
+          "amharic": "ዛሬ",
+          "transliteration": "zare",
+          "english": "today"
+        },
+        {
+          "amharic": "ከዚያ",
+          "transliteration": "käzïya",
+          "english": "then"
+        },
+        {
+          "amharic": "በኋላ",
+          "transliteration": "bähüla",
+          "english": "later/after"
+        },
+        {
+          "amharic": "በፊት",
+          "transliteration": "bäfit",
+          "english": "before"
+        },
+        {
+          "amharic": "ሄደ",
+          "transliteration": "hedä",
+          "english": "went"
+        },
+        {
+          "amharic": "መጣ",
+          "transliteration": "mät’t’a",
+          "english": "came"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ትናንት ወደ ገበያ ሄድኩ።",
+          "english": "Yesterday I went to the market."
+        },
+        {
+          "speaker": "",
+          "amharic": "ከዚያ ወደ ቤት ተመለስኩ።",
+          "english": "Then I returned home."
+        }
+      ],
+      "practice": "Tell a four-sentence story using ትናንት and ከዚያ.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 10,
+      "titleAm": "መንገድ መጠየቅ",
+      "titleEn": "Finding Your Way Around",
+      "objectives": [
+        "Ask where a place is",
+        "Give simple directions",
+        "Use left/right/straight and cardinal directions",
+        "Make practical transport requests"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ግራ",
+          "transliteration": "gïra",
+          "english": "left"
+        },
+        {
+          "amharic": "ቀኝ",
+          "transliteration": "k’äñ",
+          "english": "right"
+        },
+        {
+          "amharic": "ቀጥታ",
+          "transliteration": "k’äṭṭa",
+          "english": "straight"
+        },
+        {
+          "amharic": "ሰሜን",
+          "transliteration": "sämen",
+          "english": "north"
+        },
+        {
+          "amharic": "ደቡብ",
+          "transliteration": "däbub",
+          "english": "south"
+        },
+        {
+          "amharic": "ምስራቅ",
+          "transliteration": "mïsrak’",
+          "english": "east"
+        },
+        {
+          "amharic": "ምዕራብ",
+          "transliteration": "mï’ïrab",
+          "english": "west"
+        },
+        {
+          "amharic": "መኪና",
+          "transliteration": "mäkina",
+          "english": "car"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ሆቴሉ የት ነው?",
+          "english": "Where is the hotel?"
+        },
+        {
+          "speaker": "",
+          "amharic": "ቀጥታ ሂድ፣ ከዚያ ቀኝ ታጠፍ።",
+          "english": "Go straight, then turn right."
+        }
+      ],
+      "practice": "Draw a route and explain it in Amharic.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 11,
+      "titleAm": "ግዢ II — ልብስ እና ንጽጽር",
+      "titleEn": "Shopping II: Clothing & Comparison",
+      "objectives": [
+        "Describe clothing",
+        "Ask for another size/type/color",
+        "Compare items",
+        "Handle a simple purchase problem"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ልብስ",
+          "transliteration": "lïbs",
+          "english": "clothes"
+        },
+        {
+          "amharic": "ሸሚዝ",
+          "transliteration": "šämiz",
+          "english": "shirt"
+        },
+        {
+          "amharic": "ሱሪ",
+          "transliteration": "surri",
+          "english": "trousers"
+        },
+        {
+          "amharic": "ቀሚስ",
+          "transliteration": "k’ämis",
+          "english": "dress/skirt"
+        },
+        {
+          "amharic": "ጫማ",
+          "transliteration": "č’amma",
+          "english": "shoes"
+        },
+        {
+          "amharic": "ቀይ",
+          "transliteration": "k’äy",
+          "english": "red"
+        },
+        {
+          "amharic": "ጥቁር",
+          "transliteration": "t’ïk’ur",
+          "english": "black"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ጥቁር ሸሚዝ እፈልጋለሁ።",
+          "english": "I want a black shirt."
+        },
+        {
+          "speaker": "",
+          "amharic": "ሌላ አለ?",
+          "english": "Is there another one?"
+        }
+      ],
+      "practice": "Describe two items and say which you prefer.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 12,
+      "titleAm": "ወራት፣ ወቅቶች እና አየር ሁኔታ",
+      "titleEn": "Months, Seasons & Weather",
+      "objectives": [
+        "Give dates",
+        "Use time-period expressions",
+        "Name months and periods",
+        "Describe basic weather"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ቀን",
+          "transliteration": "k’än",
+          "english": "day"
+        },
+        {
+          "amharic": "ሳምንት",
+          "transliteration": "samïnt",
+          "english": "week"
+        },
+        {
+          "amharic": "ወር",
+          "transliteration": "wär",
+          "english": "month"
+        },
+        {
+          "amharic": "አመት",
+          "transliteration": "amät",
+          "english": "year"
+        },
+        {
+          "amharic": "መስከረም",
+          "transliteration": "mäskäräm",
+          "english": "Meskerem"
+        },
+        {
+          "amharic": "ጥቅምት",
+          "transliteration": "t’ïk’ïmt",
+          "english": "Tikimt"
+        },
+        {
+          "amharic": "ህዳር",
+          "transliteration": "hïdar",
+          "english": "Hidar"
+        },
+        {
+          "amharic": "ታህሳስ",
+          "transliteration": "tahïsas",
+          "english": "Tahsas"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ዛሬ ቀኑ ስንት ነው?",
+          "english": "What is today’s date?"
+        },
+        {
+          "speaker": "",
+          "amharic": "ዛሬ ህዳር 15 ነው።",
+          "english": "Today is Hidar 15."
+        },
+        {
+          "speaker": "",
+          "amharic": "በየቀኑ እማራለሁ።",
+          "english": "I learn every day."
+        }
+      ],
+      "practice": "Say a date and one sentence with በየቀኑ.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 13,
+      "titleAm": "የአረፍተ ነገር አወቃቀር",
+      "titleEn": "Sentence Structure",
+      "objectives": [
+        "Recognize simple, compound, and complex sentences",
+        "Keep the verb normally at the end",
+        "Use connectors and prepositions"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "አረፍተ ነገር",
+          "transliteration": "aräftä nägär",
+          "english": "sentence"
+        },
+        {
+          "amharic": "እና",
+          "transliteration": "ïna",
+          "english": "and"
+        },
+        {
+          "amharic": "ግን",
+          "transliteration": "gïn",
+          "english": "but"
+        },
+        {
+          "amharic": "ምክንያቱም",
+          "transliteration": "mïk’ïnyatum",
+          "english": "because"
+        },
+        {
+          "amharic": "በ",
+          "transliteration": "bä",
+          "english": "in/with/by"
+        },
+        {
+          "amharic": "ወደ",
+          "transliteration": "wädä",
+          "english": "to/toward"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "እኔ ደህና ነኝ።",
+          "english": "I am fine."
+        },
+        {
+          "speaker": "",
+          "amharic": "እኔ ቡና እጠጣለሁ።",
+          "english": "I drink coffee."
+        }
+      ],
+      "practice": "Build three sentences and underline the final verb.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 14,
+      "titleAm": "ቀጠሮ እና ግብዣ",
+      "titleEn": "Appointments & Invitations",
+      "objectives": [
+        "Invite someone",
+        "Set a time and place",
+        "Accept or decline politely",
+        "Use practical phone language"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "መጋበዝ",
+          "transliteration": "mägabäz",
+          "english": "to invite"
+        },
+        {
+          "amharic": "መገናኘት",
+          "transliteration": "mägänäñät",
+          "english": "to meet"
+        },
+        {
+          "amharic": "መቼ",
+          "transliteration": "mäče",
+          "english": "when"
+        },
+        {
+          "amharic": "የት",
+          "transliteration": "yät",
+          "english": "where"
+        },
+        {
+          "amharic": "ጊዜ",
+          "transliteration": "gize",
+          "english": "time"
+        },
+        {
+          "amharic": "ይቅርታ",
+          "transliteration": "yïk’ïrta",
+          "english": "sorry/excuse me"
+        },
+        {
+          "amharic": "እሺ",
+          "transliteration": "ïšši",
+          "english": "okay"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ዛሬ ምሳ ልጋብዝሽ?",
+          "english": "Shall I invite you to lunch today?"
+        },
+        {
+          "speaker": "",
+          "amharic": "ይቅርታ፣ ዛሬ አይመቸኝም።",
+          "english": "Sorry, today does not work for me."
+        }
+      ],
+      "practice": "Make one invitation and one polite refusal.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 15,
+      "titleAm": "የግል ድንበር እና አስጨናቂ ሁኔታዎች",
+      "titleEn": "Boundaries & Responding to Harassment",
+      "objectives": [
+        "Use clear refusal language",
+        "Set personal boundaries",
+        "Practice leaving an uncomfortable interaction"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "አይ",
+          "transliteration": "ay",
+          "english": "no"
+        },
+        {
+          "amharic": "እባክህ",
+          "transliteration": "ïbakïh",
+          "english": "please (to a man)"
+        },
+        {
+          "amharic": "እባክሽ",
+          "transliteration": "ïbakïš",
+          "english": "please (to a woman)"
+        },
+        {
+          "amharic": "ይቅርታ",
+          "transliteration": "yïk’ïrta",
+          "english": "excuse me/sorry"
+        },
+        {
+          "amharic": "አሁን",
+          "transliteration": "ahun",
+          "english": "now"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "አይ፣ እባክህ።",
+          "english": "No, please."
+        },
+        {
+          "speaker": "",
+          "amharic": "ይቅርታ፣ አልፈልግም።",
+          "english": "Sorry, I don't want that."
+        }
+      ],
+      "practice": "Practice a clear, respectful refusal and a safe exit.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 16,
+      "titleAm": "ጤና እና ደህንነት",
+      "titleEn": "Personal Health & Wellbeing",
+      "objectives": [
+        "Name common body parts",
+        "Describe a basic symptom",
+        "Ask for help",
+        "Use health and good-wishes expressions"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "እጅ",
+          "transliteration": "ïj",
+          "english": "hand/arm"
+        },
+        {
+          "amharic": "አንገት",
+          "transliteration": "angät",
+          "english": "neck"
+        },
+        {
+          "amharic": "ሆድ",
+          "transliteration": "hod",
+          "english": "stomach"
+        },
+        {
+          "amharic": "እግር",
+          "transliteration": "ïgïr",
+          "english": "leg/foot"
+        },
+        {
+          "amharic": "ህመም",
+          "transliteration": "hïmäm",
+          "english": "illness/pain"
+        },
+        {
+          "amharic": "ህክምና",
+          "transliteration": "hïkïmïna",
+          "english": "medical care"
+        },
+        {
+          "amharic": "ጤና",
+          "transliteration": "t’ena",
+          "english": "health"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ሆዴ ይጎዳኛል።",
+          "english": "My stomach hurts."
+        },
+        {
+          "speaker": "",
+          "amharic": "ጤና ይስጥልህ።",
+          "english": "May God give you health."
+        },
+        {
+          "speaker": "",
+          "amharic": "አመሰግናለሁ።",
+          "english": "Thank you."
+        }
+      ],
+      "practice": "Describe one symptom and ask for help.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 17,
+      "titleAm": "የግል ደህንነት",
+      "titleEn": "Personal Safety & Emergency Language",
+      "objectives": [
+        "Call for help",
+        "Describe what happened",
+        "Use imperative/help expressions"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "እርዱኝ",
+          "transliteration": "ïrduñ",
+          "english": "help me/us"
+        },
+        {
+          "amharic": "ርዳኝ",
+          "transliteration": "rïdañ",
+          "english": "help me"
+        },
+        {
+          "amharic": "ሌባ",
+          "transliteration": "leba",
+          "english": "thief"
+        },
+        {
+          "amharic": "ሰረቀኝ",
+          "transliteration": "säräk’äñ",
+          "english": "robbed/stole from me"
+        },
+        {
+          "amharic": "ምን ሆነ?",
+          "transliteration": "mïn honä?",
+          "english": "what happened?"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ወይኔ! እርዱኝ!",
+          "english": "Help!"
+        },
+        {
+          "speaker": "",
+          "amharic": "ምን ሆነ?",
+          "english": "What happened?"
+        },
+        {
+          "speaker": "",
+          "amharic": "ሌባ ሰረቀኝ።",
+          "english": "A thief robbed me."
+        }
+      ],
+      "practice": "Practice an emergency exchange with clear pronunciation.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 18,
+      "titleAm": "ቤትን መግለጽ",
+      "titleEn": "Describing the Household",
+      "objectives": [
+        "Name rooms and household spaces",
+        "Describe size/type",
+        "Use plural forms and purpose expressions"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ቤት",
+          "transliteration": "bet",
+          "english": "house/home"
+        },
+        {
+          "amharic": "ክፍል",
+          "transliteration": "kïfïl",
+          "english": "room"
+        },
+        {
+          "amharic": "ሳሎን",
+          "transliteration": "salon",
+          "english": "living room"
+        },
+        {
+          "amharic": "መኝታ ቤት",
+          "transliteration": "mäññïta bet",
+          "english": "bedroom"
+        },
+        {
+          "amharic": "መታጠቢያ ቤት",
+          "transliteration": "mätat’äbiya bet",
+          "english": "bathroom"
+        },
+        {
+          "amharic": "ትልቅ",
+          "transliteration": "tïlïk’",
+          "english": "big"
+        },
+        {
+          "amharic": "ትንሽ",
+          "transliteration": "tïnïš",
+          "english": "small"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ይህ ሳሎን ነው።",
+          "english": "This is the living room."
+        },
+        {
+          "speaker": "",
+          "amharic": "አምስት ክፍሎች አሉት።",
+          "english": "It has five rooms."
+        }
+      ],
+      "practice": "Describe your home using three room names.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 19,
+      "titleAm": "የሥራ ቃላት",
+      "titleEn": "Job-Specific Vocabulary",
+      "objectives": [
+        "Build workplace vocabulary",
+        "Explain your role simply",
+        "Recognize specialized terms in context"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "ስራ",
+          "transliteration": "sïra",
+          "english": "work/job"
+        },
+        {
+          "amharic": "ሰራተኛ",
+          "transliteration": "säratäñña",
+          "english": "worker/employee"
+        },
+        {
+          "amharic": "አገልግሎት",
+          "transliteration": "agälïgïlot",
+          "english": "service"
+        },
+        {
+          "amharic": "ጤና ጣቢያ",
+          "transliteration": "t’ena t’abïya",
+          "english": "health center"
+        },
+        {
+          "amharic": "መከላከል",
+          "transliteration": "mäkälakäl",
+          "english": "prevention"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ስራህ ምንድን ነው?",
+          "english": "What is your job?"
+        },
+        {
+          "speaker": "",
+          "amharic": "በጤና ጣቢያ እሰራለሁ።",
+          "english": "I work at a health center."
+        }
+      ],
+      "practice": "Prepare a 30-second workplace introduction.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line?"
+    },
+    {
+      "number": 20,
+      "titleAm": "ቀጣይ የመማር ዘዴ",
+      "titleEn": "Ongoing Learning",
+      "objectives": [
+        "Create a weekly practice plan",
+        "Use speaking, listening, reading and writing",
+        "Build topic-based vocabulary",
+        "Use short dialogues and self-evaluation"
+      ],
+      "vocabulary": [
+        {
+          "amharic": "መማር",
+          "transliteration": "mämar",
+          "english": "to learn"
+        },
+        {
+          "amharic": "መናገር",
+          "transliteration": "mänagär",
+          "english": "to speak"
+        },
+        {
+          "amharic": "መስማት",
+          "transliteration": "mäsmat",
+          "english": "to listen/hear"
+        },
+        {
+          "amharic": "ማንበብ",
+          "transliteration": "manbäb",
+          "english": "to read"
+        },
+        {
+          "amharic": "መጻፍ",
+          "transliteration": "mäts’af",
+          "english": "to write"
+        },
+        {
+          "amharic": "ልምምድ",
+          "transliteration": "lïmïmïd",
+          "english": "practice"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "",
+          "amharic": "ዛሬ ምን ትማራለህ?",
+          "english": "What are you learning today?"
+        },
+        {
+          "speaker": "",
+          "amharic": "አዲስ ቃላት እማራለሁ።",
+          "english": "I am learning new words."
+        },
+        {
+          "speaker": "",
+          "amharic": "በየቀኑ እለማመዳለሁ።",
+          "english": "I practice every day."
+        }
+      ],
+      "practice": "Create a seven-day practice plan.",
+      "checkpoint": "Can you say the Amharic phrases without reading the English line? APPENDIX — Essential Pronouns / ዋና ተውላጠ ስሞች APPENDIX — High-Value Verbs / ዋና ግሶች Final Source Note This is a rewritten student textbook, not a page-for-page reproduction. It preserves the important instructional structure and Amharic script examples from the supplied materials while adding consistent bilingual explanations and newly composed practice prompts. The attached Writing & Reading PDF is copyright-protected; this edition therefore uses selected short examples and teaching concepts rather than reproducing the source book in full. UNIT 1 • ፊደል እና አጠራር • Fidel & Pronunciation ፊደል ቤተሰብ • The seven-order pattern The supplied learning materials present Amharic as a syllabic writing system organized through consonant families with seven forms. Here the idea is practiced as a speaking-and-writing routine. Figure 1. Seven-order family model for ለ. Original AmharicAI educational illustration. ☐ Read the family vertically. ☐ Read it across without stopping. ☐ Copy the full family once from memory. UNIT 1 • ፊደል ቤተሰቦች • Fidel Families & Contrast The source examples include seven-order families and special sounds such as ሸ, ዠ, ጰ, ጸ, ጠ and ጨ. Practice recognition first, pronunciation second, and handwriting third. Partner activity Partner A points to one Fidel. Partner B says it and identifies its order. Swap roles. Give one point for each correct answer. ☐ Compare ሰ and ሸ. ☐ Read the ጠ family twice. ☐ Write one difficult contrast for later review. UNIT 1 • የአናባቢ ድምፆች • Vowel Values Listening + speaking activity ☐ Say ለ–ሉ–ሊ–ላ–ሌ–ል–ሎ slowly. ☐ Compare ሰ and ሸ; do not merge the sounds. ☐ Record one family and listen back. ☐ Ask a partner to point to the form you hear. Reflection: Which order is easiest for you? Which one needs more writing practice? My note: ______________________________________________________________ UNIT 1 • የዋ ቅርጾች • -wa Combinations Fidel card-sort activity Write the seven forms of one family on separate cards. Mix the cards. Rebuild the sequence from 1st to 7th order and read it aloud. Move from shape to use Model → trace → copy → cover → write → read. Keep the sound and the written form together. ☐ Write each -wa form five times. ☐ Say ኳ and ሏ aloud. ☐ Create one short phrase containing ኳ or ሏ. UNIT 1 • ማንበብ እና መጻፍ • Reading & Writing Workshop Word checkpoint ደብዳቤ • ቤት • ቡና • ሻይ • ካርታ • መኪና Practical activity: teach-back Teach one family to a partner for 60 seconds. Your partner reads it back without looking at your page. ☐ Read every word aloud. ☐ Underline the Fidel you recognize. ☐ Write three words from memory. UNIT 1 • ፊደል ማረጋገጫ • Fidel Checkpoint Figure 2. Review the seven-order pattern before the checkpoint. Original AmharicAI illustration. Challenge A • Complete the pattern ለ, ሉ, ______, ላ, ______, ል, ______ Challenge B • Read ቤት • ቡና • ሻይ • ካርታ • መኪና Challenge C • Mini-teaching task Choose one family and explain its seven-order sequence to another learner. Then ask the learner to write it from memory. ☐ I can recognize seven orders. ☐ I can distinguish key consonants. ☐ I can copy short words. ☐ I can explain the practice routine. UNIT 2 • ሰላምታ እና መሰናበት • Greetings & Leave-Taking Learning goal Greet, respond, and leave politely in common social situations. Figure 3. Unit 2 visual language guide. Original AmharicAI educational illustration."
+    }
+  ],
+  "pronouns": [
+    {
+      "amharic": "እኔ",
+      "transliteration": "ïne",
+      "english": "I"
+    },
+    {
+      "amharic": "አንተ",
+      "transliteration": "antä",
+      "english": "you (masculine)"
+    },
+    {
+      "amharic": "አንቺ",
+      "transliteration": "anči",
+      "english": "you (feminine)"
+    },
+    {
+      "amharic": "እርስዎ",
+      "transliteration": "ïrswo",
+      "english": "you (polite)"
+    },
+    {
+      "amharic": "እሱ",
+      "transliteration": "ïssu",
+      "english": "he"
+    },
+    {
+      "amharic": "እሷ",
+      "transliteration": "ïsswa",
+      "english": "she"
+    },
+    {
+      "amharic": "እኛ",
+      "transliteration": "ïñña",
+      "english": "we"
+    },
+    {
+      "amharic": "እናንተ",
+      "transliteration": "ïnnantä",
+      "english": "you (plural)"
+    },
+    {
+      "amharic": "እነሱ",
+      "transliteration": "ïnnässu",
+      "english": "they"
+    }
+  ],
+  "highValueVerbs": [
+    {
+      "infinitive": "መብላት",
+      "transliteration": "mäbïlat",
+      "past3ms": "bäla",
+      "meaning": "to eat"
+    },
+    {
+      "infinitive": "መጠጣት",
+      "transliteration": "mät’ät’at",
+      "past3ms": "t’ät’a",
+      "meaning": "to drink"
+    },
+    {
+      "infinitive": "መሄድ",
+      "transliteration": "mähed",
+      "past3ms": "hedä",
+      "meaning": "to go"
+    },
+    {
+      "infinitive": "መተኛት",
+      "transliteration": "mätäňat",
+      "past3ms": "täňa",
+      "meaning": "to sleep"
+    },
+    {
+      "infinitive": "መስራት",
+      "transliteration": "mäsïrat",
+      "past3ms": "sära",
+      "meaning": "to work/do/make"
+    },
+    {
+      "infinitive": "መግዛት",
+      "transliteration": "mägïzat",
+      "past3ms": "gäza",
+      "meaning": "to buy"
+    },
+    {
+      "infinitive": "መስጠት",
+      "transliteration": "mäsït’ät",
+      "past3ms": "sät’ä",
+      "meaning": "to give"
+    },
+    {
+      "infinitive": "መጻፍ",
+      "transliteration": "mäts’af",
+      "past3ms": "s’afä",
+      "meaning": "to write"
+    },
+    {
+      "infinitive": "መማር",
+      "transliteration": "mämar",
+      "past3ms": "tämarä",
+      "meaning": "to learn"
+    },
+    {
+      "infinitive": "መኖር",
+      "transliteration": "mänor",
+      "past3ms": "norä",
+      "meaning": "to live"
+    },
+    {
+      "infinitive": "መጋበዝ",
+      "transliteration": "mägabäz",
+      "past3ms": "gabäzä",
+      "meaning": "to invite"
+    },
+    {
+      "infinitive": "መክፈል",
+      "transliteration": "mäkïfäl",
+      "past3ms": "käfälä",
+      "meaning": "to pay"
+    },
+    {
+      "infinitive": "መልበስ",
+      "transliteration": "mälïbäs",
+      "past3ms": "läbäsä",
+      "meaning": "to wear"
+    },
+    {
+      "infinitive": "መውሰድ",
+      "transliteration": "mäwïsäd",
+      "past3ms": "wäsädä",
+      "meaning": "to take"
+    },
+    {
+      "infinitive": "መውደድ",
+      "transliteration": "mäwïdäd",
+      "past3ms": "wädädä",
+      "meaning": "to like"
+    },
+    {
+      "infinitive": "መጠየቅ",
+      "transliteration": "mät’äyäk’",
+      "past3ms": "t’äyäk’ä",
+      "meaning": "to ask"
+    },
+    {
+      "infinitive": "መምጣት",
+      "transliteration": "mämït’a",
+      "past3ms": "mät’a",
+      "meaning": "to come"
+    },
+    {
+      "infinitive": "መሮጥ",
+      "transliteration": "märot’",
+      "past3ms": "rot’ä",
+      "meaning": "to run"
+    }
+  ],
+  "vowelCues": [
+    {
+      "cue": "a",
+      "reminder": "as in father / ah"
+    },
+    {
+      "cue": "ä",
+      "reminder": "central vowel used in many Amharic forms"
+    },
+    {
+      "cue": "e",
+      "reminder": "as in gate / way"
+    },
+    {
+      "cue": "u",
+      "reminder": "as in moon / soon"
+    },
+    {
+      "cue": "i",
+      "reminder": "as in feet / meet"
+    },
+    {
+      "cue": "ï",
+      "reminder": "short central vowel"
+    },
+    {
+      "cue": "o",
+      "reminder": "as in shore; often with a w-like onset"
+    }
+  ],
+  "practicePlan": [
+    {
+      "day": "1",
+      "task": "Read 10 words"
+    },
+    {
+      "day": "2",
+      "task": "Speak 10 phrases"
+    },
+    {
+      "day": "3",
+      "task": "Write 5 sentences"
+    },
+    {
+      "day": "4",
+      "task": "Role-play one dialogue"
+    },
+    {
+      "day": "5",
+      "task": "Review Fidel"
+    },
+    {
+      "day": "6",
+      "task": "Listen + repeat"
+    },
+    {
+      "day": "7",
+      "task": "Self-test"
+    }
+  ],
+  "performanceTasks": [
+    {
+      "area": "Directions",
+      "task": "Ask for and give a two-step route."
+    },
+    {
+      "area": "Clothing",
+      "task": "Describe one item you want."
+    },
+    {
+      "area": "Weather",
+      "task": "Describe today's weather."
+    },
+    {
+      "area": "Appointments",
+      "task": "Make or change an appointment."
+    },
+    {
+      "area": "Boundaries",
+      "task": "State a clear boundary."
+    },
+    {
+      "area": "Health",
+      "task": "Describe a simple health problem."
+    },
+    {
+      "area": "Safety",
+      "task": "Ask for help in an emergency."
+    },
+    {
+      "area": "House",
+      "task": "Describe a room."
+    },
+    {
+      "area": "Work",
+      "task": "Talk about your work."
+    }
+  ]
+}

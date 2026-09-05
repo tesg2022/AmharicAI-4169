@@ -1,0 +1,10 @@
+# AmharicAI native voice — inference dependencies.
+# Pinned loosely on purpose: the base model is trust_remote_code and tracks
+# recent transformers. Tighten these once a working GPU deploy exists.
+fastapi>=0.115
+uvicorn[standard]>=0.32
+transformers>=4.45
+torch>=2.4
+peft>=0.13
+numpy>=1.26
+soundfile>=0.12

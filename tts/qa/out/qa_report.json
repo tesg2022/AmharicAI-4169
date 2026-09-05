@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-09-05T16:15:36.840448+00:00",
+  "config": "/tmp/lora/AmharicAI-TTS-LoRA/training_config.json",
+  "manifests": [
+    "/home/user/Attachments/train_OXesvE.jsonl",
+    "/home/user/Attachments/dev_fsjhM9.jsonl"
+  ],
+  "audio_dirs": [
+    "/home/user/Attachments"
+  ],
+  "thresholds": {
+    "duration_drift_s": 0.05,
+    "min_duration_s": 0.4,
+    "max_duration_s": 30.0,
+    "min_fidel_ratio": 0.8,
+    "cer_review": 0.15,
+    "cer_reject": 0.35,
+    "course_band_s": [
+      1.0,
+      6.0
+    ],
+    "token_rate_hz": 25.0
+  },
+  "alignment_enabled": true,
+  "totals": {
+    "rows": 4,
+    "audio_files_found": 5,
+    "orphan_audio": [
+      "clip_a7af820c3d9c"
+    ],
+    "duplicate_ids": [],
+    "audio_seconds": 58.794,
+    "audio_hours": 0.01633
+  },
+  "buckets": {
+    "clean": 0,
+    "review": 4,
+    "reject": 0
+  },
+  "duration_bands": {
+    "long_form": 4
+  },
+  "issue_counts": {
+    "tokens_estimated": 4,
+    "no_speaker_id": 4,
+    "register_long_form": 4,
+    "raw_digits": 2,
+    "alignment_drift": 2
+  },
+  "speakers": {
+    "distinct": 0,
+    "ids": [],
+    "rows_without_speaker_id": 4
+  },
+  "alignment": {
+    "scored": 4,
+    "mean_cer": 0.1662,
+    "max_cer": 0.2449
+  },
+  "gate": {
+    "passed": false,
+    "blockers": [
+      "no speaker_id on any row — the speaker-disjoint split the training README requires cannot be produced or verified",
+      "clean bucket is empty — nothing is trainable",
+      "1 audio file(s) have no manifest row: ['clip_a7af820c3d9c']"
+    ]
+  },
+  "outputs": {
+    "clean": "tts/qa/out/clean_manifest.jsonl",
+    "review": "tts/qa/out/review_manifest.jsonl",
+    "reject": "tts/qa/out/reject_manifest.jsonl"
+  }
+}

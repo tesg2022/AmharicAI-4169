@@ -1,0 +1,93 @@
+# dependencies
+node_modules
+
+# output
+out
+dist
+dist-electron
+release
+web-build
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# local databases
+*.db
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+.env*.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+.turbo
+
+# IntelliJ based IDEs
+.idea
+
+# macOS
+.DS_Store
+
+# Expo
+.expo/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# generated native folders
+ios
+android
+
+# scripts (local-only provisioning)
+scripts/
+!packages/mobile/scripts/
+packages/mobile/scripts/*
+!packages/mobile/scripts/generate-ios-certs.py
+
+# --- AmharicAI additions ---
+# Python bytecode from the tts/ pipeline
+__pycache__/
+*.pyc
+
+# The template ignores every `scripts/` dir as local-only provisioning, but
+# packages/web/scripts holds real, reviewable pipeline tooling.
+!packages/web/scripts/
+packages/web/scripts/*
+!packages/web/scripts/speech-pipeline-check.ts
+!packages/web/scripts/pregenerate-audio.ts
+!packages/web/scripts/extract-textbook.py
+
+# The template ignores every `out/` dir as build output, but the QA gate's
+# three artifacts are evidence the user asked to preserve, not build output —
+# rejected samples in particular must never be silently dropped.
+!tts/qa/out/
+!tts/recording/out/

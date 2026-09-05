@@ -1,0 +1,31 @@
+{
+  "source": "packages/web/src/api/content/amharic-course.json",
+  "phrases": 426,
+  "speakers_requested": 4,
+  "clips_if_all_speakers": 1704,
+  "estimated_hours_at_2.5s": 1.18,
+  "by_domain": {
+    "greetings": 11,
+    "introductions": 7,
+    "classroom_instructions": 10,
+    "fidel_pronunciation": 26,
+    "vocabulary": 219,
+    "questions_answers": 98,
+    "dialogues": 3,
+    "exercises": 2,
+    "tutor_feedback": 12,
+    "everyday_conversation": 38
+  },
+  "empty_domains": [],
+  "fidel_characters_covered": 183,
+  "fidel_families_covered": 36,
+  "phrases_containing_ejectives": 107,
+  "requirements": {
+    "sample_rate": 24000,
+    "channels": 1,
+    "bit_depth": 16,
+    "format": "wav",
+    "speaker_id": "REQUIRED on every clip — the existing corpus has none, which makes a speaker-disjoint split impossible",
+    "text_normalization": "digits must be written as Amharic words, not numerals"
+  }
+}

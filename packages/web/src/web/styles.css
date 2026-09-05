@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* AmharicAI tokens — see design.md at the app root.
+   Warm ivory canvas, highland green primary, gold for XP/streaks,
+   red-clay for mistakes, a reserved blue for AI Tutor surfaces. */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-sky: var(--sky);
+  --color-script: var(--script-surface);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-ethiopic: "Noto Sans Ethiopic", "Nyala", serif;
+}
+
+:root {
+  --radius: 0.875rem;
+  --background: #fbf7ef;
+  --foreground: #14201b;
+  --card: #ffffff;
+  --card-foreground: #14201b;
+  --popover: #ffffff;
+  --popover-foreground: #14201b;
+  --primary: #0b6e4f;
+  --primary-foreground: #fbf7ef;
+  --secondary: #efe7d7;
+  --secondary-foreground: #14201b;
+  --muted: #efe7d7;
+  --muted-foreground: #6b7b72;
+  --accent: #f0b323;
+  --accent-foreground: #2b1d00;
+  --destructive: #c1272d;
+  --success: #2f9e44;
+  --warning: #d97706;
+  --sky: #1d6f9e;
+  --script-surface: #edf3f0;
+  --border: #e1d7c4;
+  --input: #e1d7c4;
+  --ring: #0b6e4f;
+  --chart-1: #0b6e4f;
+  --chart-2: #f0b323;
+  --chart-3: #1d6f9e;
+  --chart-4: #c1272d;
+  --chart-5: #6b7b72;
+  --sidebar: #f5efe3;
+  --sidebar-foreground: #14201b;
+  --sidebar-primary: #0b6e4f;
+  --sidebar-primary-foreground: #fbf7ef;
+  --sidebar-accent: #efe7d7;
+  --sidebar-accent-foreground: #14201b;
+  --sidebar-border: #e1d7c4;
+  --sidebar-ring: #0b6e4f;
+}
+
+.dark {
+  --background: #0e1512;
+  --foreground: #f3efe6;
+  --card: #16211c;
+  --card-foreground: #f3efe6;
+  --popover: #16211c;
+  --popover-foreground: #f3efe6;
+  --primary: #12a171;
+  --primary-foreground: #06110c;
+  --secondary: #1d2a24;
+  --secondary-foreground: #f3efe6;
+  --muted: #1d2a24;
+  --muted-foreground: #93a79c;
+  --accent: #f5c449;
+  --accent-foreground: #2b1d00;
+  --destructive: #e0484e;
+  --success: #3fbf57;
+  --warning: #f59e0b;
+  --sky: #4aa3d4;
+  --script-surface: #152420;
+  --border: #26332c;
+  --input: #26332c;
+  --ring: #12a171;
+  --chart-1: #12a171;
+  --chart-2: #f5c449;
+  --chart-3: #4aa3d4;
+  --chart-4: #e0484e;
+  --chart-5: #93a79c;
+  --sidebar: #121b17;
+  --sidebar-foreground: #f3efe6;
+  --sidebar-primary: #12a171;
+  --sidebar-primary-foreground: #06110c;
+  --sidebar-accent: #1d2a24;
+  --sidebar-accent-foreground: #f3efe6;
+  --sidebar-border: #26332c;
+  --sidebar-ring: #12a171;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    /* Faint tibeb weave — texture without pattern noise. */
+    background-image:
+      radial-gradient(circle at 12% 8%, color-mix(in oklab, var(--primary) 7%, transparent), transparent 45%),
+      radial-gradient(circle at 88% 4%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 40%);
+    background-attachment: fixed;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  /* Every Amharic (Ge'ez) string must carry this class — the Latin faces have
+     no Ethiopic glyphs and fall back to an inconsistent system font. */
+  .am {
+    font-family: var(--font-ethiopic);
+    line-height: 1.6;
+  }
+
+  .card-surface {
+    @apply rounded-[var(--radius)] border border-border bg-card;
+    box-shadow: 0 1px 2px rgb(20 32 27 / 0.04), 0 8px 24px -18px rgb(20 32 27 / 0.35);
+  }
+
+  .script-surface {
+    background-color: var(--script-surface);
+  }
+}
+
+/* Tibeb chevron rule — the one decorative motif, used sparingly. */
+.tibeb-rule {
+  height: 8px;
+  background-image: linear-gradient(
+      135deg,
+      var(--accent) 25%,
+      transparent 25.5%
+    ),
+    linear-gradient(225deg, var(--accent) 25%, transparent 25.5%);
+  background-size: 14px 8px;
+  background-repeat: repeat-x;
+  opacity: 0.75;
+}
