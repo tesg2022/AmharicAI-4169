@@ -1,37 +1,26 @@
 /**
- * Provider registry.
+ * Provider registry — AmharicAI only.
  *
- * Composition only. Selection is by env, in a fixed preference order, so
- * dropping a key into the root `.env` is the entire act of turning native
- * Amharic audio on — no code change, no redeploy of the client.
+ * There is deliberately exactly one speech provider: our own native-speaker
+ * voice, served from `tts/serving/`. The Azure, Google and Addis adapters were
+ * removed on purpose. They existed so the app was never voiceless while the
+ * LoRA was being trained, but a commercial fallback means the product can ship
+ * sounding like a hyperscaler locale while claiming a native Amharic voice.
+ * Failing honestly is the better failure: when our endpoint is down the clients
+ * fall back to a device am-ET voice if one is installed, and otherwise stay
+ * silent and say why.
  *
- * `SPEECH_PROVIDER` pins one explicitly when more than one key is present.
+ * Selection is still by env, so dropping `AMHARICAI_TTS_URL` into the root
+ * `.env` remains the entire act of turning native Amharic audio on.
  */
 
-import { addisProvider } from "./addis";
 import { amharicaiProvider } from "./amharicai";
-import { azureProvider } from "./azure";
-import { googleProvider } from "./google";
 import type { ProviderStatus, SpeechProvider } from "./types";
 
 export * from "./types";
-export { addisProvider, amharicaiProvider, azureProvider, googleProvider };
+export { amharicaiProvider };
 
-/**
- * Preference order when nothing is pinned.
- *
- * Our own native-speaker voice first: it is trained on Amharic recorded for
- * this course, so when the endpoint is up it should beat a hyperscaler locale.
- * Azure follows because it is the only vendor verified to have both a neural
- * am-ET voice pair and am-ET recognition — and recognition still comes from a
- * vendor regardless, since the LoRA only synthesizes.
- */
-export const PROVIDERS: SpeechProvider[] = [
-  amharicaiProvider,
-  azureProvider,
-  googleProvider,
-  addisProvider,
-];
+export const PROVIDERS: SpeechProvider[] = [amharicaiProvider];
 
 export function allStatuses(): ProviderStatus[] {
   return PROVIDERS.map((p) => p.status());
@@ -42,7 +31,7 @@ export function activeProvider(): SpeechProvider | null {
   const pinned = process.env.SPEECH_PROVIDER?.trim();
   if (pinned) {
     const match = PROVIDERS.find((p) => p.id === pinned);
-    if (match?.status().configured) return match;
+    return match?.status().configured ? match : null;
   }
   return PROVIDERS.find((p) => p.status().configured) ?? null;
 }
@@ -50,11 +39,16 @@ export function activeProvider(): SpeechProvider | null {
 /**
  * The provider that will actually transcribe a learner's take.
  *
- * Deliberately *not* `activeProvider()`. Our own voice sits first in the
- * preference order but only synthesizes, so selecting a recognizer by the
- * synthesis order would silently disable the speaking loop the moment the
- * native voice endpoint is configured. Recognition falls through to the first
- * configured vendor that actually listens.
+ * Today this always returns null, and that is a stated consequence rather than
+ * an oversight: the AmharicAI backend synthesizes but does not listen, and it is
+ * now the only provider. Every caller already handles a null recognizer — the
+ * speaking loop falls back to the deterministic typed self-check, scored by the
+ * same Levenshtein rules — so the loop keeps working and the UI says plainly
+ * that no recognizer is configured.
+ *
+ * The function stays because the seam is the point: give `amharicaiProvider` a
+ * `recognize` implementation (or add an Amharic ASR provider) and recognition
+ * turns back on with no changes at the call sites.
  */
 export function activeRecognizer(): SpeechProvider | null {
   const pinned = process.env.SPEECH_RECOGNIZER?.trim() || process.env.SPEECH_PROVIDER?.trim();

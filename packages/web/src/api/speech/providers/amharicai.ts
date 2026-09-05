@@ -2,10 +2,11 @@
  * AmharicAI native-voice adapter — our own OmniVoice/HiggsAudio LoRA, served
  * from `tts/serving/`.
  *
- * This is provider #1 by preference: it is a voice trained on native Amharic
- * speech for this course, so when it is reachable it should win over a
- * hyperscaler locale. The commercial adapters stay behind it as fallback, so
- * the app is never voiceless while the model is being trained or redeployed.
+ * This is the only speech provider. It is a voice trained on native Amharic
+ * speech recorded for this course, and there is deliberately no commercial
+ * fallback behind it: when this endpoint is unreachable the app degrades to a
+ * device am-ET voice, or to honest silence with a stated reason. It never
+ * substitutes a hyperscaler locale while claiming a native voice.
  *
  * Host-agnostic on purpose. The primary target is a Hugging Face Inference
  * Endpoint, but nothing here assumes HF — point the URL at a container, a

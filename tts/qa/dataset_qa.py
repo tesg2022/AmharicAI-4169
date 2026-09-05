@@ -164,7 +164,8 @@ def transcribe(path: Path, cache: dict[str, str]) -> str | None:
 # --------------------------------------------------------------------------
 
 
-def qa_row(row: dict, audio: Path | None, cfg: dict, th: dict, hyp: str | None) -> dict:
+def qa_row(row: dict, audio: Path | None, cfg: dict, th: dict, hyp: str | None,
+           metadata_only: bool = False) -> dict:
     """Return the row annotated with `qa` — bucket plus every reason."""
     issues: list[dict] = []
 
@@ -180,7 +181,24 @@ def qa_row(row: dict, audio: Path | None, cfg: dict, th: dict, hyp: str | None) 
 
     # --- audio ---
     probe: dict = {}
-    if audio is None or not audio.exists():
+    stated_duration = row.get("audio_duration")
+    if metadata_only:
+        # The waveforms are not present (a manifest exported from Colab points at
+        # /content paths). Rejecting all 1500+ rows as `audio_missing` would be
+        # technically true and analytically useless, so the audio-dependent checks
+        # are SKIPPED and said to be skipped — never quietly assumed to have passed.
+        add("audio_unverified", "info",
+            "audio file not available; sample rate, channels, codec, bit depth and "
+            "duration drift were NOT checked. Stated duration is trusted, not measured.")
+        if isinstance(stated_duration, (int, float)):
+            dur = float(stated_duration)
+            if dur < th["min_duration_s"]:
+                add("too_short", "reject", f"{dur:.2f}s (stated, unverified)")
+            elif dur > th["max_duration_s"]:
+                add("too_long", "reject", f"{dur:.2f}s (stated, unverified)")
+        else:
+            add("duration_absent", "review", "no duration in manifest and no audio to measure")
+    elif audio is None or not audio.exists():
         add("audio_missing", "reject", f"no file for {row.get('audio_path')!r}")
     else:
         probe = ffprobe(audio)
@@ -209,7 +227,10 @@ def qa_row(row: dict, audio: Path | None, cfg: dict, th: dict, hyp: str | None) 
                 add("too_long", "reject", f"{dur:.2f}s")
 
     # --- tokens ---
-    dur = probe.get("duration", 0.0)
+    # Measured duration when we have the file, stated duration when we do not.
+    dur = probe.get("duration") or (
+        float(stated_duration) if isinstance(stated_duration, (int, float)) else 0.0
+    )
     tokens = row.get("num_tokens")
     estimated = False
     if not isinstance(tokens, (int, float)) and dur:
@@ -292,6 +313,33 @@ def qa_row(row: dict, audio: Path | None, cfg: dict, th: dict, hyp: str | None) 
 # --------------------------------------------------------------------------
 
 
+# Field aliases. The 5h corpus manifest and the earlier shard manifests describe
+# the same things under different names; mapping them here means one gate serves
+# both rather than two gates drifting apart.
+FIELD_ALIASES = {
+    "audio": "audio_path",
+    "audio_filepath": "audio_path",
+    "file": "audio_path",
+    "duration": "audio_duration",
+    "language": "language_id",
+    "speaker": "speaker_id",
+}
+
+
+def normalize_schema(row: dict) -> dict:
+    """Canonicalize field names, and derive `id` from the clip stem when absent.
+
+    Non-destructive: the original keys are left in place, so nothing is lost
+    from the manifests written back out."""
+    out = dict(row)
+    for src, dst in FIELD_ALIASES.items():
+        if src in out and dst not in out:
+            out[dst] = out[src]
+    if not out.get("id") and out.get("audio_path"):
+        out["id"] = Path(str(out["audio_path"])).stem
+    return out
+
+
 def load_manifest(path: Path) -> list[dict]:
     rows = []
     for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
@@ -303,6 +351,7 @@ def load_manifest(path: Path) -> list[dict]:
         except json.JSONDecodeError as exc:
             rows.append({"id": f"{path.name}:{n}", "_parse_error": str(exc)})
             continue
+        row = normalize_schema(row)
         row["_source_manifest"] = path.name
         rows.append(row)
     return rows
@@ -311,7 +360,11 @@ def load_manifest(path: Path) -> list[dict]:
 def main() -> int:
     p = argparse.ArgumentParser(description="AmharicAI dataset QA gate")
     p.add_argument("--manifest", action="append", required=True, type=Path)
-    p.add_argument("--audio-dir", action="append", required=True, type=Path)
+    p.add_argument("--audio-dir", action="append", default=[], type=Path)
+    p.add_argument("--metadata-only", action="store_true",
+                   help="QA the manifest without the waveforms (they are not present). "
+                        "Audio-dependent checks are skipped and reported as skipped; "
+                        "the result is never a training-readiness pass.")
     p.add_argument("--config", type=Path, required=True)
     p.add_argument("--out-dir", type=Path, default=Path("tts/qa/out"))
     p.add_argument("--align", action="store_true",
@@ -321,6 +374,9 @@ def main() -> int:
     p.add_argument("--min-duration", type=float, default=DEFAULTS["min_duration_s"])
     p.add_argument("--max-duration", type=float, default=DEFAULTS["max_duration_s"])
     args = p.parse_args()
+
+    if not args.audio_dir and not args.metadata_only:
+        p.error("--audio-dir is required unless --metadata-only is given")
 
     th = dict(DEFAULTS)
     th.update({
@@ -366,7 +422,7 @@ def main() -> int:
         if audio:
             used_stems.add(stem)
         hyp = transcribe(audio, cache) if (args.align and audio and audio.exists()) else None
-        results.append(qa_row(r, audio, cfg, th, hyp))
+        results.append(qa_row(r, audio, cfg, th, hyp, metadata_only=args.metadata_only))
 
     if args.align:
         cache_path.write_text(json.dumps(cache, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -385,7 +441,11 @@ def main() -> int:
                 fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
     # ---- corpus-level facts ----
-    durations = [r["qa"]["audio"].get("duration", 0.0) for r in results if r["qa"]["audio"]]
+    durations = [
+        (r["qa"]["audio"].get("duration") if r["qa"]["audio"] else None)
+        or (float(r["audio_duration"]) if isinstance(r.get("audio_duration"), (int, float)) else 0.0)
+        for r in results
+    ]
     total_s = sum(durations)
     speakers = {r.get("speaker_id") for r in results if r.get("speaker_id")}
     issue_counts = Counter(i["code"] for r in results for i in r["qa"]["issues"])
@@ -404,8 +464,17 @@ def main() -> int:
         )
     if not buckets["clean"]:
         blockers.append("clean bucket is empty — nothing is trainable")
-    if orphan_audio:
+    if orphan_audio and not args.metadata_only:
         blockers.append(f"{len(orphan_audio)} audio file(s) have no manifest row: {orphan_audio}")
+
+    # Metadata QA can clear the manifest; it can never clear the corpus. Training
+    # readiness is tracked separately so a metadata pass is not mistaken for one.
+    training_blockers = list(blockers)
+    if args.metadata_only:
+        training_blockers.append(
+            "audio was not verified — sample rate, channels, codec and audio↔text "
+            "alignment are unchecked; re-run with --audio-dir once the waveforms are present"
+        )
     if duplicates:
         blockers.append(f"{len(duplicates)} duplicate id(s): {duplicates[:10]}")
 
@@ -437,9 +506,20 @@ def main() -> int:
             "mean_cer": round(sum(cers) / len(cers), 4) if cers else None,
             "max_cer": max(cers) if cers else None,
         },
+        "audio_verification": {
+            "performed": not args.metadata_only,
+            "skipped_checks": (
+                ["sample_rate", "channels", "bit_depth", "codec", "duration_drift",
+                 "audio_text_alignment", "manifest_audio_existence"]
+                if args.metadata_only else []
+            ),
+            "durations_source": "manifest (stated, unverified)" if args.metadata_only else "ffprobe (measured)",
+        },
         "gate": {
             "passed": not blockers,
             "blockers": blockers,
+            "training_ready": not training_blockers,
+            "training_blockers": training_blockers,
         },
         "outputs": {
             "clean": str(args.out_dir / "clean_manifest.jsonl"),
@@ -467,6 +547,11 @@ def main() -> int:
     if blockers:
         print("GATE: FAILED — do not train.")
         for b in blockers:
+            print(f"  · {b}")
+    elif args.metadata_only:
+        print("GATE: PASSED (METADATA ONLY) — the manifest is coherent and splittable.")
+        print("NOT training-ready. Unverified until the waveforms are present:")
+        for b in training_blockers:
             print(f"  · {b}")
     else:
         print("GATE: PASSED — clean_manifest.jsonl is safe to split and tokenize.")

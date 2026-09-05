@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-09-05T18:19:22.846385+00:00",
+  "config": "tts/training/training_config.json",
+  "manifests": [
+    "/tmp/metadata_5h.jsonl"
+  ],
+  "audio_dirs": [],
+  "thresholds": {
+    "duration_drift_s": 0.05,
+    "min_duration_s": 0.4,
+    "max_duration_s": 30.0,
+    "min_fidel_ratio": 0.8,
+    "cer_review": 0.15,
+    "cer_reject": 0.35,
+    "course_band_s": [
+      1.0,
+      6.0
+    ],
+    "token_rate_hz": 25.0
+  },
+  "alignment_enabled": false,
+  "totals": {
+    "rows": 1532,
+    "audio_files_found": 0,
+    "orphan_audio": [],
+    "duplicate_ids": [],
+    "audio_seconds": 18002.32,
+    "audio_hours": 5.00064
+  },
+  "buckets": {
+    "clean": 1266,
+    "review": 266,
+    "reject": 0
+  },
+  "duration_bands": {
+    "long_form": 1455,
+    "course": 77
+  },
+  "issue_counts": {
+    "audio_unverified": 1532,
+    "tokens_estimated": 1532,
+    "register_long_form": 1455,
+    "raw_digits": 260,
+    "latin_contamination": 6,
+    "low_fidel_ratio": 1
+  },
+  "speakers": {
+    "distinct": 15,
+    "ids": [
+      "spk_069c95aab7e5",
+      "spk_19128d650180",
+      "spk_2781999af248",
+      "spk_3fdd7de93865",
+      "spk_543fa508df52",
+      "spk_580fd8276ca4",
+      "spk_6674d883613f",
+      "spk_6917a9efa8b0",
+      "spk_785eaafc249b",
+      "spk_9c054ad076f4",
+      "spk_a9e5bcbd13c3",
+      "spk_b4cde1709ab6",
+      "spk_b72a8d7b3938",
+      "spk_efb391a67d78",
+      "spk_f2ab2b0e7cc9"
+    ],
+    "rows_without_speaker_id": 0
+  },
+  "alignment": {
+    "scored": 0,
+    "mean_cer": null,
+    "max_cer": null
+  },
+  "audio_verification": {
+    "performed": false,
+    "skipped_checks": [
+      "sample_rate",
+      "channels",
+      "bit_depth",
+      "codec",
+      "duration_drift",
+      "audio_text_alignment",
+      "manifest_audio_existence"
+    ],
+    "durations_source": "manifest (stated, unverified)"
+  },
+  "gate": {
+    "passed": true,
+    "blockers": [],
+    "training_ready": false,
+    "training_blockers": [
+      "audio was not verified — sample rate, channels, codec and audio↔text alignment are unchecked; re-run with --audio-dir once the waveforms are present"
+    ]
+  },
+  "outputs": {
+    "clean": "tts/qa/out5h/clean_manifest.jsonl",
+    "review": "tts/qa/out5h/review_manifest.jsonl",
+    "reject": "tts/qa/out5h/reject_manifest.jsonl"
+  }
+}

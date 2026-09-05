@@ -1,0 +1,37 @@
+{
+  "source": "tts/qa/out5h/clean_manifest.jsonl",
+  "rows": {
+    "train": 913,
+    "dev": 230,
+    "test": 123
+  },
+  "speakers": {
+    "train": [
+      "spk_069c95aab7e5",
+      "spk_19128d650180",
+      "spk_2781999af248",
+      "spk_3fdd7de93865",
+      "spk_580fd8276ca4",
+      "spk_6674d883613f",
+      "spk_6917a9efa8b0",
+      "spk_785eaafc249b",
+      "spk_9c054ad076f4",
+      "spk_b4cde1709ab6",
+      "spk_f2ab2b0e7cc9"
+    ],
+    "dev": [
+      "spk_a9e5bcbd13c3",
+      "spk_efb391a67d78"
+    ],
+    "test": [
+      "spk_543fa508df52",
+      "spk_b72a8d7b3938"
+    ]
+  },
+  "seconds": {
+    "train": 11008.31,
+    "dev": 2369.7,
+    "test": 1491.54
+  },
+  "disjoint_verified": true
+}

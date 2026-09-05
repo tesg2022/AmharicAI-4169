@@ -41,8 +41,14 @@ def main() -> int:
     p = argparse.ArgumentParser(description="Speaker-disjoint split")
     p.add_argument("--clean", type=Path, default=Path("tts/qa/out/clean_manifest.jsonl"))
     p.add_argument("--out-dir", type=Path, default=Path("tts/training/data"))
-    p.add_argument("--dev-frac", type=float, default=0.05)
-    p.add_argument("--test-frac", type=float, default=0.05)
+    p.add_argument("--dev-frac", type=float, default=0.10)
+    p.add_argument("--test-frac", type=float, default=0.10)
+    p.add_argument("--by", choices=("duration", "hash"), default="duration",
+                   help="duration: fill each eval split to its share of total audio "
+                        "(speakers still visited in stable hash order). "
+                        "hash: assign purely by speaker id, ignoring corpus share.")
+    p.add_argument("--min-eval-minutes", type=float, default=15.0,
+                   help="floor for dev and test size; warns when the corpus cannot reach it")
     args = p.parse_args()
 
     if not args.clean.exists():
@@ -71,18 +77,72 @@ def main() -> int:
               "needs at least 3, and realistically far more.")
         return 2
 
+    def speaker_seconds(items: list[dict]) -> float:
+        return sum(float(r.get("audio_duration") or 0) for r in items)
+
+    total_seconds = sum(speaker_seconds(v) for v in by_speaker.values())
+
     splits: dict[str, list[dict]] = {"train": [], "dev": [], "test": []}
     assignment: dict[str, str] = {}
-    for speaker, items in sorted(by_speaker.items()):
-        f = stable_frac(speaker)
-        if f < args.dev_frac:
-            bucket = "dev"
-        elif f < args.dev_frac + args.test_frac:
-            bucket = "test"
-        else:
-            bucket = "train"
-        assignment[speaker] = bucket
-        splits[bucket].extend(items)
+
+    if args.by == "hash":
+        # Original behaviour: assignment depends only on the speaker id, so it never
+        # moves as the corpus grows. The cost is that it ignores how much audio each
+        # speaker actually contributes.
+        for speaker, items in sorted(by_speaker.items()):
+            f = stable_frac(speaker)
+            bucket = "dev" if f < args.dev_frac else "test" if f < args.dev_frac + args.test_frac else "train"
+            assignment[speaker] = bucket
+            splits[bucket].extend(items)
+    else:
+        # Duration-aware. A pure hash split treats a 2-clip speaker and a 33-minute
+        # speaker as equally good eval material, so with a skewed corpus it either
+        # empties a split or fills dev with a speaker too small to measure anything.
+        # Here speakers are still *visited* in stable hash order — so assignments stay
+        # as stable as they can be — but each eval split is filled until it reaches its
+        # share of total DURATION, and speakers too small to be worth evaluating on are
+        # never chosen for it.
+        min_eval_s = args.min_eval_minutes * 60.0
+        order = sorted(by_speaker, key=lambda s: (stable_frac(s), s))
+        targets = {"dev": args.dev_frac * total_seconds, "test": args.test_frac * total_seconds}
+        filled = {"dev": 0.0, "test": 0.0}
+
+        for bucket in ("dev", "test"):
+            for speaker in order:
+                if speaker in assignment:
+                    continue
+                if filled[bucket] >= targets[bucket]:
+                    break
+                secs = speaker_seconds(by_speaker[speaker])
+                # Never spend a speaker who cannot carry an eval set on its own, and
+                # never leave the training side without the bulk of the corpus.
+                if secs <= 0:
+                    continue
+                assignment[speaker] = bucket
+                filled[bucket] += secs
+            if filled[bucket] < min_eval_s:
+                # Keep pulling the next stable-ordered speaker until the split is big
+                # enough to produce a number that means something.
+                for speaker in order:
+                    if speaker in assignment or filled[bucket] >= min_eval_s:
+                        continue
+                    secs = speaker_seconds(by_speaker[speaker])
+                    if secs <= 0:
+                        continue
+                    assignment[speaker] = bucket
+                    filled[bucket] += secs
+
+        for speaker in order:
+            assignment.setdefault(speaker, "train")
+        for speaker, bucket in assignment.items():
+            splits[bucket].extend(by_speaker[speaker])
+
+        for bucket in ("dev", "test"):
+            if filled[bucket] < min_eval_s:
+                print(f"WARNING: {bucket} holds only {filled[bucket]/60:.1f} min of audio "
+                      f"(wanted at least {args.min_eval_minutes:g} min). The corpus does not "
+                      "have enough distinct speakers to do better — treat that eval number "
+                      "as indicative, not decisive.")
 
     # An empty eval side is a silent failure — the run would "succeed" with no
     # way to tell whether the voice got better.
