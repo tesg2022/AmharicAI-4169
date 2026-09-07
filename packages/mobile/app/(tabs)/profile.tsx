@@ -9,6 +9,7 @@ import { useColors } from "@/hooks/use-colors";
 import { useSession } from "@/hooks/use-session";
 import { authClient, clearToken } from "@/lib/auth";
 import { usePreview } from "@/lib/preview-plan";
+import { useAccess } from "@/queries/access";
 import { useCourseStats } from "@/queries/content";
 import {
   useActivity,
@@ -73,7 +74,11 @@ export default function ProfileScreen() {
   const leaderboard = useLeaderboard(isSignedIn);
   const courseStats = useCourseStats();
   const updateSettings = useUpdateSettings();
-  const { plan: previewPlan, locale, toggleLocale } = usePreview();
+  const { locale, toggleLocale } = usePreview();
+  // The plan shown here is the one the SERVER resolved from the session. The
+  // device's preview switch is not consulted: for a signed-in learner the
+  // server ignores it entirely, so showing it here would contradict the gate.
+  const access = useAccess();
   const [signingOut, setSigningOut] = useState(false);
 
   const stats = progress.data?.stats;
@@ -284,20 +289,34 @@ export default function ProfileScreen() {
           </>
         )}
 
-        {/* Plans and free-text translation. The plan shown is a preview switch
-            on this device, not a subscription — this build has no accounts. */}
+        {/* Plan, as resolved by the server from the session. */}
         <Card style={{ gap: 10 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Title size={FontSize.h3} style={{ flex: 1 }}>
               Plan
             </Title>
-            <Chip label={`${previewPlan} · preview`} icon="eye-outline" color={colors.warning} />
+            <Chip
+              label={
+                access.data?.plan_is_verified
+                  ? `${access.data.plan} · verified`
+                  : `${access.data?.plan ?? "free"} · preview`
+              }
+              icon={access.data?.plan_is_verified ? "shield-checkmark" : "eye-outline"}
+              color={access.data?.plan_is_verified ? colors.success : colors.warning}
+            />
           </View>
           <Body size={FontSize.caption} color={colors.mutedForeground}>
-            Nothing can be purchased yet: there is no payment key and no account store to record a
-            subscription against.
+            {access.data?.plan_is_verified
+              ? "This plan is recorded against your account on the server, not on this device."
+              : "Nothing can be purchased yet — payment is not connected in this build. An administrator-issued access code is the only way to hold a paid plan."}
           </Body>
           <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+            <Button
+              label="Your plan"
+              variant="secondary"
+              icon="ribbon-outline"
+              onPress={() => router.push("/subscription")}
+            />
             <Button
               label="See plans"
               variant="secondary"

@@ -142,3 +142,68 @@ page that had no business making it still breaks the build.
 Next: mobile (packages/mobile) — login, subscription screen reading `access.me`, redeem-code
 screen, Restore Purchases affordance; replace `lib/preview-plan.tsx` usage (do NOT persist it).
 Then Stage C, the Nuxt BFF integration.
+
+## Stage B mobile — VERIFIED and complete
+
+Files: `queries/access.ts` (new), `app/subscription.tsx` (new), `app/(tabs)/profile.tsx`
+(plan card now server-resolved, links to /subscription), `app/pricing.tsx` (corrected).
+
+Gates, all green:
+
+- `packages/mobile` `bun run typecheck` clean. Two real errors fixed on the way: an
+  `Ionicons` name that does not exist (`badge-outline` -> `ribbon-outline`), and an implicit
+  `any` in `src/api/middleware/admin.ts` — the mobile tsconfig typechecks the web API types it
+  imports, so a web-side annotation gap surfaces here rather than in the web build.
+- root `bun run lint` clean (40 files), root `bun run build` clean.
+- `/tmp/acc_verify.py` **45/45** (backend unchanged, re-run as the gate).
+- `/tmp/mob_sub.py` **21/21** — anonymous and signed-in, /subscription /pricing /profile.
+- `/tmp/mob_redeem.py` **11/11** — the redeem HAPPY path on the device: a real
+  admin-issued code, gate demonstrably CLOSED on `u3-l1` (403 "Included from the Learner
+  plan"), redeem, plan becomes **Premium / Verified / "Access code" / 30 days left**, history
+  shows `····85` and never the plaintext, then the gate demonstrably OPEN on the same lesson.
+  So the mobile surface is not just wired — the entitlement it draws is enforced.
+
+### `app/pricing.tsx` — two corrections, both honesty bugs
+
+1. It still carried the dead blocker "there is no payment key in this build and no account
+   store to record a subscription against". The second half stopped being true the moment
+   Stage A landed. Replaced with the Autumn truth: the integration is not wired, so nothing
+   can be bought, and the button will say exactly what is missing. A stale honesty notice is
+   just another false statement.
+2. It offered "Preview as {plan}" buttons to *signed-in* learners, for whom the server ignores
+   the preview switch entirely — the buttons silently did nothing. They are now hidden when
+   signed in, replaced by a link to `/subscription`, and the copy says the switch is ignored.
+   The capability heading also stops calling a signed-in learner's real plan a "preview".
+
+### Two more false alarms from my own assertions (fourth and fifth in this project)
+
+Both on `/profile` anonymous, both my test's fault, neither a code bug. The screen shows the
+SignInPrompt for the *progress* half and still renders the plan card below it, and the chip
+reads lower-case `free · preview`. A case-sensitive `"Free" in t` and then a `"Plan" not in t`
+both failed against a page that was correct. Dumped the DOM, fixed the assertions. The rule
+stands: dump before diagnosing.
+
+The console check in both mobile suites is phase-attributed, like the web one. `mob_redeem`
+allows exactly one error — the 403 from the gate it deliberately closes — and nothing else.
+
+### Deliberate, not oversights
+
+- The new mobile screens are **English-only**; no keys were added to `i18n/messages.ts`.
+  This follows `app/sign-in.tsx`, already English-only. Machine-translating billing and
+  security copy into Amharic is worse than leaving it in English until a native reviewer
+  writes it. (The rule still holds for anything that *is* added there: both locales or the
+  key renders as a visible bug.)
+- `lib/preview-plan.tsx` stays, is still **never persisted**, and still owns
+  `locale`/`toggleLocale`. Only its `plan` reads shrank.
+- `queries/catalog.ts` `useEntitlements()` still reads `catalog.me` with the preview plan, so
+  the anonymous preview switch keeps working. `/subscription` and the profile plan card read
+  `access.me` directly. For a signed-in caller both resolve identically, because the server
+  ignores the preview switch — verified by the suites above.
+- The iOS **code-redemption screen is an App Review risk** and stays on the record: Apple has
+  its own Offer Codes mechanism, and custom redemption granting paid content can read as
+  circumventing IAP.
+- Mobile purchase flow is still not buildable here: IAP needs a development build, and running
+  EAS in this sandbox would kill it. Restore Purchases exists and says plainly that there is
+  no purchase mechanism to restore from yet.
+
+Next: Stage C, the Nuxt BFF integration (`/home/user/gh/AmharicAI`).

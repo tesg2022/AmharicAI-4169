@@ -17,7 +17,7 @@ import { authed } from "./auth";
 export function adminEmails(): string[] {
   return (process.env["ADMIN_EMAILS"] ?? "")
     .split(",")
-    .map((e) => e.trim().toLowerCase())
+    .map((e: string) => e.trim().toLowerCase())
     .filter(Boolean);
 }
 

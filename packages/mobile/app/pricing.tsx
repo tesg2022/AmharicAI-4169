@@ -1,8 +1,10 @@
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { FontSize, Radius } from "@/constants/theme";
 import { useColors } from "@/hooks/use-colors";
+import { useSession } from "@/hooks/use-session";
 import { t } from "@/i18n/messages";
 import { usePreview, type PreviewPlan } from "@/lib/preview-plan";
 import {
@@ -28,10 +30,12 @@ import {
  *
  * Two things this screen refuses to do:
  *
- *  1. Pretend it can charge. There are no payment keys AND no account store to
- *     record a subscription against, so checkout fails and lists BOTH blockers.
- *     Adding Stripe keys alone would still not make this chargeable — the
- *     notice above the buttons says so before anyone taps.
+ *  1. Pretend it can charge. The Autumn billing integration is not wired into
+ *     this build, so checkout fails and reports that as the real blocker. The
+ *     notice above the buttons says so before anyone taps. (The older copy
+ *     here also claimed there was no account store to record a subscription
+ *     against — that stopped being true when accounts landed, and a stale
+ *     honesty notice is just another false statement.)
  *  2. Sell a capability that does not exist. A plan can GRANT a feature while
  *     the feature is `coming_soon` (custom voice, speaking feedback),
  *     `preview` (AI tutor) or `not_configured` (TTS host, translation key).
@@ -40,6 +44,10 @@ import {
  *     screen cannot word it differently from the website. `coming_soon` is
  *     reported ahead of `plan_gated` on purpose: never invite an upgrade for
  *     something that does not exist.
+ *  3. Offer a preview switch to somebody who is signed in. The server resolves
+ *     a signed-in learner's plan from their session and ignores the switch
+ *     entirely, so those buttons would do nothing at all. They are replaced by
+ *     a link to the real plan screen.
  */
 
 type CapabilityStatus = "available" | "preview" | "coming_soon" | "not_configured";
@@ -130,6 +138,7 @@ function CapabilityRow({ feature }: { feature: Feature }) {
 export default function PricingScreen() {
   const colors = useColors();
   const { plan, setPlan, locale, toggleLocale } = usePreview();
+  const { isSignedIn } = useSession();
   const me = useEntitlements();
   const checkout = useCheckout();
 
@@ -179,10 +188,24 @@ export default function PricingScreen() {
               Nothing here can be purchased yet
             </Body>
             <Body size={FontSize.caption} color={colors.foreground}>
-              Payment is not connected: there is no payment key in this build and no account store
-              to record a subscription against. Adding payment keys alone would not be enough. The
-              plan switch below only previews how the app gates content.
+              Payment is not connected: the Autumn billing integration is not wired into this
+              build, so no plan on this screen can be bought. Tapping a subscribe button will tell
+              you exactly what is missing, and nothing is charged.
             </Body>
+            <Body size={FontSize.caption} color={colors.foreground}>
+              {isSignedIn
+                ? "You are signed in, so your plan is resolved on the server from your account and the preview switch is ignored. Open Your plan to see what you actually hold, or to redeem an access code."
+                : "The plan switch below only previews how the app gates content. It grants nothing, and it is ignored once you sign in."}
+            </Body>
+            {isSignedIn ? (
+              <Button
+                label="Your plan"
+                variant="secondary"
+                icon="ribbon-outline"
+                onPress={() => router.push("/subscription")}
+                style={{ alignSelf: "flex-start", marginTop: 4 }}
+              />
+            ) : null}
           </View>
 
           {plans.map((p) => {
@@ -239,7 +262,7 @@ export default function PricingScreen() {
                 </View>
 
                 <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                  {isCurrent ? (
+                  {isSignedIn ? null : isCurrent ? (
                     <View
                       style={{
                         flexDirection: "row",
@@ -302,7 +325,9 @@ export default function PricingScreen() {
 
           <Card tone="muted" style={{ gap: 10 }}>
             <Body size={FontSize.small} bold>
-              What each feature actually does today, on the {plan} preview
+              {isSignedIn
+                ? "What each feature actually does today, on the plan your account holds"
+                : `What each feature actually does today, on the ${plan} preview`}
             </Body>
             {features.map((feature) => (
               <CapabilityRow key={feature.id} feature={feature} />
@@ -316,9 +341,11 @@ export default function PricingScreen() {
                 {t(locale, "stateLegend")}
               </Body>
             )}
-            <Body size={FontSize.caption} color={colors.mutedForeground}>
-              {t(locale, "previewNote")}
-            </Body>
+            {isSignedIn ? null : (
+              <Body size={FontSize.caption} color={colors.mutedForeground}>
+                {t(locale, "previewNote")}
+              </Body>
+            )}
           </Card>
         </ScrollView>
       )}
