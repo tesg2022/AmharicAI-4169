@@ -151,7 +151,14 @@ function SoundCard({ sound, mode }: { sound: Sound; mode: VoiceMode }) {
                 onPress={() => {
                   void speakAmharic(char, { mode, kind: "drill" });
                 }}
+                accessibilityRole="button"
+                // The character itself is Ethiopic; an English screen reader
+                // would spell it as an unknown glyph. Name the action instead.
+                accessibilityLabel={`Play the sound of ${sound.id} family letter ${i + 1}`}
+                hitSlop={6}
                 style={{
+                  minHeight: 44,
+                  justifyContent: "center",
                   borderWidth: 1,
                   borderColor: colors.border,
                   borderRadius: Radius.card,
@@ -244,7 +251,13 @@ export default function PronunciationScreen() {
                 <Pressable
                   key={t.id}
                   onPress={() => setTab(t.id)}
+                  accessibilityRole="tab"
+                  accessibilityState={{ selected: active }}
+                  accessibilityLabel={t.label}
+                  hitSlop={8}
                   style={{
+                    minHeight: 44,
+                    justifyContent: "center",
                     paddingHorizontal: 16,
                     paddingVertical: 8,
                     borderRadius: Radius.pill,
@@ -359,6 +372,8 @@ export default function PronunciationScreen() {
                         onPress={() => {
                           void speakAmharic(pair.plainText, { mode, kind: "drill" });
                         }}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Play ${pair.plainRoman}, the plain consonant`}
                         style={{
                           flex: 1,
                           alignItems: "center",
@@ -378,6 +393,8 @@ export default function PronunciationScreen() {
                         onPress={() => {
                           void speakAmharic(pair.ejectiveText, { mode, kind: "drill" });
                         }}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Play ${pair.ejectiveRoman}, the ejective consonant`}
                         style={{
                           flex: 1,
                           alignItems: "center",

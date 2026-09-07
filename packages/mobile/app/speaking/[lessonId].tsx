@@ -344,6 +344,9 @@ export default function SpeakingScreen() {
                   key={s}
                   disabled={i > stageIndex}
                   onPress={() => goStage(s)}
+                  accessibilityRole="tab"
+                  accessibilityLabel={`Stage ${i + 1}: ${s}`}
+                  accessibilityState={{ selected: active, disabled: i > stageIndex }}
                   style={{
                     flex: 1,
                     alignItems: "center",
@@ -436,6 +439,12 @@ export default function SpeakingScreen() {
                 <Pressable
                   onPress={() => void toggleRecord()}
                   disabled={scorer.isPending || recognizer.busy}
+                  accessibilityRole="button"
+                  accessibilityLabel={recognizer.recording ? "Stop recording" : "Start recording"}
+                  accessibilityState={{
+                    disabled: scorer.isPending || recognizer.busy,
+                    busy: recognizer.busy || scorer.isPending,
+                  }}
                   style={({ pressed }) => ({
                     width: 92,
                     height: 92,

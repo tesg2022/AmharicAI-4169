@@ -37,7 +37,14 @@ function PlanChip() {
   const colors = useColors();
   const { plan, locale } = usePreview();
   return (
-    <Pressable onPress={() => router.push("/pricing")} hitSlop={8}>
+    <Pressable
+      onPress={() => router.push("/pricing")}
+      accessibilityRole="button"
+      // Spelled out, because "Plan: free preview" read as bare chip text does
+      // not tell a screen-reader user that the word "preview" is the point.
+      accessibilityLabel={`Current plan: ${plan}. This is a preview switch, not a subscription. Opens plans.`}
+      hitSlop={8}
+    >
       <View
         style={{
           flexDirection: "row",
@@ -66,7 +73,12 @@ function LocaleToggle() {
   const colors = useColors();
   const { locale, toggleLocale } = usePreview();
   return (
-    <Pressable onPress={toggleLocale} hitSlop={8}>
+    <Pressable
+      onPress={toggleLocale}
+      accessibilityRole="button"
+      accessibilityLabel={locale === "en" ? "Switch to Amharic" : "Switch to English"}
+      hitSlop={8}
+    >
       <View
         style={{
           width: 36,
@@ -184,7 +196,13 @@ function UnitCard({
             color={colors.warning}
             background={colors.accent + "22"}
           />
-          <Pressable onPress={() => router.push("/pricing")}>
+          <Pressable
+            onPress={() => router.push("/pricing")}
+            accessibilityRole="button"
+            accessibilityLabel={t(locale, "upgrade")}
+            hitSlop={8}
+            style={{ minHeight: 44, justifyContent: "center" }}
+          >
             <Body size={FontSize.small} medium color={colors.primary}>
               {t(locale, "upgrade")} →
             </Body>
@@ -196,10 +214,13 @@ function UnitCard({
             <Pressable
               key={lesson.id}
               onPress={() => router.push(`/course/${lesson.id}`)}
+              accessibilityRole="link"
+              accessibilityLabel={`${t(locale, "lesson")}: ${lesson.label || lesson.title_am || lesson.id}`}
               style={({ pressed }) => ({
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 10,
+                minHeight: 44,
                 paddingVertical: 10,
                 paddingHorizontal: 12,
                 borderRadius: 10,
@@ -285,6 +306,36 @@ export default function CourseScreen() {
               ) : null}
             </Card>
           ) : null}
+
+          {/*
+            Said out loud, because an interface with no progress numbers is
+            easily read as "0% complete". Nothing is recorded at all: there is
+            no account store in this build, so a completion, score or streak
+            here could only be invented.
+          */}
+          <Card tone="muted" style={{ gap: 4 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <Ionicons name="information-circle-outline" size={16} color={colors.mutedForeground} />
+              {locale === "am" ? (
+                <Am size={FontSize.small} bold>
+                  {t(locale, "progressNotTracked")}
+                </Am>
+              ) : (
+                <Body size={FontSize.small} medium>
+                  {t(locale, "progressNotTracked")}
+                </Body>
+              )}
+            </View>
+            {locale === "am" ? (
+              <Am size={FontSize.caption} color={colors.mutedForeground}>
+                {t(locale, "progressNotTrackedBody")}
+              </Am>
+            ) : (
+              <Body size={FontSize.caption} color={colors.mutedForeground}>
+                {t(locale, "progressNotTrackedBody")}
+              </Body>
+            )}
+          </Card>
 
           {(course.data?.units ?? []).map((unit) => (
             <UnitCard key={unit.id} unit={unit as Parameters<typeof UnitCard>[0]["unit"]} />

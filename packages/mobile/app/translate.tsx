@@ -100,9 +100,16 @@ export default function TranslateScreen() {
                   <Pressable
                     key={value}
                     onPress={() => setDirection(value)}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected: active }}
+                    accessibilityLabel={
+                      value === "en2am" ? "English to Amharic" : "Amharic to English"
+                    }
                     style={{
                       flex: 1,
                       alignItems: "center",
+                      justifyContent: "center",
+                      minHeight: 44,
                       paddingVertical: 9,
                       borderRadius: Radius.pill,
                       backgroundColor: active ? colors.card : "transparent",

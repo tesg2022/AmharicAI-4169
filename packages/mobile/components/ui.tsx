@@ -279,12 +279,19 @@ export function Button({
   return (
     <Pressable
       onPress={inactive ? undefined : onPress}
+      accessibilityRole="button"
+      // The label is the visible text, so a screen reader and a sighted user
+      // hear and read the same thing. Loading/disabled is announced as state
+      // rather than being silently unresponsive.
+      accessibilityLabel={label}
+      accessibilityState={{ disabled: inactive, busy: loading }}
       style={({ pressed }) => [
         {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
           gap: 8,
+          minHeight: 44,
           paddingVertical: 14,
           paddingHorizontal: 20,
           borderRadius: Radius.pill,
@@ -400,7 +407,13 @@ export function VoiceModeToggle({
           <Pressable
             key={value}
             onPress={() => onChange(value)}
+            accessibilityRole="radio"
+            accessibilityState={{ selected: active }}
+            accessibilityLabel={value === "native" ? "Native speed" : "Slow speed, 0.7x"}
+            hitSlop={10}
             style={{
+              minHeight: 44,
+              justifyContent: "center",
               paddingHorizontal: 14,
               paddingVertical: 6,
               borderRadius: Radius.pill,
@@ -444,9 +457,14 @@ export function RepeatButton({
         await repeatAmharic(amharic, { mode, times });
         setRunning(false);
       }}
+      accessibilityRole="button"
+      accessibilityLabel={`Repeat the phrase ${times} times`}
+      accessibilityState={{ disabled: running, busy: running }}
+      hitSlop={8}
       style={{
         flexDirection: "row",
         alignItems: "center",
+        minHeight: 44,
         gap: 6,
         paddingHorizontal: 14,
         paddingVertical: 8,
@@ -534,6 +552,8 @@ export function ScreenHeader({
         {back ? (
           <Pressable
             onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
             hitSlop={12}
             style={{
               width: 36,

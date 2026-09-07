@@ -21,13 +21,34 @@
 
 export type PlanId = "free" | "learner" | "premium";
 
+/**
+ * Does the capability physically exist? This axis knows nothing about plans.
+ */
 export type CapabilityStatus =
-  /** Works right now. */
+  /** Built, verified, works right now. */
   | "available"
-  /** Granted by the plan, but the underlying capability does not exist yet. */
-  | "not_built"
-  /** Exists but needs configuration the deployment has not supplied. */
+  /** Built and reachable, but not verified end to end — usable, not promised. */
+  | "preview"
+  /** Does not exist in this build yet. Never sell it, never gate it. */
+  | "coming_soon"
+  /** Code exists; the deployment has not supplied the config it needs. */
   | "not_configured";
+
+/**
+ * What the UI should actually say about a feature for a given plan. This is
+ * the single resolved answer, folding the grant axis into the capability axis
+ * so no screen has to combine them by hand and get the order wrong.
+ */
+export type FeatureState = CapabilityStatus | "plan_gated";
+
+/** Chip copy per state. Kept here so the website and the app never diverge. */
+export const STATE_LABELS: Record<FeatureState, { en: string; am: string }> = {
+  available: { en: "Available", am: "ይሠራል" },
+  preview: { en: "Preview", am: "በቅድመ እይታ" },
+  coming_soon: { en: "Coming soon", am: "በቅርቡ ይመጣል" },
+  not_configured: { en: "Not configured", am: "አልተዘጋጀም" },
+  plan_gated: { en: "Needs a higher plan", am: "ከፍ ያለ ዕቅድ ያስፈልጋል" },
+};
 
 export interface Feature {
   id: string;
@@ -36,8 +57,9 @@ export interface Feature {
   /** Lowest plan that includes the feature. */
   min_plan: PlanId;
   capability: CapabilityStatus;
-  /** Shown verbatim in the UI when capability !== 'available'. */
+  /** Shown verbatim in the UI whenever capability !== "available". */
   caveat_en?: string;
+  caveat_am?: string;
 }
 
 export const PLAN_ORDER: PlanId[] = ["free", "learner", "premium"];
@@ -118,6 +140,7 @@ export const FEATURES: Feature[] = [
     capability: "not_configured",
     caveat_en:
       "Needs a reachable AmharicAI TTS host. Without one the app says so instead of playing silence.",
+    caveat_am: "የAmharicAI ድምፅ አገልጋይ ያስፈልጋል። ከሌለ መተግበሪያው ዝምታ አያጫውትም፤ ይነግርዎታል።",
   },
   {
     id: "translate_free_text",
@@ -126,32 +149,37 @@ export const FEATURES: Feature[] = [
     min_plan: "learner",
     capability: "not_configured",
     caveat_en: "Needs a translation provider key. Not set in this build.",
+    caveat_am: "የትርጉም አገልግሎት ቁልፍ ያስፈልጋል። በዚህ ግንባታ ውስጥ አልተቀመጠም።",
   },
   {
     id: "tutor_limited",
     label_en: "AI tutor (limited)",
     label_am: "የAI አስተማሪ (ውስን)",
     min_plan: "free",
-    capability: "not_configured",
-    caveat_en: "The tutor stream is written but has not been verified end to end.",
+    capability: "preview",
+    caveat_en:
+      "The tutor stream is written but has not been verified end to end. Treat its Amharic as a draft, not as a teacher.",
+    caveat_am: "አስተማሪው ተጽፏል፣ ግን ሙሉ በሙሉ አልተፈተነም። አማርኛውን እንደ ረቂቅ ይያዙት።",
   },
   {
     id: "custom_voice",
     label_en: "Custom Amharic voice",
     label_am: "ብጁ የአማርኛ ድምፅ",
     min_plan: "premium",
-    capability: "not_built",
+    capability: "coming_soon",
     caveat_en:
       "No fine-tuned voice exists yet. The 5-hour corpus is manifest-only — the audio has not been delivered, so nothing has been trained.",
+    caveat_am: "ብጁ ድምፅ እስካሁን አልሠለጠነም። የድምፅ ፋይሎቹ አልደረሱም።",
   },
   {
     id: "speech_recognition",
     label_en: "Speaking feedback from your microphone",
     label_am: "ከማይክሮፎን የንግግር ግምገማ",
     min_plan: "premium",
-    capability: "not_built",
+    capability: "coming_soon",
     caveat_en:
       "There is no speech recognizer in this build. Speaking practice is scored by typed self-check instead.",
+    caveat_am: "በዚህ ግንባታ ውስጥ የንግግር መለያ የለም። የመናገር ልምምድ በጽሑፍ ራስን በመፈተሽ ይገመገማል።",
   },
 ];
 
@@ -175,6 +203,22 @@ export function usable(plan: PlanId, featureId: string): boolean {
   const f = FEATURES.find((x) => x.id === featureId);
   if (!f) return false;
   return grants(plan, featureId) && f.capability === "available";
+}
+
+/**
+ * The resolved four-state answer for one feature and one plan.
+ *
+ * Order matters and is the same principle as `unitAccess`: what does not exist
+ * is never dressed up as something you could buy. So `coming_soon` is reported
+ * before `plan_gated` — a learner on Free is told the custom voice is not built
+ * yet, rather than being invited to upgrade for it.
+ */
+export function featureState(plan: PlanId, featureId: string): FeatureState {
+  const f = FEATURES.find((x) => x.id === featureId);
+  if (!f) return "coming_soon";
+  if (f.capability === "coming_soon") return "coming_soon";
+  if (!grants(plan, featureId)) return "plan_gated";
+  return f.capability;
 }
 
 export interface UnitAccess {
@@ -212,6 +256,9 @@ export function entitlements(plan: PlanId) {
       ...f,
       granted: grants(plan, f.id),
       usable: usable(plan, f.id),
+      state: featureState(plan, f.id),
+      state_label: STATE_LABELS[featureState(plan, f.id)],
     })),
+    state_labels: STATE_LABELS,
   };
 }

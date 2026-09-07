@@ -80,6 +80,11 @@ export default function ProfileScreen() {
   const todayXp = progress.data?.todayXp ?? 0;
   const goal = stats?.dailyGoalXp ?? 50;
 
+  // NOTE: these come from the seeded Drizzle tables that power the legacy
+  // drills, XP and review deck — NOT from course.generated.json, which is the
+  // source-faithful 20-unit course shown on the Course tab. The numbers do not
+  // match because they are two different content sets. Labelled as such below
+  // rather than quietly showing whichever is larger.
   const totals = useMemo(
     () => [
       { label: "Units", value: courseStats.data?.units ?? "—" },
@@ -332,7 +337,10 @@ export default function ProfileScreen() {
             ))}
           </View>
           <Body size={FontSize.caption} color={colors.mutedForeground} style={{ textAlign: "center" }}>
-            Course content is kept verbatim as written.
+            Counted from the seeded practice set behind the signed-in drills and XP. It is a
+            different, older content set from the source-faithful course on the Course tab, which
+            has 20 units with 6 written. The two are not the same curriculum yet — trust the Course
+            tab for what has actually been written from the textbook.
           </Body>
         </Card>
 

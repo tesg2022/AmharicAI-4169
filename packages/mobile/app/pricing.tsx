@@ -33,45 +33,70 @@ import {
  *     Adding Stripe keys alone would still not make this chargeable — the
  *     notice above the buttons says so before anyone taps.
  *  2. Sell a capability that does not exist. A plan can GRANT a feature while
- *     the feature is `not_built` (custom voice, speaking feedback) or
- *     `not_configured` (TTS host, translation key). Both axes are shown, so
- *     nobody reaches checkout to discover the difference.
+ *     the feature is `coming_soon` (custom voice, speaking feedback),
+ *     `preview` (AI tutor) or `not_configured` (TTS host, translation key).
+ *     The server folds the grant axis and the capability axis into one
+ *     resolved `state` per feature and ships the chip copy with it, so this
+ *     screen cannot word it differently from the website. `coming_soon` is
+ *     reported ahead of `plan_gated` on purpose: never invite an upgrade for
+ *     something that does not exist.
  */
+
+type CapabilityStatus = "available" | "preview" | "coming_soon" | "not_configured";
+type FeatureState = CapabilityStatus | "plan_gated";
 
 type Feature = {
   id: string;
   label_en: string;
   label_am: string;
   min_plan: string;
-  capability: "available" | "not_built" | "not_configured";
+  capability: CapabilityStatus;
   caveat_en?: string | undefined;
+  caveat_am?: string | undefined;
   granted: boolean;
   usable: boolean;
+  /** Resolved by the server; the only thing this screen should report. */
+  state: FeatureState;
+  /** Chip copy, shipped with the state so the two surfaces cannot diverge. */
+  state_label: { en: string; am: string };
+};
+
+const STATE_ICON: Record<FeatureState, keyof typeof Ionicons.glyphMap> = {
+  available: "checkmark-circle",
+  preview: "flask-outline",
+  coming_soon: "construct-outline",
+  not_configured: "alert-circle-outline",
+  plan_gated: "lock-closed-outline",
 };
 
 function CapabilityRow({ feature }: { feature: Feature }) {
   const colors = useColors();
   const { locale } = usePreview();
 
-  const icon: keyof typeof Ionicons.glyphMap = !feature.granted
-    ? "remove-outline"
-    : feature.capability === "available"
-      ? "checkmark-circle"
-      : "alert-circle-outline";
+  const icon = STATE_ICON[feature.state];
 
-  const tint = !feature.granted
-    ? colors.mutedForeground
-    : feature.capability === "available"
+  const tint =
+    feature.state === "available"
       ? colors.success
-      : colors.warning;
+      : feature.state === "plan_gated"
+        ? colors.mutedForeground
+        : colors.warning;
 
-  const status = !feature.granted
-    ? t(locale, "notIncluded")
-    : feature.capability === "not_built"
-      ? t(locale, "notBuilt")
-      : feature.capability === "not_configured"
-        ? t(locale, "notConfigured")
-        : t(locale, "granted");
+  const status = feature.state_label[locale];
+
+  // Only ever the caveat written in the reader's own language — a mixed-script
+  // fallback would be worse than showing nothing.
+  //
+  // A plan-gated feature keeps its capability caveat, prefixed: a Free learner
+  // told only "needs a higher plan" would upgrade for translation and find it
+  // unconfigured. The prefix makes it read as "and upgrading still would not
+  // be enough" rather than as the reason for the gate.
+  const rawCaveat = locale === "am" ? feature.caveat_am : feature.caveat_en;
+  const caveat = rawCaveat
+    ? feature.state === "plan_gated"
+      ? `${t(locale, "evenThen")} ${rawCaveat}`
+      : rawCaveat
+    : undefined;
 
   return (
     <View style={{ flexDirection: "row", gap: 10, alignItems: "flex-start" }}>
@@ -86,10 +111,16 @@ function CapabilityRow({ feature }: { feature: Feature }) {
           {status}
         </Body>
         {/* The caveat is rendered verbatim — it is the honest part. */}
-        {feature.granted && feature.caveat_en ? (
-          <Body size={FontSize.caption} color={colors.mutedForeground}>
-            {feature.caveat_en}
-          </Body>
+        {caveat ? (
+          locale === "am" ? (
+            <Am size={FontSize.caption} color={colors.mutedForeground}>
+              {caveat}
+            </Am>
+          ) : (
+            <Body size={FontSize.caption} color={colors.mutedForeground}>
+              {caveat}
+            </Body>
+          )
         ) : null}
       </View>
     </View>
@@ -276,6 +307,15 @@ export default function PricingScreen() {
             {features.map((feature) => (
               <CapabilityRow key={feature.id} feature={feature} />
             ))}
+            {locale === "am" ? (
+              <Am size={FontSize.caption} color={colors.mutedForeground}>
+                {t(locale, "stateLegend")}
+              </Am>
+            ) : (
+              <Body size={FontSize.caption} color={colors.mutedForeground}>
+                {t(locale, "stateLegend")}
+              </Body>
+            )}
             <Body size={FontSize.caption} color={colors.mutedForeground}>
               {t(locale, "previewNote")}
             </Body>
