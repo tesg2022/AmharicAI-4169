@@ -60,7 +60,7 @@ function StreakHeader() {
             justifyContent: "center",
             backgroundColor: colors.card,
             borderWidth: 1,
-            borderColor: colors.border,
+            borderColor: colors.borderStrong,
           }}
         >
           <Ionicons
@@ -74,7 +74,7 @@ function StreakHeader() {
       <View style={{ flexDirection: "row", gap: 10 }}>
         <Card style={{ flex: 1, padding: 12, gap: 4 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <Ionicons name="flame" size={15} color={colors.accent} />
+            <Ionicons name="flame" size={15} color={colors.accentInk} />
             <Body size={FontSize.caption} color={colors.mutedForeground} medium>
               Streak
             </Body>
@@ -83,7 +83,7 @@ function StreakHeader() {
         </Card>
         <Card style={{ flex: 1, padding: 12, gap: 4 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <Ionicons name="star" size={15} color={colors.accent} />
+            <Ionicons name="star" size={15} color={colors.accentInk} />
             <Body size={FontSize.caption} color={colors.mutedForeground} medium>
               Total XP
             </Body>

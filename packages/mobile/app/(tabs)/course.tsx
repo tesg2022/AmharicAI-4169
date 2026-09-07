@@ -54,7 +54,7 @@ function PlanChip() {
           paddingVertical: 6,
           borderRadius: Radius.pill,
           borderWidth: 1,
-          borderColor: colors.border,
+          borderColor: colors.borderStrong,
           backgroundColor: colors.card,
         }}
       >
@@ -87,7 +87,7 @@ function LocaleToggle() {
           alignItems: "center",
           justifyContent: "center",
           borderWidth: 1,
-          borderColor: colors.border,
+          borderColor: colors.borderStrong,
           backgroundColor: colors.card,
         }}
       >
@@ -226,7 +226,7 @@ function UnitCard({
                 borderRadius: 10,
                 backgroundColor: pressed ? colors.muted : colors.background,
                 borderWidth: 1,
-                borderColor: colors.border,
+                borderColor: colors.borderStrong,
               })}
             >
               <Ionicons name="document-text-outline" size={16} color={colors.primary} />

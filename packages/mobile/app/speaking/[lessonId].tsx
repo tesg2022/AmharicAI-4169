@@ -498,7 +498,7 @@ export default function SpeakingScreen() {
                     color: colors.foreground,
                     backgroundColor: colors.background,
                     borderWidth: 1,
-                    borderColor: colors.border,
+                    borderColor: colors.borderStrong,
                     borderRadius: Radius.card,
                     paddingHorizontal: 14,
                     paddingVertical: 12,

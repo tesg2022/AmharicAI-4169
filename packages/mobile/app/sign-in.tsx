@@ -89,7 +89,8 @@ export default function SignInScreen() {
     color: colors.foreground,
     backgroundColor: colors.background,
     borderWidth: 1,
-    borderColor: colors.border,
+    // Text input — the border is the affordance. Needs 3:1.
+    borderColor: colors.borderStrong,
     borderRadius: Radius.card,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -117,7 +118,7 @@ export default function SignInScreen() {
                 justifyContent: "center",
                 backgroundColor: colors.card,
                 borderWidth: 1,
-                borderColor: colors.border,
+                borderColor: colors.borderStrong,
               }}
             >
               <Ionicons name="close" size={20} color={colors.foreground} />

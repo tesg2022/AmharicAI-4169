@@ -258,7 +258,7 @@ export default function ProfileScreen() {
                     <Body
                       size={FontSize.small}
                       bold
-                      color={row.rank <= 3 ? colors.accent : colors.mutedForeground}
+                      color={row.rank <= 3 ? colors.accentInk : colors.mutedForeground}
                       style={{ width: 26 }}
                     >
                       {row.rank}
@@ -268,7 +268,7 @@ export default function ProfileScreen() {
                     </Body>
                     {row.streakDays > 0 ? (
                       <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-                        <Ionicons name="flame" size={12} color={colors.accent} />
+                        <Ionicons name="flame" size={12} color={colors.accentInk} />
                         <Body size={FontSize.caption} color={colors.mutedForeground}>
                           {row.streakDays}
                         </Body>

@@ -16,13 +16,21 @@ export const Colors = {
     secondary: "#EFE7D7",
     secondaryForeground: "#14201B",
     muted: "#EFE7D7",
-    mutedForeground: "#6B7B72",
+    /** Darkened from #6B7B72 (4.18:1) — it carries caption text at 12-13px. */
+    mutedForeground: "#5D6B63",
+    /** FILL only: chip and progress-bar backgrounds, with accentForeground on top. */
     accent: "#F0B323",
     accentForeground: "#2B1D00",
+    /** Gold as TEXT or as an ICON. #F0B323 is 1.76:1 on the canvas — unusable. */
+    accentInk: "#8A6309",
+    /** Decorative edges only. Interactive control boundaries use borderStrong. */
     border: "#E1D7C4",
+    borderStrong: "#9A7F4C",
     destructive: "#C1272D",
     success: "#2F9E44",
-    warning: "#D97706",
+    /** Darkened from #D97706 (2.98:1). This is the colour of every honesty
+        notice — caveats, "Not configured", preview chips. It has to be legible. */
+    warning: "#9E5606",
     /** AI Tutor surfaces — keeps AI visually distinct from course content. */
     sky: "#1D6F9E",
     /** Tint used behind ፊደል / script surfaces. */
@@ -41,8 +49,13 @@ export const Colors = {
     mutedForeground: "#93A79C",
     accent: "#F5C449",
     accentForeground: "#2B1D00",
+    /** Gold already clears 4.5:1 on the dark canvas; aliased so callers can use
+        one token name on both schemes. */
+    accentInk: "#F5C449",
     border: "#26332C",
-    destructive: "#E0484E",
+    borderStrong: "#5C7A6A",
+    /** Lightened from #E0484E, which was 4.10:1 on the dark card. */
+    destructive: "#E9686C",
     success: "#3FBF57",
     warning: "#F59E0B",
     sky: "#4AA3D4",

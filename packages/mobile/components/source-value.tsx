@@ -209,7 +209,7 @@ export function SourceValue({ value }: { value: unknown }) {
                   paddingVertical: 6,
                 }}
               >
-                <Body color={colors.accent}>•</Body>
+                <Body color={colors.accentInk}>•</Body>
                 <View style={{ flex: 1 }}>
                   <Scalar value={item} size={FontSize.small} />
                 </View>

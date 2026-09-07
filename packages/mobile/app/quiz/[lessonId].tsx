@@ -261,13 +261,13 @@ export default function QuizScreen() {
             <Ionicons
               name={pct >= 80 ? "trophy" : pct >= 50 ? "ribbon-outline" : "refresh-circle-outline"}
               size={44}
-              color={pct >= 80 ? colors.accent : colors.primary}
+              color={pct >= 80 ? colors.accentInk : colors.primary}
             />
             <Title size={FontSize.hero}>{pct}%</Title>
             <Body color={colors.mutedForeground}>
               {correctCount} of {questions.length} correct
             </Body>
-            {xp > 0 ? <Chip label={`+${xp} XP`} icon="star" color={colors.accent} /> : null}
+            {xp > 0 ? <Chip label={`+${xp} XP`} icon="star" color={colors.accentInk} /> : null}
             {!isSignedIn ? (
               <Body size={FontSize.caption} color={colors.mutedForeground}>
                 Sign in to keep this score and earn XP.
@@ -343,7 +343,7 @@ export default function QuizScreen() {
             <Body size={FontSize.caption} color={colors.mutedForeground} medium>
               Question {index + 1} of {questions.length}
             </Body>
-            <Body size={FontSize.caption} color={colors.accent} medium>
+            <Body size={FontSize.caption} color={colors.accentInk} medium>
               {xp} XP
             </Body>
           </View>
@@ -414,7 +414,7 @@ export default function QuizScreen() {
                   {graded.isCorrect ? "Correct" : "Not quite"}
                 </Body>
                 {graded.xpAwarded ? (
-                  <Chip label={`+${graded.xpAwarded} XP`} icon="star" color={colors.accent} />
+                  <Chip label={`+${graded.xpAwarded} XP`} icon="star" color={colors.accentInk} />
                 ) : null}
               </View>
 

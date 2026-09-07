@@ -160,7 +160,7 @@ function SoundCard({ sound, mode }: { sound: Sound; mode: VoiceMode }) {
                   minHeight: 44,
                   justifyContent: "center",
                   borderWidth: 1,
-                  borderColor: colors.border,
+                  borderColor: colors.borderStrong,
                   borderRadius: Radius.card,
                   paddingHorizontal: 10,
                   paddingVertical: 6,
@@ -378,7 +378,7 @@ export default function PronunciationScreen() {
                           flex: 1,
                           alignItems: "center",
                           borderWidth: 1,
-                          borderColor: colors.border,
+                          borderColor: colors.borderStrong,
                           borderRadius: Radius.card,
                           paddingVertical: 14,
                         }}

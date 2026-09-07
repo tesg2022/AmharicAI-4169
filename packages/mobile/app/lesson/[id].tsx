@@ -430,7 +430,7 @@ export default function LessonScreen() {
                   paddingVertical: 12,
                   borderRadius: Radius.pill,
                   borderWidth: 1,
-                  borderColor: colors.border,
+                  borderColor: colors.borderStrong,
                 }}
               >
                 <Ionicons name="arrow-back" size={15} color={colors.mutedForeground} />
@@ -451,7 +451,7 @@ export default function LessonScreen() {
                   paddingVertical: 12,
                   borderRadius: Radius.pill,
                   borderWidth: 1,
-                  borderColor: colors.border,
+                  borderColor: colors.borderStrong,
                   backgroundColor: colors.card,
                 }}
               >

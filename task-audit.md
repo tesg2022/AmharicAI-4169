@@ -1,49 +1,42 @@
-# Polish + honesty audit — round scratchpad (2026-09-07)
+# Round: polish + honesty audit (Sep 7, 2026) — COMPLETE
 
-User picked: "Polish + honesty audit", **both surfaces in step**, plus their 4 additions:
-1. Curriculum integrity (units 1-6 source-faithful; 7-20 clearly "Coming soon / Not yet written";
-   consistent numbering/objectives/phrases/exercises/progression)
-2. Real progress tracking (no fake completed/in-progress/score/streak)
-3. Capability-state system (available / coming soon / preview / plan-gated) esp. TTS, ASR, tutor, translation
-4. Accessibility + language quality (Amharic rendering, font sizes, contrast, button labels,
-   punctuation ። ፣, en/am consistency, pronunciation guidance)
+## Done, both surfaces, verified
+- Four-state capability model (`available` / `preview` / `coming_soon` / `not_configured`)
+  plus resolved `plan_gated`, with `STATE_LABELS` (en+am) living in the model so the
+  website and app cannot word a state differently.
+  - Nuxt: `server/utils/plans.ts` + useEntitlements/pricing/dashboard/index/lesson pages
+  - App:  `packages/web/src/api/content/plans.ts` + `packages/mobile/app/pricing.tsx`
+  - Precedence is deliberate: `coming_soon` beats `plan_gated`. Do not reorder.
+  - `usable()` stays strict (`granted && available`). UI gates on `usable`, never `grants`.
+- Reclassified: tutor_limited -> preview; custom_voice, speech_recognition -> coming_soon.
+- Amharic caveats (`caveat_am`) written for all five caveat-bearing features.
+- "Even on a higher plan:" prefix so a plan-gated feature keeps its capability caveat
+  instead of implying an upgrade fixes it. (Real bug found in smoke.)
+- Curriculum copy: "Not yet written" -> "Coming soon" everywhere; unwritten units render
+  as coming soon, never as a paywall.
+- Progress honesty: Nuxt dashboard already clean; managed web progress screen is genuinely
+  DB-backed (leave it); mobile course tab gained a "Progress is not tracked" card.
+- `/profile` counts contradiction labelled on screen (seeded practice set vs generated
+  course). NOT resolved — needs the user's call. See handover §9.
+- Accessibility: `lang` paired with every Amharic-marked node (Nuxt); role + accessible
+  name + 44pt targets on every touchable (mobile). Ethiopic is never an accessible name.
 
-GitHub push still blocked: deploy key not registered. Work lands in both repos locally.
+## Gates (all green)
+Nuxt build PASS · Nuxt smoke 11 rows no console errors · mobile typecheck PASS ·
+root lint 36 files 0 errors · root build PASS · mobile smoke 7 routes clean ·
+mobile /pricing capability chips checked on all 3 plans via Playwright.
 
-## Status
+## Commits
+- Nuxt `/home/user/gh/AmharicAI` @ `ad1abda` on `fix/nuxt-structure-and-tts`, 4 ahead of origin/main
+- App  `/home/user/amharicai` @ `c5d63d5` on `main`
+- Patch `/home/user/gh/amharicai-nuxt-fix.patch` regenerated (900,525 B, 4 patches) and
+  verified by tree hash: applied tree == HEAD tree (a5936289).
 
-### 3. Capability-state system — CORE DONE, consumers pending
-- [x] `server/utils/plans.ts` (Nuxt): CapabilityStatus = available | preview | coming_soon | not_configured
-      (`not_built` renamed -> `coming_soon`); added `FeatureState = CapabilityStatus | 'plan_gated'`,
-      `STATE_LABELS` (en+am), `featureState(plan,id)`, `caveat_am` on all 5 caveats.
-      Reclassified: tutor_limited not_configured -> **preview**; custom_voice + speech_recognition -> **coming_soon**.
-      `entitlements()` now emits `state` + `state_label` per feature and `state_labels`.
-- [x] `packages/web/src/api/content/plans.ts` (managed): mirrored exactly. mobile typecheck PASSES.
-- [ ] Nuxt consumers: composables/useEntitlements.ts (type), pages/pricing.vue, pages/dashboard.vue,
-      pages/course/[lessonId].vue (status.not_built tag), i18n/messages.ts status.* keys
-- [ ] Mobile consumers: app/pricing.tsx (CapabilityRow union type + chips), i18n/messages.ts
+## Blocked
+- GitHub push: deploy key still not registered (`ssh -T git@github.com` -> permission
+  denied). PATs are read-only. User must add the pubkey with "Allow write access".
+- Publishing (Vercel / Expo builds) is the user's to run, not mine.
 
-**Precedence decided:** `coming_soon` is reported BEFORE `plan_gated` — same principle as
-`unitAccess` checking `not_written` before the paywall. Never invite an upgrade for something
-that does not exist. `usable()` stays strict (`available` only) — `preview` is not a promise.
-
-### 2. Real progress tracking — AUDITED, mostly already honest
-- Nuxt: `pages/dashboard.vue` shows no streaks/percentages, prints `dashboard.progress_empty`. OK.
-- Managed web `pages/progress.tsx`: streak/XP/mastery are **real** — `authed` oRPC handlers over
-  Drizzle tables (`xpEvents`, `userProgress`, `lessons`), behind `ProtectedRoute`. Genuine, keep.
-- Mobile: no progress UI at all. **TODO:** say so on the course screen so silence isn't read as 0%.
-
-### 1. Curriculum integrity — pending
-- [ ] Unify "Coming soon / Not yet written" copy across both surfaces (currently mobile says
-      "Not yet written", Nuxt uses its own phrasing)
-- [ ] Numbering/objectives consistency check in build-course.mjs QA
-
-### 4. A11y + language quality — pending
-- [ ] Nuxt: `lang="am"` on Ethiopic spans (screen-reader voice switch), contrast, button labels
-- [ ] Mobile: accessibilityLabel/accessibilityRole on touchables, 44pt targets
-- [ ] Amharic punctuation sweep of both i18n files (። sentence end, ፣ list separator)
-
-## Gates before delivering
-- Nuxt: `npm run build` + /tmp/smoke.py (12 rows, CONSOLE_BAD none)
-- Managed: `bun run --cwd packages/mobile typecheck`, root `bun run lint`, root `bun run build`,
-  /tmp/mob_smoke.py
+## Optional next polish
+Contrast measurement (gold #c07f16 on #f6f3ec first) · Ethiopic line-height on `.am` /
+`.fidel` · punctuation sweep of pre-existing i18n strings (። ፣).

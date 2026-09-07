@@ -48,7 +48,7 @@ function ActionTile({
         borderRadius: Radius.card,
         backgroundColor: colors.card,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: colors.borderStrong,
         opacity: pressed ? 0.85 : 1,
       })}
     >

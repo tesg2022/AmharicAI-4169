@@ -47,7 +47,10 @@ export function Am({
           fontFamily: bold ? Fonts.ethiopicBold : Fonts.ethiopic,
           fontSize: size,
           color: color ?? colors.foreground,
-          lineHeight: size * 1.5,
+          // Ethiopic has a taller body than Latin at the same px size and its
+          // syllabic marks hang below the baseline, so it needs MORE leading
+          // than body copy, not less. Matches `.am/.fidel` on the website.
+          lineHeight: size * 1.75,
         },
         style,
       ]}
@@ -470,7 +473,9 @@ export function RepeatButton({
         paddingVertical: 8,
         borderRadius: Radius.pill,
         borderWidth: 1,
-        borderColor: colors.border,
+        // Interactive control: its fill matches the card it sits on, so the
+        // border is the only thing identifying it. WCAG 1.4.11 wants 3:1.
+        borderColor: colors.borderStrong,
         backgroundColor: colors.card,
         opacity: running ? 0.6 : 1,
       }}
@@ -563,7 +568,7 @@ export function ScreenHeader({
               justifyContent: "center",
               backgroundColor: colors.card,
               borderWidth: 1,
-              borderColor: colors.border,
+              borderColor: colors.borderStrong,
             }}
           >
             <Ionicons name="chevron-back" size={20} color={colors.foreground} />

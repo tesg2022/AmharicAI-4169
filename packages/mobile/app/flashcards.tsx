@@ -127,7 +127,7 @@ export default function FlashcardsScreen() {
               <Body color={colors.mutedForeground}>
                 {reviewed} card{reviewed === 1 ? "" : "s"} reviewed
               </Body>
-              {xp > 0 ? <Chip label={`+${xp} XP`} icon="star" color={colors.accent} /> : null}
+              {xp > 0 ? <Chip label={`+${xp} XP`} icon="star" color={colors.accentInk} /> : null}
             </Card>
           ) : (
             <EmptyState
