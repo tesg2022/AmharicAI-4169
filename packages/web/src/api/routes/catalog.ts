@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { ORPCError } from "@orpc/server";
 import { base } from "../__core/app";
+import { withUser } from "../middleware/auth";
+import { billingStatus, resolvePlan } from "../entitlements/resolve";
 import {
   getCourseFlags,
   getCourseSummary,
@@ -19,10 +21,11 @@ import {
  * matching the website's /api/course, /api/me, /api/translate and
  * /api/billing/checkout exactly.
  *
- * The `plan` input is a PREVIEW SWITCH held by the client. There are no
- * accounts in this build, so it is not an entitlement and is never used to
- * authorise a charge. Gating is still resolved server-side so the client
- * cannot accidentally render content it was not granted.
+ * The `plan` input is a PREVIEW SWITCH, and it is honoured for ANONYMOUS
+ * callers only. Once a request carries a session, the plan comes from the
+ * server (`resolvePlan`) and the input is ignored — otherwise a query
+ * parameter could upgrade a signed-in user and the login would gate nothing.
+ * It is never used to authorise a charge in either case.
  */
 
 const planInput = z.object({
@@ -37,28 +40,42 @@ function translateConfig() {
   return { url, key, model, configured: Boolean(url && key) };
 }
 
-function billingConfig() {
-  const secret = process.env["STRIPE_SECRET_KEY"]?.trim() ?? "";
-  return { secret, configured: Boolean(secret) };
-}
+
 
 export const catalog = {
   /** Plans + per-feature grant/capability, so the client never guesses a gate. */
-  me: base.input(planInput).handler(({ input }) => {
-    return entitlements(planFromInput(input.plan));
+  me: withUser.input(planInput).handler(async ({ context, input }) => {
+    const resolved = await resolvePlan({
+      userId: context.user?.id ?? null,
+      previewPlan: input.plan,
+    });
+    return {
+      ...entitlements(resolved.plan, {
+        source: resolved.plan_source,
+        verified: resolved.plan_is_verified,
+      }),
+      expires_at: resolved.expires_at,
+      expired_notice: resolved.expired_notice,
+      signed_in: Boolean(context.user),
+    };
   }),
 
   /**
    * The 20-unit map with access resolved server-side. Unwritten units come back
    * as `not_written` — never as a paywall, because selling them would be a lie.
    */
-  course: base.input(planInput).handler(({ input }) => {
-    const plan = planFromInput(input.plan);
+  course: withUser.input(planInput).handler(async ({ context, input }) => {
+    const resolved = await resolvePlan({
+      userId: context.user?.id ?? null,
+      previewPlan: input.plan,
+    });
+    const plan = resolved.plan;
     const summary = getCourseSummary();
     return {
       ...summary,
       plan,
-      plan_is_verified: false,
+      plan_source: resolved.plan_source,
+      plan_is_verified: resolved.plan_is_verified,
       units: summary.units.map((u) => ({
         ...u,
         access: unitAccess(plan, u),
@@ -70,10 +87,13 @@ export const catalog = {
   flags: base.handler(() => getCourseFlags()),
 
   /** One lesson, gated. */
-  lesson: base
+  lesson: withUser
     .input(z.object({ lessonId: z.string(), plan: z.string().optional() }))
-    .handler(({ input }) => {
-      const plan = planFromInput(input.plan);
+    .handler(async ({ context, input }) => {
+      const { plan } = await resolvePlan({
+        userId: context.user?.id ?? null,
+        previewPlan: input.plan,
+      });
       const found = getLesson(input.lessonId);
       // A lesson in an unwritten unit does not exist at all: 404, not a paywall.
       if (!found) {
@@ -101,7 +121,7 @@ export const catalog = {
    * (The English gloss inside lessons is different: it comes from the course
    * data, works offline, and needs no provider.)
    */
-  translate: base
+  translate: withUser
     .input(
       z.object({
         text: z.string().min(1).max(2000),
@@ -109,8 +129,11 @@ export const catalog = {
         plan: z.string().optional(),
       }),
     )
-    .handler(async ({ input }) => {
-      const plan = planFromInput(input.plan);
+    .handler(async ({ context, input }) => {
+      const { plan } = await resolvePlan({
+        userId: context.user?.id ?? null,
+        previewPlan: input.plan,
+      });
       if (plan === "free") {
         throw new ORPCError("FORBIDDEN", {
           message: "Translating your own text is included from the Learner plan.",
@@ -164,11 +187,15 @@ export const catalog = {
     }),
 
   /**
-   * Checkout. A deliberate refusal, not a fake stub: there are no payment keys
-   * AND no account store to record a subscription against, so adding Stripe
-   * keys alone would still not make this chargeable. Both blockers are listed.
+   * Checkout. A deliberate refusal, not a fake stub.
+   *
+   * The account store now exists, so that blocker is gone and is no longer
+   * claimed. What remains is genuine: no payment provider is configured, and
+   * the managed billing layer is Autumn, so a key alone is not the whole job.
+   * Until then the only way to hold a paid plan is an administrator-issued
+   * access code, which is stated here rather than left for the user to guess.
    */
-  checkout: base
+  checkout: withUser
     .input(z.object({ plan: z.string() }))
     .handler(({ input }) => {
       const target = planFromInput(input.plan);
@@ -179,12 +206,8 @@ export const catalog = {
         });
       }
 
-      const blockers = [
-        ...(billingConfig().configured
-          ? []
-          : ["No Stripe secret key is configured in this build."]),
-        "There is no account store yet, so a subscription could not be recorded against a user even with keys configured.",
-      ];
+      const billing = billingStatus();
+      const blockers = billing.blockers;
 
       throw new ORPCError("SERVICE_UNAVAILABLE", {
         message: `Payment is not connected, so nothing was charged. ${planById(target).name_en} costs $${planById(target).price_usd_month.toFixed(2)}/month once billing is wired.`,

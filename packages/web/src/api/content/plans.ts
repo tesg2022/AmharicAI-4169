@@ -244,13 +244,35 @@ export function unitAccess(
   return { allowed: true, reason: "ok" };
 }
 
-/** Everything the client needs to render gates without guessing. */
-export function entitlements(plan: PlanId) {
+/**
+ * Where an active plan came from. Only `subscription` and `access_code` are
+ * verified entitlements — the other two are the honest "we have nothing to go
+ * on" answers and must never be reported as verified.
+ */
+export type PlanSource =
+  | "subscription"
+  | "access_code"
+  | "preview_cookie"
+  | "default_free";
+
+/**
+ * Everything the client needs to render gates without guessing.
+ *
+ * `source` defaults to the anonymous preview answer so any caller that has not
+ * resolved a session yet stays truthful by omission rather than by accident.
+ */
+export function entitlements(
+  plan: PlanId,
+  provenance: { source: PlanSource; verified: boolean } = {
+    source: "preview_cookie",
+    verified: false,
+  },
+) {
   return {
     plan,
-    /** The plan is a preview switch held by the client, not a verified entitlement. */
-    plan_source: "preview_client" as const,
-    plan_is_verified: false,
+    /** How this plan was established. See `PlanSource`. */
+    plan_source: provenance.source,
+    plan_is_verified: provenance.verified,
     plans: PLANS,
     features: FEATURES.map((f) => ({
       ...f,

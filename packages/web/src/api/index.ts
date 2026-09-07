@@ -7,6 +7,8 @@ import { activeProvider, activeRecognizer } from "./speech/providers";
 import { VOICE_MODES, type VoiceMode } from "./speech/ssml";
 import { tutorAgent } from "./agent";
 import { auth } from "./auth";
+import { access } from "./routes/access";
+import { admin } from "./routes/admin";
 import { catalog } from "./routes/catalog";
 import { content } from "./routes/content";
 import { ping } from "./routes/ping";
@@ -26,6 +28,8 @@ import { tutor } from "./routes/tutor";
 // Patterns and examples: skills/app/references/api.md
 export const router = {
   ping,
+  access,
+  admin,
   catalog,
   content,
   practice,

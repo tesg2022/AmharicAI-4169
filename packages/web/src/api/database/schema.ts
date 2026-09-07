@@ -633,4 +633,124 @@ export const speechSessions = sqliteTable(
 );
 
 
+/* ------------------------------------------------ entitlements and comp codes */
+
+/**
+ * Where a user's active plan came from. Only `subscription` and `access_code`
+ * are verified entitlements; the other two are the honest "we have nothing"
+ * answers and must never be reported as verified.
+ */
+export const PLAN_SOURCES = [
+  "subscription",
+  "access_code",
+  "preview_cookie",
+  "default_free",
+] as const;
+export type PlanSource = (typeof PLAN_SOURCES)[number];
+
+export const ACCESS_CODE_STATUS = [
+  "active",
+  "revoked",
+  "expired",
+  "exhausted",
+] as const;
+export type AccessCodeStatus = (typeof ACCESS_CODE_STATUS)[number];
+
+/**
+ * An administrator-issued comp code granting a plan without payment.
+ *
+ * The six-digit code itself is NEVER stored. `code_hash` is
+ * HMAC-SHA256(pepper, code) with a server-side pepper that does not live in
+ * this database, because a plain hash over a 10^6 keyspace is brute-forced
+ * offline in milliseconds by anyone who reads the table. HMAC is
+ * deterministic, so redemption is still a single indexed lookup.
+ *
+ * Consequence, surfaced in the admin UI: the plaintext is shown exactly once,
+ * at creation, and cannot be recovered afterwards.
+ *
+ * This is a comp code. It is not an admin password, not an MFA code, and not a
+ * passwordless sign-in code — redeeming it requires an already-authenticated
+ * session and only ever grants an entitlement.
+ */
+export const accessCodes = sqliteTable(
+  "access_codes",
+  {
+    id: text("id").primaryKey(),
+    /** HMAC-SHA256(pepper, code), hex. Unique so collisions are rejected at insert. */
+    codeHash: text("code_hash").notNull(),
+    /** Last two digits, for the admin list only — 100 candidates is not a code. */
+    hint: text("hint").notNull(),
+    /** Plan granted on redemption: free | learner | premium. */
+    plan: text("plan").notNull(),
+    /** How long the grant lasts, per redeemer, from the moment they redeem. */
+    durationDays: integer("duration_days").notNull(),
+    /** After this instant the code cannot be redeemed at all. */
+    expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+    maxRedemptions: integer("max_redemptions").notNull().default(1),
+    redemptionCount: integer("redemption_count").notNull().default(0),
+    /**
+     * Optional narrowing of the granted plan to specific feature ids. null =
+     * exactly what the plan includes. Never widens a plan.
+     */
+    features: text("features", { mode: "json" }).$type<string[] | null>(),
+    status: text("status").$type<AccessCodeStatus>().notNull().default("active"),
+    /** Free-text admin note: who it is for, why it was issued. */
+    note: text("note"),
+    createdBy: text("created_by").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(now),
+    revokedBy: text("revoked_by"),
+    revokedAt: integer("revoked_at", { mode: "timestamp" }),
+  },
+  (t) => [
+    uniqueIndex("access_codes_hash").on(t.codeHash),
+    index("idx_access_codes_created").on(t.createdAt),
+    index("idx_access_codes_status").on(t.status),
+  ],
+);
+
+/**
+ * One redemption of one code by one account. The unique index is the
+ * single-use-per-user rule, enforced by the database rather than by a check
+ * that a race could slip past.
+ */
+export const accessCodeRedemptions = sqliteTable(
+  "access_code_redemptions",
+  {
+    id: text("id").primaryKey(),
+    codeId: text("code_id")
+      .notNull()
+      .references(() => accessCodes.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull(),
+    /** Copied from the code at redemption so later edits cannot rewrite history. */
+    grantedPlan: text("granted_plan").notNull(),
+    grantedFeatures: text("granted_features", { mode: "json" }).$type<string[] | null>(),
+    redeemedAt: integer("redeemed_at", { mode: "timestamp" }).notNull().default(now),
+    /** The grant lapses here; entitlement resolution treats past-due as Free. */
+    grantsUntil: integer("grants_until", { mode: "timestamp" }).notNull(),
+    revokedBy: text("revoked_by"),
+    revokedAt: integer("revoked_at", { mode: "timestamp" }),
+  },
+  (t) => [
+    uniqueIndex("access_code_redemption_once").on(t.codeId, t.userId),
+    index("idx_redemption_user").on(t.userId, t.grantsUntil),
+  ],
+);
+
+/**
+ * Every redemption attempt, successful or not. This table is the rate limiter:
+ * six digits is a 10^6 keyspace, which is minutes of guessing unthrottled, so
+ * the lockout that reads this table is load-bearing security, not telemetry.
+ */
+export const accessCodeAttempts = sqliteTable(
+  "access_code_attempts",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    succeeded: integer("succeeded", { mode: "boolean" }).notNull().default(false),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(now),
+  },
+  (t) => [index("idx_code_attempts_user_time").on(t.userId, t.createdAt)],
+);
+
+
 export * from "./auth-schema";
