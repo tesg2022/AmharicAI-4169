@@ -22,6 +22,7 @@ import { ErrorBoundary } from "../components/__ErrorBoundary";
 import { OneDollarStatsProvider } from "../lib/__analytics";
 import { isWeb, startWebSafeArea } from "../lib/__web-safe-area";
 import { authClient } from "../lib/auth";
+import { PreviewProvider } from "../lib/preview-plan";
 import { Colors } from "../constants/theme";
 import appJson from "../app.json";
 
@@ -77,17 +78,24 @@ export default function RootLayout() {
       >
         <SafeAreaProvider>
           <QueryClientProvider client={queryClient}>
-            <StatusBar style="auto" />
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="lesson/[id]" />
-              <Stack.Screen name="quiz/[lessonId]" />
-              <Stack.Screen name="speaking/[lessonId]" />
-              <Stack.Screen name="fidel" />
-              <Stack.Screen name="pronunciation" />
-              <Stack.Screen name="flashcards" />
-              <Stack.Screen name="sign-in" options={{ presentation: "modal" }} />
-            </Stack>
+            {/* Preview plan + UI language. The plan is a preview switch, never
+                an entitlement — see lib/preview-plan.tsx. */}
+            <PreviewProvider>
+              <StatusBar style="auto" />
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="lesson/[id]" />
+                <Stack.Screen name="course/[lessonId]" />
+                <Stack.Screen name="quiz/[lessonId]" />
+                <Stack.Screen name="speaking/[lessonId]" />
+                <Stack.Screen name="fidel" />
+                <Stack.Screen name="pronunciation" />
+                <Stack.Screen name="flashcards" />
+                <Stack.Screen name="pricing" />
+                <Stack.Screen name="translate" />
+                <Stack.Screen name="sign-in" options={{ presentation: "modal" }} />
+              </Stack>
+            </PreviewProvider>
           </QueryClientProvider>
         </SafeAreaProvider>
       </OneDollarStatsProvider>

@@ -1,0 +1,287 @@
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { FontSize, Radius } from "@/constants/theme";
+import { useColors } from "@/hooks/use-colors";
+import { t } from "@/i18n/messages";
+import { usePreview, type PreviewPlan } from "@/lib/preview-plan";
+import {
+  failureBlockers,
+  failureMessage,
+  useCheckout,
+  useEntitlements,
+} from "@/queries/catalog";
+import {
+  Am,
+  Body,
+  Button,
+  Card,
+  Chip,
+  ErrorState,
+  Loading,
+  ScreenHeader,
+  Title,
+} from "@/components/ui";
+
+/**
+ * Plans.
+ *
+ * Two things this screen refuses to do:
+ *
+ *  1. Pretend it can charge. There are no payment keys AND no account store to
+ *     record a subscription against, so checkout fails and lists BOTH blockers.
+ *     Adding Stripe keys alone would still not make this chargeable — the
+ *     notice above the buttons says so before anyone taps.
+ *  2. Sell a capability that does not exist. A plan can GRANT a feature while
+ *     the feature is `not_built` (custom voice, speaking feedback) or
+ *     `not_configured` (TTS host, translation key). Both axes are shown, so
+ *     nobody reaches checkout to discover the difference.
+ */
+
+type Feature = {
+  id: string;
+  label_en: string;
+  label_am: string;
+  min_plan: string;
+  capability: "available" | "not_built" | "not_configured";
+  caveat_en?: string | undefined;
+  granted: boolean;
+  usable: boolean;
+};
+
+function CapabilityRow({ feature }: { feature: Feature }) {
+  const colors = useColors();
+  const { locale } = usePreview();
+
+  const icon: keyof typeof Ionicons.glyphMap = !feature.granted
+    ? "remove-outline"
+    : feature.capability === "available"
+      ? "checkmark-circle"
+      : "alert-circle-outline";
+
+  const tint = !feature.granted
+    ? colors.mutedForeground
+    : feature.capability === "available"
+      ? colors.success
+      : colors.warning;
+
+  const status = !feature.granted
+    ? t(locale, "notIncluded")
+    : feature.capability === "not_built"
+      ? t(locale, "notBuilt")
+      : feature.capability === "not_configured"
+        ? t(locale, "notConfigured")
+        : t(locale, "granted");
+
+  return (
+    <View style={{ flexDirection: "row", gap: 10, alignItems: "flex-start" }}>
+      <Ionicons name={icon} size={16} color={tint} style={{ marginTop: 2 }} />
+      <View style={{ flex: 1, gap: 2 }}>
+        {locale === "am" ? (
+          <Am size={FontSize.small}>{feature.label_am}</Am>
+        ) : (
+          <Body size={FontSize.small}>{feature.label_en}</Body>
+        )}
+        <Body size={FontSize.caption} color={tint} medium>
+          {status}
+        </Body>
+        {/* The caveat is rendered verbatim — it is the honest part. */}
+        {feature.granted && feature.caveat_en ? (
+          <Body size={FontSize.caption} color={colors.mutedForeground}>
+            {feature.caveat_en}
+          </Body>
+        ) : null}
+      </View>
+    </View>
+  );
+}
+
+export default function PricingScreen() {
+  const colors = useColors();
+  const { plan, setPlan, locale, toggleLocale } = usePreview();
+  const me = useEntitlements();
+  const checkout = useCheckout();
+
+  const plans = me.data?.plans ?? [];
+  const features = (me.data?.features ?? []) as Feature[];
+
+  return (
+    <SafeAreaView
+      edges={["top", "left", "right"]}
+      style={{ flex: 1, backgroundColor: colors.background }}
+    >
+      <ScreenHeader
+        title={t(locale, "pricing")}
+        subtitle={t(locale, "pricingSubtitle")}
+        back
+        right={
+          <Button
+            label={t(locale, "language")}
+            variant="secondary"
+            onPress={toggleLocale}
+            style={{ paddingVertical: 8, paddingHorizontal: 14 }}
+          />
+        }
+      />
+
+      {me.isLoading ? (
+        <Loading />
+      ) : me.isError ? (
+        <ErrorState message={failureMessage(me.error)} onRetry={() => me.refetch()} />
+      ) : (
+        <ScrollView
+          contentContainerStyle={{ padding: 20, gap: 14, paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Stated BEFORE the buttons, not after a failed tap. */}
+          <View
+            style={{
+              backgroundColor: colors.accent + "22",
+              borderLeftWidth: 3,
+              borderLeftColor: colors.warning,
+              borderRadius: 10,
+              padding: 12,
+              gap: 4,
+            }}
+          >
+            <Body size={FontSize.small} bold color={colors.warning}>
+              Nothing here can be purchased yet
+            </Body>
+            <Body size={FontSize.caption} color={colors.foreground}>
+              Payment is not connected: there is no payment key in this build and no account store
+              to record a subscription against. Adding payment keys alone would not be enough. The
+              plan switch below only previews how the app gates content.
+            </Body>
+          </View>
+
+          {plans.map((p) => {
+            const isCurrent = p.id === plan;
+            return (
+              <Card
+                key={p.id}
+                style={{
+                  gap: 10,
+                  borderColor: isCurrent ? colors.primary : colors.border,
+                  borderWidth: isCurrent ? 2 : 1,
+                }}
+              >
+                <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 10 }}>
+                  <View style={{ flex: 1 }}>
+                    <Title size={FontSize.h3}>{p.name_en}</Title>
+                    <Am size={FontSize.small} color={colors.primary}>
+                      {p.name_am}
+                    </Am>
+                  </View>
+                  <View style={{ alignItems: "flex-end" }}>
+                    <Title size={FontSize.h2}>
+                      {p.price_usd_month === 0 ? "Free" : `$${p.price_usd_month.toFixed(2)}`}
+                    </Title>
+                    {p.price_usd_month > 0 ? (
+                      <Body size={FontSize.caption} color={colors.mutedForeground}>
+                        {t(locale, "perMonth")}
+                      </Body>
+                    ) : null}
+                  </View>
+                </View>
+
+                <Body size={FontSize.small} color={colors.mutedForeground}>
+                  {p.tagline_en}
+                </Body>
+
+                <View style={{ flexDirection: "row", gap: 6, flexWrap: "wrap" }}>
+                  <Chip
+                    label={
+                      p.max_units === null
+                        ? "Every written unit"
+                        : `Units 1-${p.max_units} only`
+                    }
+                    icon="book-outline"
+                  />
+                  <Chip
+                    label={
+                      p.tts_per_day === null
+                        ? "Unmetered listening · not enforced yet"
+                        : `${p.tts_per_day} listens/day · not enforced yet`
+                    }
+                    icon="volume-medium-outline"
+                  />
+                </View>
+
+                <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+                  {isCurrent ? (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 6,
+                        paddingHorizontal: 14,
+                        paddingVertical: 10,
+                        borderRadius: Radius.pill,
+                        backgroundColor: colors.muted,
+                      }}
+                    >
+                      <Ionicons name="eye-outline" size={15} color={colors.foreground} />
+                      <Body size={FontSize.small} medium>
+                        {t(locale, "current")}
+                      </Body>
+                    </View>
+                  ) : (
+                    <Button
+                      label={`Preview as ${p.name_en}`}
+                      variant="secondary"
+                      icon="eye-outline"
+                      onPress={() => setPlan(p.id as PreviewPlan)}
+                    />
+                  )}
+                  {p.price_usd_month > 0 ? (
+                    <Button
+                      label="Try to subscribe"
+                      variant="ghost"
+                      icon="card-outline"
+                      loading={checkout.isPending && checkout.variables?.plan === p.id}
+                      onPress={() => checkout.mutate({ plan: p.id })}
+                    />
+                  ) : null}
+                </View>
+              </Card>
+            );
+          })}
+
+          {checkout.isError ? (
+            <Card style={{ gap: 8, borderColor: colors.destructive }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                <Ionicons name="close-circle-outline" size={18} color={colors.destructive} />
+                <Body size={FontSize.small} bold color={colors.destructive}>
+                  Nothing was charged
+                </Body>
+              </View>
+              <Body size={FontSize.small}>{failureMessage(checkout.error)}</Body>
+              {failureBlockers(checkout.error).map((blocker, i) => (
+                <View key={`b-${i}`} style={{ flexDirection: "row", gap: 8 }}>
+                  <Body size={FontSize.caption} color={colors.mutedForeground}>
+                    •
+                  </Body>
+                  <Body size={FontSize.caption} color={colors.mutedForeground} style={{ flex: 1 }}>
+                    {blocker}
+                  </Body>
+                </View>
+              ))}
+            </Card>
+          ) : null}
+
+          <Card tone="muted" style={{ gap: 10 }}>
+            <Body size={FontSize.small} bold>
+              What each feature actually does today, on the {plan} preview
+            </Body>
+            {features.map((feature) => (
+              <CapabilityRow key={feature.id} feature={feature} />
+            ))}
+            <Body size={FontSize.caption} color={colors.mutedForeground}>
+              {t(locale, "previewNote")}
+            </Body>
+          </Card>
+        </ScrollView>
+      )}
+    </SafeAreaView>
+  );
+}

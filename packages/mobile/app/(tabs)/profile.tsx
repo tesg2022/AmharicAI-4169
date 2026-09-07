@@ -8,6 +8,7 @@ import { FontSize, Radius } from "@/constants/theme";
 import { useColors } from "@/hooks/use-colors";
 import { useSession } from "@/hooks/use-session";
 import { authClient, clearToken } from "@/lib/auth";
+import { usePreview } from "@/lib/preview-plan";
 import { useCourseStats } from "@/queries/content";
 import {
   useActivity,
@@ -72,6 +73,7 @@ export default function ProfileScreen() {
   const leaderboard = useLeaderboard(isSignedIn);
   const courseStats = useCourseStats();
   const updateSettings = useUpdateSettings();
+  const { plan: previewPlan, locale, toggleLocale } = usePreview();
   const [signingOut, setSigningOut] = useState(false);
 
   const stats = progress.data?.stats;
@@ -276,6 +278,40 @@ export default function ProfileScreen() {
             </Card>
           </>
         )}
+
+        {/* Plans and free-text translation. The plan shown is a preview switch
+            on this device, not a subscription — this build has no accounts. */}
+        <Card style={{ gap: 10 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Title size={FontSize.h3} style={{ flex: 1 }}>
+              Plan
+            </Title>
+            <Chip label={`${previewPlan} · preview`} icon="eye-outline" color={colors.warning} />
+          </View>
+          <Body size={FontSize.caption} color={colors.mutedForeground}>
+            Nothing can be purchased yet: there is no payment key and no account store to record a
+            subscription against.
+          </Body>
+          <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+            <Button
+              label="See plans"
+              variant="secondary"
+              icon="pricetags-outline"
+              onPress={() => router.push("/pricing")}
+            />
+            <Button
+              label="Translate"
+              variant="secondary"
+              icon="language-outline"
+              onPress={() => router.push("/translate")}
+            />
+          </View>
+          <Pressable onPress={toggleLocale}>
+            <Body size={FontSize.caption} medium color={colors.primary}>
+              UI language: {locale === "en" ? "English" : "አማርኛ"} — tap to switch
+            </Body>
+          </Pressable>
+        </Card>
 
         {/* Whether the app can actually speak, and what is missing if not */}
         <SpeechStatusCard />

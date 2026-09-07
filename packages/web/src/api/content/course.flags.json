@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-09-07T09:32:08.459Z",
+  "policy": "Preserve source wording and answers as source_as_written. Flag apparent inconsistencies instead of silently correcting them.",
+  "counts": {
+    "error": 0,
+    "warn": 3,
+    "info": 3
+  },
+  "flags": [
+    {
+      "level": "warn",
+      "where": "u5-l5",
+      "code": "missing_title_en",
+      "detail": "lesson has title_am \"አለኝ፣ ነበረኝ እና አለ\" but no title_en"
+    },
+    {
+      "level": "warn",
+      "where": "u5-l6",
+      "code": "missing_title_en",
+      "detail": "lesson has title_am \"የግስ ግንድ ማውጫ ሕጎች\" but no title_en"
+    },
+    {
+      "level": "warn",
+      "where": "u5-l7",
+      "code": "missing_title_en",
+      "detail": "lesson has title_am \"ልምምዶች እና ምዘና\" but no title_en"
+    },
+    {
+      "level": "info",
+      "where": "u1",
+      "code": "shell_title_differs",
+      "detail": "scope shell says \"Fidel & Pronunciation\", the source spec says \"Guide to Amharic Pronunciation\" — both kept"
+    },
+    {
+      "level": "info",
+      "where": "u2",
+      "code": "shell_title_differs",
+      "detail": "scope shell says \"Greetings & Leave Taking\", the source spec says \"Hello and Goodbye!\" — both kept"
+    },
+    {
+      "level": "info",
+      "where": "u3",
+      "code": "shell_title_differs",
+      "detail": "scope shell says \"Introducing Yourself\", the source spec says \"Introducing Oneself\" — both kept"
+    }
+  ]
+}

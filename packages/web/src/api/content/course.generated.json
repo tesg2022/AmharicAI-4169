@@ -1,0 +1,6393 @@
+{
+  "meta": {
+    "course_id": "amharic-beginner-001",
+    "title_en": "Amharic Language — Beginner",
+    "title_am": "አማርኛ ለመማር ቀላል ዘዴዎች",
+    "level": "beginner",
+    "spec_name": "Amharic Course Content Specification",
+    "spec_version": "1.0.0",
+    "source": {
+      "title": "አማርኛ ለመማር ቀላል ዘዴዎች / Amharic Language Book",
+      "file": "Amharic Language Book(1).pdf",
+      "pages": 54,
+      "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+    },
+    "segmentation_principle": "Source-faithful content model. Digital lesson boundaries are implementation-oriented segmentation of the source chapters/sections; they are not claimed to be the author's original lesson numbering.",
+    "qa_policy": "Preserve source wording and answers as source_as_written. Flag apparent inconsistencies instead of silently correcting them.",
+    "generated_at": "2026-09-07T09:32:08.459Z",
+    "generated_by": "scripts/build-course.mjs"
+  },
+  "stats": {
+    "units_total": 20,
+    "units_written": 6,
+    "units_planned": 14,
+    "lessons": 32,
+    "blocks": 94,
+    "activities": 62,
+    "assessment_questions": 91,
+    "speakables": 458
+  },
+  "units": [
+    {
+      "id": "u1",
+      "source_chapter": "Chapter 1",
+      "title_en": "Guide to Amharic Pronunciation",
+      "title_am": "የአማርኛ አጠራር መመሪያ",
+      "source_pages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "learning_objectives": [
+        "Recognize the four alphabet categories presented in the source.",
+        "Recognize the seven orders used in the pronunciation charts.",
+        "Practice the vowel sounds a, ä, u, i, e, ï and o.",
+        "Recognize special consonant sounds such as ሸ, ጰ, ዠ, ጸ, ጠ and ጨ.",
+        "Recognize common -wa sound combinations.",
+        "Understand basic grammar and punctuation terminology."
+      ],
+      "lessons": [
+        {
+          "id": "u1-l1",
+          "unit_id": "u1",
+          "title_en": "Amharic Alphabet Categories",
+          "title_am": "የአማርኛ ፊደላት ምድቦች",
+          "source_pages": [
+            1,
+            3,
+            4
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u1-l1-b1",
+              "title": "Alphabet categories",
+              "source_key": "alphabet_categories",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                1,
+                3,
+                4
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Name",
+                "Examples"
+              ],
+              "rows": [
+                [
+                  "two-legged",
+                  "ለ  ሰ  በ"
+                ],
+                [
+                  "three-legged",
+                  "ሐ  ጠ  ጨ"
+                ],
+                [
+                  "legless",
+                  "ሀ  ረ  መ"
+                ],
+                [
+                  "uni-legged",
+                  "ቀ  ተ  ቸ"
+                ]
+              ]
+            },
+            {
+              "id": "u1-l1-b2",
+              "title": "Orders",
+              "source_key": "orders",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                1,
+                3,
+                4
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "7"
+            },
+            {
+              "id": "u1-l1-b3",
+              "title": "Fidel charts (source)",
+              "source_key": "charts",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                1,
+                3,
+                4
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Group",
+                "Source page"
+              ],
+              "rows": [
+                [
+                  "two-legged",
+                  "3"
+                ],
+                [
+                  "three-legged",
+                  "3"
+                ],
+                [
+                  "legless",
+                  "4"
+                ],
+                [
+                  "uni-legged",
+                  "4"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u1-a1",
+              "type": "recognition",
+              "title": "Identify the letter group",
+              "interactive": false
+            },
+            {
+              "id": "u1-a2",
+              "type": "reading",
+              "title": "Read seven orders",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ለ  ሰ  በ",
+            "ሐ  ጠ  ጨ",
+            "ሀ  ረ  መ",
+            "ቀ  ተ  ቸ"
+          ]
+        },
+        {
+          "id": "u1-l2",
+          "unit_id": "u1",
+          "title_en": "Vowel Sounds and Seven Orders",
+          "title_am": "የአናባቢ ድምፆች እና ሰባቱ ቅደም ተከተሎች",
+          "source_pages": [
+            3,
+            4
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u1-l2-b4",
+              "title": "Vowels",
+              "source_key": "vowels",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                3,
+                4
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Symbol",
+                "Description"
+              ],
+              "rows": [
+                [
+                  "ä",
+                  "Like uh in again"
+                ],
+                [
+                  "u",
+                  "As in moon"
+                ],
+                [
+                  "i",
+                  "As in feet"
+                ],
+                [
+                  "a",
+                  "As in father"
+                ],
+                [
+                  "e",
+                  "As in gate, slightly shorter"
+                ],
+                [
+                  "ï",
+                  "Similar to player"
+                ],
+                [
+                  "o",
+                  "As in shore, often pronounced wo"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u1-a3",
+              "type": "listen_and_select",
+              "title": "Hear a vowel and select it",
+              "interactive": false
+            },
+            {
+              "id": "u1-a4",
+              "type": "reading",
+              "title": "Read a seven-order row",
+              "interactive": false
+            }
+          ],
+          "speakables": []
+        },
+        {
+          "id": "u1-l3",
+          "unit_id": "u1",
+          "title_en": "Special Consonants and -wa Combinations",
+          "title_am": "ልዩ ተነባቢዎች እና -ዋ ጥምረቶች",
+          "source_pages": [
+            1,
+            4,
+            5
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u1-l3-b5",
+              "title": "Special consonants",
+              "source_key": "special_consonants",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                1,
+                4,
+                5
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "Description"
+              ],
+              "rows": [
+                [
+                  "ሸ",
+                  "š",
+                  "sh as in shoe"
+                ],
+                [
+                  "ጰ",
+                  "p'",
+                  "Exploding bilabial p"
+                ],
+                [
+                  "ዠ",
+                  "ž",
+                  "s as in leisure"
+                ],
+                [
+                  "ጸ",
+                  "s'",
+                  "Exploding glottalized s"
+                ],
+                [
+                  "ጠ",
+                  "t'",
+                  "Exploding glottalized t"
+                ],
+                [
+                  "ጨ",
+                  "č'",
+                  "Exploding glottalized ch"
+                ]
+              ]
+            },
+            {
+              "id": "u1-l3-b6",
+              "title": "Wa combinations",
+              "source_key": "wa_combinations",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                1,
+                4,
+                5
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "ሏ",
+                "ሟ",
+                "ሧ",
+                "ሯ",
+                "ሷ",
+                "ሿ",
+                "ቋ",
+                "ኋ",
+                "ኗ",
+                "ኟ",
+                "ኳ",
+                "ዟ",
+                "ዧ",
+                "ዷ",
+                "ጇ",
+                "ጓ",
+                "ጧ",
+                "ጯ",
+                "ጿ",
+                "ፏ"
+              ]
+            },
+            {
+              "id": "u1-l3-b7",
+              "title": "Example words",
+              "source_key": "example_words",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                1,
+                4,
+                5
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "k’olo",
+                "k’es",
+                "säňňo",
+                "baňňo",
+                "gäži",
+                "yaži",
+                "räžim",
+                "mät’ät’at",
+                "t’ät’a",
+                "t’ot’a",
+                "č’aka",
+                "č’äw",
+                "č’at",
+                "lap’is",
+                "ityop’ya",
+                "p’ap’as",
+                "s’älot",
+                "mänäs’ir",
+                "s’ägur"
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u1-a5",
+              "type": "listen_and_repeat",
+              "title": "Repeat special sounds",
+              "interactive": false
+            },
+            {
+              "id": "u1-a6",
+              "type": "reading",
+              "title": "Read example words",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ሸ",
+            "ጰ",
+            "ዠ",
+            "ጸ",
+            "ጠ",
+            "ጨ",
+            "ሏ",
+            "ሟ",
+            "ሧ",
+            "ሯ",
+            "ሷ",
+            "ሿ",
+            "ቋ",
+            "ኋ",
+            "ኗ",
+            "ኟ",
+            "ኳ",
+            "ዟ",
+            "ዧ",
+            "ዷ",
+            "ጇ",
+            "ጓ",
+            "ጧ",
+            "ጯ",
+            "ጿ",
+            "ፏ"
+          ]
+        },
+        {
+          "id": "u1-l4",
+          "unit_id": "u1",
+          "title_en": "Grammar, Linguistic and Punctuation Terms",
+          "title_am": "የሰዋሰው እና ሥነ-ቋንቋ ቃላት",
+          "source_pages": [
+            2,
+            5
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u1-l4-b8",
+              "title": "Grammar terms",
+              "source_key": "grammar_terms",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                2,
+                5
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ስም",
+                  "sïm",
+                  "Noun"
+                ],
+                [
+                  "ግስ",
+                  "gïs",
+                  "Verb"
+                ],
+                [
+                  "አረፍተ ነገር",
+                  "aräftä nägär",
+                  "Sentence"
+                ],
+                [
+                  "አንቀፅ",
+                  "ank'äs'",
+                  "Paragraph"
+                ],
+                [
+                  "ቃል",
+                  "k'al",
+                  "Word"
+                ]
+              ]
+            },
+            {
+              "id": "u1-l4-b9",
+              "title": "Punctuation",
+              "source_key": "punctuation",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                2,
+                5
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English",
+                "Symbol"
+              ],
+              "rows": [
+                [
+                  "አራት ነጥብ",
+                  "arat nät'ïb",
+                  "Period/Full stop",
+                  "::"
+                ],
+                [
+                  "ጥያቄ ምልክት",
+                  "t'ïyak'e mïlïkït",
+                  "Question mark",
+                  "?"
+                ],
+                [
+                  "የቃል አጋኖ ምልክት",
+                  "yäk'al agano mïlïkït",
+                  "Exclamation mark",
+                  "!"
+                ],
+                [
+                  "ነጠላ ሰረዝ",
+                  "nät'äla säräz",
+                  "Comma",
+                  ","
+                ]
+              ]
+            },
+            {
+              "id": "u1-l4-b10",
+              "title": "Linguistic terms",
+              "source_key": "linguistic_terms",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                2,
+                5
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Term",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Affix",
+                  "Generic term for prefixes and suffixes"
+                ],
+                [
+                  "Direct Object",
+                  "Noun receiving the action of the verb"
+                ],
+                [
+                  "Gerund",
+                  "Verb form used as a noun"
+                ],
+                [
+                  "Imperative",
+                  "Command form"
+                ],
+                [
+                  "Passive form",
+                  "Object becomes subject"
+                ],
+                [
+                  "Root",
+                  "Basic form of a word"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u1-a7",
+              "type": "matching",
+              "title": "Match grammar terms",
+              "interactive": false
+            },
+            {
+              "id": "u1-a8",
+              "type": "matching",
+              "title": "Match punctuation terms",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ስም",
+            "ግስ",
+            "አረፍተ ነገር",
+            "አንቀፅ",
+            "ቃል",
+            "አራት ነጥብ",
+            "ጥያቄ ምልክት",
+            "የቃል አጋኖ ምልክት",
+            "ነጠላ ሰረዝ"
+          ]
+        }
+      ],
+      "assessments": [],
+      "shell_unit": 1,
+      "status": "written",
+      "description": "Seven-order Fidel families, pronunciation, special consonants and wa combinations.",
+      "key_phrase": {
+        "amharic": "ለ ሉ ሊ ላ ሌ ል ሎ",
+        "english": "Read the seven orders aloud and copy the family."
+      },
+      "shell_title_en": "Fidel & Pronunciation",
+      "shell_title_am": "ፊደል እና አጠራር"
+    },
+    {
+      "id": "u2",
+      "source_chapter": "Chapter 2",
+      "title_en": "Hello and Goodbye!",
+      "title_am": "ሰላምታ",
+      "source_pages": [
+        6,
+        7,
+        8
+      ],
+      "learning_objectives": [
+        "Say hello and goodbye in Amharic.",
+        "Recognize how greetings change according to the person being addressed and time of day.",
+        "Understand the source's introductory notes on greeting body language.",
+        "Use forms of the verb to be with personal pronouns.",
+        "Recognize that the verb usually comes at the end of an Amharic sentence."
+      ],
+      "lessons": [
+        {
+          "id": "u2-l1",
+          "unit_id": "u2",
+          "title_en": "Pronouns and 'To Be'",
+          "title_am": "ተውላጠ ስሞች እና መሆን",
+          "source_pages": [
+            6,
+            7
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u2-l1-b11",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                6,
+                7
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "እኔ",
+                  "ïne",
+                  "I"
+                ],
+                [
+                  "አንተ",
+                  "antä",
+                  "You (boy/man)"
+                ],
+                [
+                  "አንቺ",
+                  "anči",
+                  "You (girl/woman)"
+                ],
+                [
+                  "እርስዎ",
+                  "ïrswo",
+                  "You (polite)"
+                ],
+                [
+                  "እሱ",
+                  "ïssu",
+                  "He"
+                ],
+                [
+                  "እሷ",
+                  "ïsswa",
+                  "She"
+                ],
+                [
+                  "እሳቸው",
+                  "ïsaččäw",
+                  "He/She (polite)"
+                ],
+                [
+                  "እኛ",
+                  "ïňňa",
+                  "We"
+                ],
+                [
+                  "እናንተ",
+                  "ïnnantä",
+                  "You (plural)"
+                ],
+                [
+                  "እነሱ",
+                  "ïnnässu",
+                  "They"
+                ],
+                [
+                  "ደህና",
+                  "dähna",
+                  "Fine, well"
+                ]
+              ]
+            },
+            {
+              "id": "u2-l1-b12",
+              "title": "Grammar — Verb",
+              "source_key": "grammar.verb",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                6,
+                7
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "to be (መሆን / mähon)"
+            },
+            {
+              "id": "u2-l1-b13",
+              "title": "Grammar — Forms",
+              "source_key": "grammar.forms",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                6,
+                7
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Pronoun",
+                "Form",
+                "Transliteration"
+              ],
+              "rows": [
+                [
+                  "እኔ",
+                  "ነኝ",
+                  "näň"
+                ],
+                [
+                  "አንተ",
+                  "ነህ",
+                  "näh"
+                ],
+                [
+                  "አንቺ",
+                  "ነሽ",
+                  "näš"
+                ],
+                [
+                  "እርስዎ",
+                  "ነዎት",
+                  "näwot"
+                ],
+                [
+                  "እሱ",
+                  "ነው",
+                  "näw"
+                ],
+                [
+                  "እሷ",
+                  "ናት",
+                  "nat"
+                ],
+                [
+                  "እሳቸው",
+                  "ናቸው",
+                  "naččäw"
+                ],
+                [
+                  "እኛ",
+                  "ነን",
+                  "nän"
+                ],
+                [
+                  "እናንተ",
+                  "ናችሁ",
+                  "naččïhu"
+                ],
+                [
+                  "እነሱ",
+                  "ናቸው",
+                  "naččäw"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u2-a1",
+              "type": "conjugation",
+              "title": "Choose the correct 'to be' form",
+              "interactive": false
+            },
+            {
+              "id": "u2-a2",
+              "type": "translation",
+              "title": "Translate 'I am fine'",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "እኔ",
+            "አንተ",
+            "አንቺ",
+            "እርስዎ",
+            "እሱ",
+            "እሷ",
+            "እሳቸው",
+            "እኛ",
+            "እናንተ",
+            "እነሱ",
+            "ደህና",
+            "to be (መሆን / mähon)",
+            "ነኝ",
+            "ነህ",
+            "ነሽ",
+            "ነዎት",
+            "ነው",
+            "ናት",
+            "ናቸው",
+            "ነን",
+            "ናችሁ"
+          ]
+        },
+        {
+          "id": "u2-l2",
+          "unit_id": "u2",
+          "title_en": "Greetings and Leave-takings",
+          "title_am": "ሰላምታ እና መሰናበቻ",
+          "source_pages": [
+            7,
+            8
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u2-l2-b14",
+              "title": "Greetings",
+              "source_key": "hello",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                7,
+                8
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "ሰላም"
+            },
+            {
+              "id": "u2-l2-b15",
+              "title": "Leave-takings",
+              "source_key": "leave_takings",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                7,
+                8
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ደህና እደሩ",
+                  "dähna ïdäru",
+                  "Goodbye (polite/plural)"
+                ],
+                [
+                  "ደህና ዋይ",
+                  "dähna way(i)",
+                  "Goodbye (woman)"
+                ],
+                [
+                  "ደህና አምሽ",
+                  "dähna amš",
+                  "Goodbye (man)"
+                ]
+              ]
+            },
+            {
+              "id": "u2-l2-b16",
+              "title": "Time-of-day greetings",
+              "source_key": "time_greetings",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                7,
+                8
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "እንደምን አደርክ?",
+                  "ïndämïn addärk?",
+                  "How did you (male) spend the night?"
+                ],
+                [
+                  "ደህና ዋልሽ?",
+                  "dähna walš?",
+                  "Did you (female) spend the day well?"
+                ],
+                [
+                  "እንደምን አመሻችሁ?",
+                  "ïndämïn amäššaččïhu?",
+                  "How did you (plural) spend the evening?"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u2-a3",
+              "type": "dialogue",
+              "title": "Greeting role-play",
+              "interactive": false
+            },
+            {
+              "id": "u2-a4",
+              "type": "speaking",
+              "title": "Say hello and goodbye",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ሰላም",
+            "ደህና እደሩ",
+            "ደህና ዋይ",
+            "ደህና አምሽ",
+            "እንደምን አደርክ?",
+            "ደህና ዋልሽ?",
+            "እንደምን አመሻችሁ?"
+          ]
+        },
+        {
+          "id": "u2-l3",
+          "unit_id": "u2",
+          "title_en": "Amharic Sentence Order",
+          "title_am": "የአማርኛ ዓረፍተ ነገር ቅደም ተከተል",
+          "source_pages": [
+            7,
+            8
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u2-l3-b17",
+              "title": "Grammar — Rule",
+              "source_key": "grammar.rule",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                7,
+                8
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "The verb usually/almost always comes at the end."
+            },
+            {
+              "id": "u2-l3-b18",
+              "title": "Grammar — Structure",
+              "source_key": "grammar.structure",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                7,
+                8
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "subject + (object/modifier/descriptor) + verb"
+            },
+            {
+              "id": "u2-l3-b19",
+              "title": "Grammar — Example",
+              "source_key": "grammar.example",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                7,
+                8
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "እኔ ደህና ነኝ",
+                "ïne dähna näň",
+                "I am fine"
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u2-a5",
+              "type": "word_order",
+              "title": "Put the sentence in order",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "እኔ ደህና ነኝ"
+          ]
+        }
+      ],
+      "assessments": [],
+      "shell_unit": 2,
+      "status": "written",
+      "description": "Greetings, leave-taking, forms of address and everyday greeting practice.",
+      "key_phrase": {
+        "amharic": "ሰላም። ደህና ነህ?",
+        "english": "Hello. How are you?"
+      },
+      "shell_title_en": "Greetings & Leave Taking",
+      "shell_title_am": "ሰላምታ እና መሰናበት"
+    },
+    {
+      "id": "u3",
+      "source_chapter": "Chapter 3",
+      "title_en": "Introducing Oneself",
+      "title_am": "ራስን ማስተዋወቅ",
+      "source_pages": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "learning_objectives": [
+        "Introduce yourself by nationality, occupation and marital status.",
+        "Ask others for place of origin, occupation and marital status.",
+        "Use the verb 'to be called' for names.",
+        "Use possessives.",
+        "Pluralize nouns."
+      ],
+      "lessons": [
+        {
+          "id": "u3-l1",
+          "unit_id": "u3",
+          "title_en": "Names and 'To Be Called'",
+          "title_am": "ስም እና መባል",
+          "source_pages": [
+            9,
+            10
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u3-l1-b20",
+              "title": "Grammar — Verb",
+              "source_key": "grammar.verb",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                9,
+                10
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "መባል (mäbbal), source note: pronounced as täbalä"
+            },
+            {
+              "id": "u3-l1-b21",
+              "title": "Grammar — Forms",
+              "source_key": "grammar.forms",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                9,
+                10
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Pronoun",
+                "Form",
+                "Transliteration"
+              ],
+              "rows": [
+                [
+                  "እኔ",
+                  "እባላለሁ",
+                  "ïbbalallähu"
+                ],
+                [
+                  "አንተ",
+                  "ትባላለህ",
+                  "tïbbalalläh"
+                ],
+                [
+                  "አንቺ",
+                  "ትባያለሽ",
+                  "tïbbayalläš"
+                ],
+                [
+                  "እርስዎ",
+                  "ይባላሉ",
+                  "yïbbalallu"
+                ],
+                [
+                  "እሱ",
+                  "ይባላል",
+                  "yïbbalal"
+                ],
+                [
+                  "እነሱ",
+                  "ይባላሉ",
+                  "yïbbalallu"
+                ]
+              ]
+            },
+            {
+              "id": "u3-l1-b22",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                9,
+                10
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ስም",
+                  "sïm",
+                  "Name"
+                ],
+                [
+                  "ስሜ",
+                  "sïme",
+                  "My name"
+                ],
+                [
+                  "አገር",
+                  "agär",
+                  "Country"
+                ],
+                [
+                  "አገሬ",
+                  "agäre",
+                  "My country"
+                ],
+                [
+                  "አግብቻለሁ",
+                  "agïbïčallähu",
+                  "Married"
+                ],
+                [
+                  "አላገባሁም",
+                  "alagäbahum",
+                  "Not married"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u3-a1",
+              "type": "profile",
+              "title": "Create a personal introduction",
+              "interactive": false
+            },
+            {
+              "id": "u3-a2",
+              "type": "speaking",
+              "title": "Say your name and country",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "መባል (mäbbal), source note: pronounced as täbalä",
+            "እኔ",
+            "እባላለሁ",
+            "አንተ",
+            "ትባላለህ",
+            "አንቺ",
+            "ትባያለሽ",
+            "እርስዎ",
+            "ይባላሉ",
+            "እሱ",
+            "ይባላል",
+            "እነሱ",
+            "ስም",
+            "ስሜ",
+            "አገር",
+            "አገሬ",
+            "አግብቻለሁ",
+            "አላገባሁም"
+          ]
+        },
+        {
+          "id": "u3-l2",
+          "unit_id": "u3",
+          "title_en": "Nationality",
+          "title_am": "ዜግነት",
+          "source_pages": [
+            9,
+            11
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u3-l2-b23",
+              "title": "Grammar — Rule",
+              "source_key": "grammar.rule",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                9,
+                11
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "Add -ዊ (wi) for male singular.",
+                "Add -ዊት (wit) for female singular.",
+                "Plural form is -ውያን (wïyan)."
+              ]
+            },
+            {
+              "id": "u3-l2-b24",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                9,
+                11
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ኢትዮጵያ",
+                  "ityop'ya",
+                  "Ethiopia"
+                ],
+                [
+                  "ኢትዮጵያዊ",
+                  "ityop'yawi",
+                  "Ethiopian male"
+                ],
+                [
+                  "ኢትዮጵያዊት",
+                  "ityop'yawit",
+                  "Ethiopian female"
+                ],
+                [
+                  "ኢትዮጵያውያን",
+                  "ityop'yawïyan",
+                  "Ethiopian plural"
+                ],
+                [
+                  "አሜሪካዊ",
+                  "amerikawi",
+                  "American male"
+                ],
+                [
+                  "አሜሪካዊት",
+                  "amerikawit",
+                  "American female"
+                ],
+                [
+                  "አሜሪካውያን",
+                  "amerikawïyan",
+                  "American plural"
+                ],
+                [
+                  "ኬንያዊ",
+                  "kenyawi",
+                  "Kenyan male"
+                ],
+                [
+                  "ኬንያዊት",
+                  "kenyawit",
+                  "Kenyan female"
+                ],
+                [
+                  "ኬንያውያን",
+                  "kenyawïyan",
+                  "Kenyan plural"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u3-a3",
+              "type": "pattern",
+              "title": "Form nationality adjectives",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "Add -ዊ (wi) for male singular.",
+            "Add -ዊት (wit) for female singular.",
+            "Plural form is -ውያን (wïyan).",
+            "ኢትዮጵያ",
+            "ኢትዮጵያዊ",
+            "ኢትዮጵያዊት",
+            "ኢትዮጵያውያን",
+            "አሜሪካዊ",
+            "አሜሪካዊት",
+            "አሜሪካውያን",
+            "ኬንያዊ",
+            "ኬንያዊት",
+            "ኬንያውያን"
+          ]
+        },
+        {
+          "id": "u3-l3",
+          "unit_id": "u3",
+          "title_en": "Occupations and Marital Status",
+          "title_am": "ሥራ እና የጋብቻ ሁኔታ",
+          "source_pages": [
+            11,
+            15
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u3-l3-b25",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                11,
+                15
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ሃኪም",
+                  "hakim",
+                  "Physician"
+                ],
+                [
+                  "ጸሃፊ",
+                  "s'ähafi",
+                  "Secretary"
+                ],
+                [
+                  "መሃንዲስ",
+                  "mähandis",
+                  "Engineer"
+                ],
+                [
+                  "የህግ ባለሙያ",
+                  "yähïg balämuya",
+                  "Lawyer"
+                ],
+                [
+                  "የቤት እመቤት",
+                  "yäbet ïmäbet",
+                  "Housewife"
+                ],
+                [
+                  "አስተማሪ",
+                  "astämari",
+                  "Teacher"
+                ],
+                [
+                  "ዘፋኝ",
+                  "zäfañ",
+                  "Singer"
+                ],
+                [
+                  "ገበሬ",
+                  "gäbäre",
+                  "Farmer"
+                ],
+                [
+                  "አስተናጋጅ",
+                  "astänagaj",
+                  "Waiter or Waitress"
+                ],
+                [
+                  "ጡረተኛ",
+                  "t'urätäña",
+                  "Retired"
+                ],
+                [
+                  "ነጋዴ",
+                  "nägade",
+                  "Merchant/Businessperson"
+                ],
+                [
+                  "የሒሳብ ሰራተኛ",
+                  "yähisab säratäña",
+                  "Accountant"
+                ],
+                [
+                  "የጽዳት ሰራተኛ",
+                  "yäs'dat säratäña",
+                  "Janitor"
+                ],
+                [
+                  "አማካሪ",
+                  "amakari",
+                  "Consultant"
+                ],
+                [
+                  "ረዳት",
+                  "rädat",
+                  "Driver Assistant"
+                ],
+                [
+                  "አናጺ",
+                  "anas'i",
+                  "Carpenter"
+                ],
+                [
+                  "ወታደር",
+                  "wätadär",
+                  "Soldier"
+                ],
+                [
+                  "ሞግዚት",
+                  "mogzit",
+                  "Nunny"
+                ],
+                [
+                  "ቧንቧ ሰራተኛ",
+                  "bwanbwa säratäňa",
+                  "Plumber"
+                ],
+                [
+                  "ፖሊስ",
+                  "polis",
+                  "Policeman"
+                ],
+                [
+                  "ነርስ",
+                  "närs",
+                  "Nurse"
+                ],
+                [
+                  "ጋዜጠኛ",
+                  "gazet'äňa",
+                  "Journalist"
+                ],
+                [
+                  "ሾፌር",
+                  "šofer",
+                  "Driver"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u3-a4",
+              "type": "picture_vocabulary",
+              "title": "Match jobs to pictures",
+              "interactive": false
+            },
+            {
+              "id": "u3-a5",
+              "type": "speaking",
+              "title": "Say 'I am a...' with a job",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ሃኪም",
+            "ጸሃፊ",
+            "መሃንዲስ",
+            "የህግ ባለሙያ",
+            "የቤት እመቤት",
+            "አስተማሪ",
+            "ዘፋኝ",
+            "ገበሬ",
+            "አስተናጋጅ",
+            "ጡረተኛ",
+            "ነጋዴ",
+            "የሒሳብ ሰራተኛ",
+            "የጽዳት ሰራተኛ",
+            "አማካሪ",
+            "ረዳት",
+            "አናጺ",
+            "ወታደር",
+            "ሞግዚት",
+            "ቧንቧ ሰራተኛ",
+            "ፖሊስ",
+            "ነርስ",
+            "ጋዜጠኛ",
+            "ሾፌር"
+          ]
+        },
+        {
+          "id": "u3-l4",
+          "unit_id": "u3",
+          "title_en": "Asking About Others",
+          "title_am": "ስለሌሎች መጠየቅ",
+          "source_pages": [
+            11,
+            14
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u3-l4-b26",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                11,
+                14
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "የት ነው?",
+                  "yät näw?",
+                  "Where is it?"
+                ],
+                [
+                  "ማን ነው?",
+                  "man näw?",
+                  "Who is it?"
+                ],
+                [
+                  "ምንድን ነው?",
+                  "mïndïn näw?",
+                  "What is it?"
+                ],
+                [
+                  "ስምህ ማን ነው?",
+                  "sïmïh man näw?",
+                  "What is your name? (for boys)"
+                ],
+                [
+                  "ስምሽ ማን ነው?",
+                  "sïmïš man näw?",
+                  "What is your name? (for girls)"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u3-a6",
+              "type": "dialogue",
+              "title": "Ask a partner their name and job",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "የት ነው?",
+            "ማን ነው?",
+            "ምንድን ነው?",
+            "ስምህ ማን ነው?",
+            "ስምሽ ማን ነው?"
+          ]
+        },
+        {
+          "id": "u3-l5",
+          "unit_id": "u3",
+          "title_en": "Possessives, Plurals and Negative Responses",
+          "title_am": "ባለቤትነት፣ ብዙ ቁጥር እና አሉታዊ መልሶች",
+          "source_pages": [
+            10,
+            12,
+            13,
+            14
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u3-l5-b27",
+              "title": "Grammar — Possessive suffixes",
+              "source_key": "grammar.possessive_suffixes",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                10,
+                12,
+                13,
+                14
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "My",
+                  "-e/-ye"
+                ],
+                [
+                  "Your male",
+                  "-ïh"
+                ],
+                [
+                  "Your female",
+                  "-ïš"
+                ],
+                [
+                  "Your polite",
+                  "-wot/-wo"
+                ],
+                [
+                  "His",
+                  "-u/-w"
+                ],
+                [
+                  "Her",
+                  "-wa"
+                ],
+                [
+                  "Their",
+                  "-aččäw"
+                ]
+              ]
+            },
+            {
+              "id": "u3-l5-b28",
+              "title": "Grammar — Plural examples",
+              "source_key": "grammar.plural_examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                10,
+                12,
+                13,
+                14
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "ድመት",
+                  "ድመቶች"
+                ],
+                [
+                  "ውሻ",
+                  "ውሻዎች"
+                ],
+                [
+                  "ልጅ",
+                  "ልጆች"
+                ],
+                [
+                  "ቤት",
+                  "ቤቶች"
+                ]
+              ]
+            },
+            {
+              "id": "u3-l5-b29",
+              "title": "Grammar — Negative examples",
+              "source_key": "grammar.negative_examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                10,
+                12,
+                13,
+                14
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "ሃኪም ነህ/ነሽ?",
+                  "አይደለሁም"
+                ],
+                [
+                  "እንግሊዛዊ/ዊት ነህ/ነሽ?",
+                  "አይደለሁም"
+                ],
+                [
+                  "ተማሪዎች ናችሁ?",
+                  "አይደለንም"
+                ],
+                [
+                  "ቱሪስት ናችሁ?",
+                  "አይደለንም"
+                ],
+                [
+                  "ኣባትህ/ሽ ናቸው?",
+                  "አይደለም"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u3-a7",
+              "type": "possessive_transformation",
+              "title": "Turn items into possessive forms",
+              "interactive": false
+            },
+            {
+              "id": "u3-a8",
+              "type": "negative_response",
+              "title": "Answer questions in the negative",
+              "interactive": false
+            },
+            {
+              "id": "u3-a9",
+              "type": "matching",
+              "title": "Match singular and plural forms",
+              "interactive": false
+            },
+            {
+              "id": "u3-a10",
+              "type": "questionnaire",
+              "title": "Complete personal information",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ድመት",
+            "ድመቶች",
+            "ውሻ",
+            "ውሻዎች",
+            "ልጅ",
+            "ልጆች",
+            "ቤት",
+            "ቤቶች",
+            "ሃኪም ነህ/ነሽ?",
+            "አይደለሁም",
+            "እንግሊዛዊ/ዊት ነህ/ነሽ?",
+            "ተማሪዎች ናችሁ?",
+            "አይደለንም",
+            "ቱሪስት ናችሁ?",
+            "ኣባትህ/ሽ ናቸው?",
+            "አይደለም"
+          ]
+        }
+      ],
+      "assessments": [],
+      "shell_unit": 3,
+      "status": "written",
+      "description": "Names, origin, identity and simple personal introductions.",
+      "key_phrase": {
+        "amharic": "ስምህ ማን ነው?",
+        "english": "What is your name?"
+      },
+      "shell_title_en": "Introducing Yourself",
+      "shell_title_am": "ራስን ማስተዋወቅ"
+    },
+    {
+      "id": "u4",
+      "source_chapter": "Chapter 4",
+      "title_en": "Introducing Others",
+      "title_am": "ሌሎችን ማስተዋወቅ",
+      "source_pages": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "learning_objectives": [
+        "Introduce your own family.",
+        "Ask about where family members live, what they are called and their professions.",
+        "Use the verb to live.",
+        "Use the verb to have in positive and negative forms.",
+        "Use negative, singular and plural markers and demonstrative adjectives.",
+        "Use demonstrative pronouns."
+      ],
+      "lessons": [
+        {
+          "id": "u4-l1",
+          "unit_id": "u4",
+          "title_en": "Desta's Family and Kinship",
+          "title_am": "የደስታ ቤተሰብ እና የዝምድና ቃላት",
+          "source_pages": [
+            16,
+            20,
+            24,
+            25
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u4-l1-b30",
+              "title": "Family tree roles",
+              "source_key": "family_tree_roles",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                16,
+                20,
+                24,
+                25
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "English"
+              ],
+              "rows": [
+                [
+                  "A",
+                  "Ato Meshesha"
+                ],
+                [
+                  "B",
+                  "Wäyzäro Tiruayehu"
+                ],
+                [
+                  "C",
+                  "Ato Belete"
+                ],
+                [
+                  "D",
+                  "Wäyzäro Mulu"
+                ],
+                [
+                  "E",
+                  "Ato Nega"
+                ],
+                [
+                  "F",
+                  "Ato Gashaw"
+                ],
+                [
+                  "G",
+                  "Fantahun"
+                ],
+                [
+                  "H",
+                  "Mesfin"
+                ],
+                [
+                  "I",
+                  "Desta"
+                ],
+                [
+                  "J",
+                  "Gete"
+                ],
+                [
+                  "K",
+                  "Wäyzäro Taytu"
+                ],
+                [
+                  "L",
+                  "Woizäro Tsehay"
+                ],
+                [
+                  "M",
+                  "Ato Abebe"
+                ],
+                [
+                  "N",
+                  "Ato Getahun"
+                ],
+                [
+                  "O",
+                  "Ato Mebratu"
+                ],
+                [
+                  "P",
+                  "Wäyzäro Alem"
+                ]
+              ]
+            },
+            {
+              "id": "u4-l1-b31",
+              "title": "Kinship vocabulary",
+              "source_key": "kinship_vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                16,
+                20,
+                24,
+                25
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "አባት",
+                  "abbat",
+                  "father"
+                ],
+                [
+                  "እናት",
+                  "ïnnat",
+                  "mother"
+                ],
+                [
+                  "ባል",
+                  "bal",
+                  "husband"
+                ],
+                [
+                  "ሚስት",
+                  "mist",
+                  "wife"
+                ],
+                [
+                  "እንጀራ አባት",
+                  "ïnjära abbat",
+                  "stepfather"
+                ],
+                [
+                  "እንጀራ እናት",
+                  "ïnjära ïnnat",
+                  "stepmother"
+                ],
+                [
+                  "እህት",
+                  "ïhït",
+                  "sister"
+                ],
+                [
+                  "ወንድም",
+                  "wändïm",
+                  "brother"
+                ],
+                [
+                  "ሴት አያት",
+                  "set ayat",
+                  "grandmother"
+                ],
+                [
+                  "ወንድ አያት",
+                  "wänd ayat",
+                  "grandfather"
+                ],
+                [
+                  "ወላጅ",
+                  "wälaj",
+                  "parent"
+                ],
+                [
+                  "አክስት",
+                  "akïst",
+                  "aunt"
+                ],
+                [
+                  "አጎት",
+                  "aggot",
+                  "uncle"
+                ],
+                [
+                  "የአጎት / የአክስት ልጅ",
+                  "yag’got / yakïst lïj",
+                  "cousin"
+                ],
+                [
+                  "የሴት ቅድመ አያት",
+                  "yäset k’ïdïmä ayat",
+                  "great-grandmother"
+                ],
+                [
+                  "የወንድ ቅድመ አያት",
+                  "yäwänd k’ïdïmä ayat",
+                  "great-grandfather"
+                ],
+                [
+                  "የልጅ ልጅ",
+                  "yälïj lïj",
+                  "granddaughter/son"
+                ]
+              ]
+            },
+            {
+              "id": "u4-l1-b32",
+              "title": "Family relations (source)",
+              "source_key": "source_family_relations",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                16,
+                20,
+                24,
+                25
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "Desta",
+                  "ልጅ",
+                  "Son"
+                ],
+                [
+                  "Ato Gashaw",
+                  "አባት",
+                  "Father"
+                ],
+                [
+                  "Wäyzäro Taytu",
+                  "እናት",
+                  "Mother"
+                ],
+                [
+                  "Mesfin",
+                  "ወንድም",
+                  "Brother"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u4-a1",
+              "type": "family_tree",
+              "title": "Explore Desta's family tree",
+              "interactive": false
+            },
+            {
+              "id": "u4-a2",
+              "type": "family_tree",
+              "title": "Create your own family tree",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "አባት",
+            "እናት",
+            "ባል",
+            "ሚስት",
+            "እንጀራ አባት",
+            "እንጀራ እናት",
+            "እህት",
+            "ወንድም",
+            "ሴት አያት",
+            "ወንድ አያት",
+            "ወላጅ",
+            "አክስት",
+            "አጎት",
+            "የአጎት / የአክስት ልጅ",
+            "የሴት ቅድመ አያት",
+            "የወንድ ቅድመ አያት",
+            "የልጅ ልጅ",
+            "ልጅ"
+          ]
+        },
+        {
+          "id": "u4-l2",
+          "unit_id": "u4",
+          "title_en": "Possessive Forms",
+          "title_am": "የባለቤትነት ቅርጾች",
+          "source_pages": [
+            17,
+            18,
+            19
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u4-l2-b33",
+              "title": "Grammar — Direct suffix method",
+              "source_key": "grammar.direct_suffix_method",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                17,
+                18,
+                19
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "Examples include አባቴ, አባትህ, አባትሽ, አባትዎ, አባቱ, አባቷ, አባታቸው."
+            },
+            {
+              "id": "u4-l2-b34",
+              "title": "Grammar — Second method",
+              "source_key": "grammar.second_method",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                17,
+                18,
+                19
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "የ (yä) + noun/pronoun = possessive phrase."
+            },
+            {
+              "id": "u4-l2-b35",
+              "title": "Grammar — Examples",
+              "source_key": "grammar.examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                17,
+                18,
+                19
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "አባቴ",
+                  "የእኔ አባት"
+                ],
+                [
+                  "እናቴ",
+                  "የእኔ እናት"
+                ],
+                [
+                  "ልጅ",
+                  "የእኔ ልጅ"
+                ],
+                [
+                  "ቤተሰብ",
+                  "የመስፍን ቤተሰብ"
+                ],
+                [
+                  "",
+                  "የሱ ቤተሰብ"
+                ]
+              ]
+            },
+            {
+              "id": "u4-l2-b36",
+              "title": "Grammar — Contrast example",
+              "source_key": "grammar.contrast_example",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                17,
+                18,
+                19
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "የኔ ቦርሳ ትልቅ ነው",
+                "የአንቺ ቦርሳ ግን ትንሽ ነው"
+              ]
+            },
+            {
+              "id": "u4-l2-b37",
+              "title": "Grammar — Vowel change",
+              "source_key": "grammar.vowel_change",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                17,
+                18,
+                19
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "የ + እኔ",
+                  "የኔ"
+                ],
+                [
+                  "የ + አንተ",
+                  "ያንተ"
+                ],
+                [
+                  "የ + እሱ",
+                  "የሱ"
+                ],
+                [
+                  "የ + እሷ",
+                  "የሷ"
+                ],
+                [
+                  "የ + እሳቸው",
+                  "የሳቸው"
+                ],
+                [
+                  "የ + አሜሪካ",
+                  "የአሜሪካ"
+                ]
+              ]
+            },
+            {
+              "id": "u4-l2-b38",
+              "title": "Grammar — Vowel hierarchy",
+              "source_key": "grammar.vowel_hierarchy",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                17,
+                18,
+                19
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "ኣ",
+                "ኤ",
+                "ኢ",
+                "ኦ",
+                "ኡ",
+                "አ",
+                "እ"
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u4-a3",
+              "type": "translation",
+              "title": "Translate possessive phrases",
+              "interactive": false
+            },
+            {
+              "id": "u4-a4",
+              "type": "pattern",
+              "title": "Practice yä + noun/pronoun",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "Examples include አባቴ, አባትህ, አባትሽ, አባትዎ, አባቱ, አባቷ, አባታቸው.",
+            "የ (yä) + noun/pronoun = possessive phrase.",
+            "አባቴ",
+            "የእኔ አባት",
+            "እናቴ",
+            "የእኔ እናት",
+            "ልጅ",
+            "የእኔ ልጅ",
+            "ቤተሰብ",
+            "የመስፍን ቤተሰብ",
+            "የሱ ቤተሰብ",
+            "የኔ ቦርሳ ትልቅ ነው",
+            "የአንቺ ቦርሳ ግን ትንሽ ነው",
+            "የ + እኔ",
+            "የኔ",
+            "የ + አንተ",
+            "ያንተ",
+            "የ + እሱ",
+            "የሱ",
+            "የ + እሷ",
+            "የሷ",
+            "የ + እሳቸው",
+            "የሳቸው",
+            "የ + አሜሪካ",
+            "የአሜሪካ",
+            "ኣ",
+            "ኤ",
+            "ኢ",
+            "ኦ",
+            "ኡ",
+            "አ",
+            "እ"
+          ]
+        },
+        {
+          "id": "u4-l3",
+          "unit_id": "u4",
+          "title_en": "The Verb 'To Live'",
+          "title_am": "መኖር",
+          "source_pages": [
+            20,
+            21
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u4-l3-b39",
+              "title": "Grammar — Verb",
+              "source_key": "grammar.verb",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                20,
+                21
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "መኖር (mänor) [ኖረ (norä)]"
+            },
+            {
+              "id": "u4-l3-b40",
+              "title": "Grammar — Present forms",
+              "source_key": "grammar.present_forms",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                20,
+                21
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "እኔ",
+                  "እኖራለሁ",
+                  "ïnorarallähu"
+                ],
+                [
+                  "አንተ",
+                  "ትኖራለህ",
+                  "tïnoral"
+                ],
+                [
+                  "አንቺ",
+                  "ትኖሪያለሽ",
+                  "tïnoriälaš"
+                ],
+                [
+                  "እርስዎ",
+                  "ይኖራሉ",
+                  "yïnoral"
+                ],
+                [
+                  "እሱ",
+                  "ይኖራል",
+                  "yïnoral"
+                ],
+                [
+                  "እሷ",
+                  "ትኖራለች",
+                  "tïnoraläč"
+                ],
+                [
+                  "እሳቸው",
+                  "ይኖራሉ",
+                  "yïnoral"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u4-a5",
+              "type": "matching",
+              "title": "Match subjects with forms of መኖር",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "መኖር (mänor) [ኖረ (norä)]",
+            "እኔ",
+            "እኖራለሁ",
+            "አንተ",
+            "ትኖራለህ",
+            "አንቺ",
+            "ትኖሪያለሽ",
+            "እርስዎ",
+            "ይኖራሉ",
+            "እሱ",
+            "ይኖራል",
+            "እሷ",
+            "ትኖራለች",
+            "እሳቸው"
+          ]
+        },
+        {
+          "id": "u4-l4",
+          "unit_id": "u4",
+          "title_en": "To Have and Presence",
+          "title_am": "አለ እና የለም",
+          "source_pages": [
+            21,
+            22,
+            23
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u4-l4-b41",
+              "title": "Grammar — Presence rule",
+              "source_key": "grammar.presence_rule",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                21,
+                22,
+                23
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "The source explains that አለ is irregular in the negative and uses የ- plus -ም in the negative form."
+            },
+            {
+              "id": "u4-l4-b42",
+              "title": "Grammar — Examples",
+              "source_key": "grammar.examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                21,
+                22,
+                23
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "አባት አለኝ",
+                  "I have a father. (Literally: A father is to me.)"
+                ],
+                [
+                  "ወንድም የለኝም",
+                  "I have no brother. (Literally: A brother is not to me.)"
+                ],
+                [
+                  "ሁለት ድመቶች አሉኝ",
+                  "I have two cats."
+                ],
+                [
+                  "ብዙ ጓደኞች አሉሽ",
+                  "You (female) have many friends!"
+                ],
+                [
+                  "ሶስት ልጆች አሏቸው",
+                  "They have three children."
+                ],
+                [
+                  "ልጆች የሉኝም",
+                  "We don't have children."
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u4-a6",
+              "type": "have_or_not_have",
+              "title": "Say whether you have an item/relation",
+              "interactive": false
+            },
+            {
+              "id": "u4-a7",
+              "type": "third_person_reporting",
+              "title": "Ask an LCF and report in third person",
+              "interactive": false
+            },
+            {
+              "id": "u4-a8",
+              "type": "comparison",
+              "title": "Compare two towns",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "The source explains that አለ is irregular in the negative and uses የ- plus -ም in the negative form.",
+            "አባት አለኝ",
+            "ወንድም የለኝም",
+            "ሁለት ድመቶች አሉኝ",
+            "ብዙ ጓደኞች አሉሽ",
+            "ሶስት ልጆች አሏቸው",
+            "ልጆች የሉኝም"
+          ]
+        },
+        {
+          "id": "u4-l5",
+          "unit_id": "u4",
+          "title_en": "Demonstratives",
+          "title_am": "ጠቋሚ ቃላት",
+          "source_pages": [
+            21
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u4-l5-b43",
+              "title": "Grammar — Demonstratives",
+              "source_key": "grammar.demonstratives",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                21
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "ይህ",
+                  "this (male/masculine)",
+                  "singular near"
+                ],
+                [
+                  "ይህች",
+                  "this (feminine)",
+                  "singular near"
+                ],
+                [
+                  "እነዚህ",
+                  "these",
+                  "plural near"
+                ],
+                [
+                  "ያ",
+                  "that (male)",
+                  "singular far"
+                ],
+                [
+                  "ያች",
+                  "that (feminine)",
+                  "singular far"
+                ],
+                [
+                  "እነዚያ",
+                  "those",
+                  "plural far"
+                ]
+              ]
+            },
+            {
+              "id": "u4-l5-b44",
+              "title": "Grammar — Note",
+              "source_key": "grammar.note",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                21
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "The source says ይህች and ያች can also show smallness/endearment or can function as diminutives marking disrespect."
+            }
+          ],
+          "activities": [
+            {
+              "id": "u4-a9",
+              "type": "image_selection",
+              "title": "Choose the correct demonstrative",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ይህ",
+            "ይህች",
+            "እነዚህ",
+            "ያ",
+            "ያች",
+            "እነዚያ",
+            "The source says ይህች and ያች can also show smallness/endearment or can function as diminutives marking disrespect."
+          ]
+        },
+        {
+          "id": "u4-l6",
+          "unit_id": "u4",
+          "title_en": "Family Application and Reading",
+          "title_am": "የቤተሰብ ተግባራዊ ልምምድ",
+          "source_pages": [
+            23,
+            24,
+            25
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u4-l6-b45",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                23,
+                24,
+                25
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "የወንድ ጓደኛ",
+                  "yäwänd gwadäňňa",
+                  "boyfriend"
+                ],
+                [
+                  "የሴት ጓደኛ",
+                  "yäset gwadäňňa",
+                  "girlfriend"
+                ],
+                [
+                  "ፍቅረኛ",
+                  "fïk'räňňa",
+                  "lover"
+                ],
+                [
+                  "እጮኛ",
+                  "ïč'oňňa",
+                  "fiancé(e)"
+                ],
+                [
+                  "ባል",
+                  "bal",
+                  "husband"
+                ],
+                [
+                  "ሚስት",
+                  "mist",
+                  "wife"
+                ],
+                [
+                  "ባለቤት",
+                  "baläbet",
+                  "spouse"
+                ],
+                [
+                  "ጓደኛ",
+                  "gwadäňňa",
+                  "friend"
+                ]
+              ]
+            },
+            {
+              "id": "u4-l6-b46",
+              "title": "Notes",
+              "source_key": "notes",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                23,
+                24,
+                25
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "The source advises that ባለቤት can be used as a relatively formal/polite term for spouse.",
+                "The source includes a practice-reading list including ሚሪንዳ, ውሃ, ሻይ/ቡና, ጫማ, ኮምፒውተር, ኤች አይ ቪ ኤድስ, አንበሳ, ፍርፍር and እድር."
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u4-a10",
+              "type": "comparison",
+              "title": "Compare your town with Addis Ababa",
+              "interactive": false
+            },
+            {
+              "id": "u4-a11",
+              "type": "application",
+              "title": "Interview a host-family member",
+              "interactive": false
+            },
+            {
+              "id": "u4-a12",
+              "type": "reading_pronunciation",
+              "title": "Read and pronounce source examples",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "የወንድ ጓደኛ",
+            "የሴት ጓደኛ",
+            "ፍቅረኛ",
+            "እጮኛ",
+            "ባል",
+            "ሚስት",
+            "ባለቤት",
+            "ጓደኛ",
+            "The source advises that ባለቤት can be used as a relatively formal/polite term for spouse.",
+            "The source includes a practice-reading list including ሚሪንዳ, ውሃ, ሻይ/ቡና, ጫማ, ኮምፒውተር, ኤች አይ ቪ ኤድስ, አንበሳ, ፍርፍር and እድር."
+          ]
+        }
+      ],
+      "assessments": [],
+      "shell_unit": 4,
+      "status": "written",
+      "description": "Introducing people and describing relationships.",
+      "key_phrase": {
+        "amharic": "እሱ ማን ነው?",
+        "english": "Who is he?"
+      },
+      "shell_title_en": "Introducing Others",
+      "shell_title_am": "ሌሎችን ማስተዋወቅ"
+    },
+    {
+      "id": "u5",
+      "source_chapter": "Unit 5",
+      "title_en": "Amharic Verbs",
+      "title_am": "የአማርኛ ግሶች",
+      "source_pages": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "learning_objectives": [
+        "Become familiar with Amharic root-verb characteristics.",
+        "Describe different forms common verbs take with personal pronouns.",
+        "Distinguish active and passive as well as transitive and intransitive verbs.",
+        "Use common verb forms to express ideas and actions in Amharic."
+      ],
+      "lessons": [
+        {
+          "id": "u5-l1",
+          "unit_id": "u5",
+          "title_en": "Active Verbs and Roots",
+          "title_am": "ገቢር ግሶች እና ሥርወ-ቃላት",
+          "source_pages": [
+            26
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u5-l1-b47",
+              "title": "Grammar — Active verb characteristics",
+              "source_key": "grammar.active_verb_characteristics",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                26
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "Expresses action.",
+                "Takes the final position in a sentence.",
+                "Includes subject, number, gender, object and tense characteristics.",
+                "A single verb can be a complete sentence depending on context."
+              ]
+            },
+            {
+              "id": "u5-l1-b48",
+              "title": "Grammar — Root verb principles",
+              "source_key": "grammar.root_verb_principles",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                26
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "Root verbs are formed by common patterns of consonants.",
+                "They become meaningful upon taking vowels.",
+                "Infinitives beginning with mä can involve a first-order to sixth-order vowel change.",
+                "The source also discusses ma verbs and tä verbs.",
+                "The source notes exceptions including stems beginning with k’o and č’ä."
+              ]
+            },
+            {
+              "id": "u5-l1-b49",
+              "title": "Root verbs",
+              "source_key": "root_verbs",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                26
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Root",
+                "Stem",
+                "Infinitive"
+              ],
+              "rows": [
+                [
+                  "b-l",
+                  "bäla",
+                  "mäbïlat"
+                ],
+                [
+                  "g-z",
+                  "gäza",
+                  "mägïzat"
+                ],
+                [
+                  "h-d",
+                  "hedä",
+                  "mähed"
+                ],
+                [
+                  "n-r",
+                  "norä",
+                  "mänor"
+                ],
+                [
+                  "t-k’-t’",
+                  "täk’ot’a",
+                  "mäk’ot’at"
+                ],
+                [
+                  "w-s-d",
+                  "wäsädä",
+                  "mäwïsad"
+                ],
+                [
+                  "s-b-r",
+                  "säbärä",
+                  "mäsïbä"
+                ],
+                [
+                  "t-č’-w-t",
+                  "täč’awätä",
+                  "mäč’awät"
+                ],
+                [
+                  "t-n-g-r",
+                  "tänagärä",
+                  "mänagär"
+                ],
+                [
+                  "t-w-d-d-r",
+                  "täwädadärä",
+                  "mäwädadär"
+                ],
+                [
+                  "t-m-l-k-t",
+                  "tämäläkätä",
+                  "mämälkät"
+                ],
+                [
+                  "t-n-k’-t’-k’-t’",
+                  "tänïk’ät’äk’ät’ä",
+                  "mänïk’ät’ïk’ät’"
+                ],
+                [
+                  "t-š-k-r-k-r",
+                  "täšïkäräkärä",
+                  "mäšïkärïkär"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u5-a1",
+              "type": "root_identification",
+              "title": "Identify root, stem and infinitive",
+              "interactive": false
+            },
+            {
+              "id": "u5-a2",
+              "type": "concept_check",
+              "title": "Explain characteristics of active verbs",
+              "interactive": false
+            }
+          ],
+          "speakables": []
+        },
+        {
+          "id": "u5-l2",
+          "unit_id": "u5",
+          "title_en": "Stem Verbs and Past Tense",
+          "title_am": "የግስ ግንድ እና ያለፈ ጊዜ",
+          "source_pages": [
+            27
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u5-l2-b50",
+              "title": "Dictionary form",
+              "source_key": "dictionary_form_note",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                27
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "The source says Amharic stem verbs are listed in dictionaries as the third-person masculine simple past."
+            },
+            {
+              "id": "u5-l2-b51",
+              "title": "Examples",
+              "source_key": "examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                27
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Infinitive",
+                "Past",
+                "English"
+              ],
+              "rows": [
+                [
+                  "mäbïlat",
+                  "bäla",
+                  "He ate"
+                ],
+                [
+                  "mägïzat",
+                  "gäza",
+                  "He bought"
+                ],
+                [
+                  "mäsïrat",
+                  "sära",
+                  "He worked"
+                ],
+                [
+                  "mayät",
+                  "ayä",
+                  "He saw"
+                ],
+                [
+                  "märot’",
+                  "rot’ä",
+                  "He ran"
+                ],
+                [
+                  "mähed",
+                  "hedä",
+                  "He went"
+                ]
+              ]
+            },
+            {
+              "id": "u5-l2-b52",
+              "title": "rotä — past tense",
+              "source_key": "rotä_past",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                27
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "እኔ",
+                  "ሮጥ-ኩ",
+                  "rot’ku"
+                ],
+                [
+                  "አንተ",
+                  "ሮጥ-ክ",
+                  "rot’kï"
+                ],
+                [
+                  "አንቺ",
+                  "ሮጥ-ሽ",
+                  "rot’š"
+                ],
+                [
+                  "እርስዎ",
+                  "ሮጥ-ኡ",
+                  "rot’u"
+                ],
+                [
+                  "እሱ",
+                  "ሮጥ-",
+                  "rot’ä"
+                ],
+                [
+                  "እሷ",
+                  "ሮጥ-ች",
+                  "rot’äč"
+                ],
+                [
+                  "እሳቸው",
+                  "ሮጥ-ኡ",
+                  "rot’u"
+                ],
+                [
+                  "እኛ",
+                  "-ሮጥን",
+                  "rot’n"
+                ],
+                [
+                  "እናንተ",
+                  "-ሮጥአችሁ",
+                  "rot’ačïhu"
+                ],
+                [
+                  "እነሱ",
+                  "-ሮጥኡ",
+                  "rot’u"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u5-a3",
+              "type": "conjugation",
+              "title": "Conjugate ሮጥ in past tense",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "እኔ",
+            "ሮጥ-ኩ",
+            "አንተ",
+            "ሮጥ-ክ",
+            "አንቺ",
+            "ሮጥ-ሽ",
+            "እርስዎ",
+            "ሮጥ-ኡ",
+            "እሱ",
+            "ሮጥ-",
+            "እሷ",
+            "ሮጥ-ች",
+            "እሳቸው",
+            "እኛ",
+            "-ሮጥን",
+            "እናንተ",
+            "-ሮጥአችሁ",
+            "እነሱ",
+            "-ሮጥኡ"
+          ]
+        },
+        {
+          "id": "u5-l3",
+          "unit_id": "u5",
+          "title_en": "The Verb 'To Be'",
+          "title_am": "መሆን",
+          "source_pages": [
+            27,
+            28
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u5-l3-b53",
+              "title": "Grammar — Verb",
+              "source_key": "grammar.verb",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                27,
+                28
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "mähon [näw] — to be"
+            },
+            {
+              "id": "u5-l3-b54",
+              "title": "Grammar — Affirmative negative",
+              "source_key": "grammar.affirmative_negative",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                27,
+                28
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "እኔ",
+                  "ነኝ",
+                  "አይደለሁም"
+                ],
+                [
+                  "አንተ",
+                  "ነህ",
+                  "አይደለህም"
+                ],
+                [
+                  "አንቺ",
+                  "ነሽ",
+                  "አይደለሽም"
+                ],
+                [
+                  "እርስዎ",
+                  "ነዎት",
+                  "አይደሉም"
+                ],
+                [
+                  "እሱ",
+                  "ነው",
+                  "አይደለም"
+                ],
+                [
+                  "እሷ",
+                  "ነች/ናት",
+                  "አይደለችም"
+                ],
+                [
+                  "እኳ/እኛ",
+                  "ነን",
+                  "አይደለንም"
+                ],
+                [
+                  "እናንተ",
+                  "ናችሁ",
+                  "አይደላችሁም"
+                ],
+                [
+                  "እነሱ",
+                  "ናቸው",
+                  "አይደሉም"
+                ]
+              ]
+            },
+            {
+              "id": "u5-l3-b55",
+              "title": "Grammar — Examples",
+              "source_key": "grammar.examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                27,
+                28
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "እኔ ተማሪ ነኝ፡፡",
+                  "I am a student."
+                ],
+                [
+                  "ሔኖክ ሃኪም ነው፡፡",
+                  "Henok is a doctor."
+                ],
+                [
+                  "ሄለን ቆንጆ ናት፡፡",
+                  "Helen is beautiful."
+                ],
+                [
+                  "እኛ አሜሪካውያን ነን፡፡",
+                  "We are Americans."
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u5-a4",
+              "type": "sentence_completion",
+              "title": "Complete sentences with the correct form of 'to be'",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "እኔ",
+            "ነኝ",
+            "አይደለሁም",
+            "አንተ",
+            "ነህ",
+            "አይደለህም",
+            "አንቺ",
+            "ነሽ",
+            "አይደለሽም",
+            "እርስዎ",
+            "ነዎት",
+            "አይደሉም",
+            "እሱ",
+            "ነው",
+            "አይደለም",
+            "እሷ",
+            "ነች/ናት",
+            "አይደለችም",
+            "እኳ/እኛ",
+            "ነን",
+            "አይደለንም",
+            "እናንተ",
+            "ናችሁ",
+            "አይደላችሁም",
+            "እነሱ",
+            "ናቸው",
+            "እኔ ተማሪ ነኝ፡፡",
+            "ሔኖክ ሃኪም ነው፡፡",
+            "ሄለን ቆንጆ ናት፡፡",
+            "እኛ አሜሪካውያን ነን፡፡"
+          ]
+        },
+        {
+          "id": "u5-l4",
+          "unit_id": "u5",
+          "title_en": "The Verb 'To Become'",
+          "title_am": "መሆን / ሆነ",
+          "source_pages": [
+            28
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u5-l4-b56",
+              "title": "Grammar — Present and past",
+              "source_key": "grammar.present_and_past",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                28
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "እኔ",
+                  "እሆናለሁ",
+                  "ሆንኩ"
+                ],
+                [
+                  "አንተ",
+                  "ትሆናለህ",
+                  "ሆንክ"
+                ],
+                [
+                  "አንቺ",
+                  "ትሆኚያለሽ",
+                  "ሆን"
+                ],
+                [
+                  "እኛ",
+                  "እንሆናለን",
+                  "ሆንን"
+                ],
+                [
+                  "እናንተ",
+                  "ትሆናላችሁ",
+                  "ሆናችሁ"
+                ]
+              ]
+            },
+            {
+              "id": "u5-l4-b57",
+              "title": "Grammar — Examples",
+              "source_key": "grammar.examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                28
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "ክሪስ በጎ ፈቃደኛ ሆነ፡፡",
+                  "Chris became a volunteer."
+                ],
+                [
+                  "አለም ፕሬዝዳንት ሆነች፡፡",
+                  "Alem became the president."
+                ],
+                [
+                  "ዮናስ እና ሃና ሾፌሮች ሆኑ፡፡",
+                  "Yonas and Hanna became drivers."
+                ],
+                [
+                  "ከሁለት አመት በኋላ ነርስ እሆናለሁ፡፡",
+                  "I will become a nurse after two years."
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u5-a5",
+              "type": "sentence_construction",
+              "title": "Construct sentences using 'to become'",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "እኔ",
+            "እሆናለሁ",
+            "ሆንኩ",
+            "አንተ",
+            "ትሆናለህ",
+            "ሆንክ",
+            "አንቺ",
+            "ትሆኚያለሽ",
+            "ሆን",
+            "እኛ",
+            "እንሆናለን",
+            "ሆንን",
+            "እናንተ",
+            "ትሆናላችሁ",
+            "ሆናችሁ",
+            "ክሪስ በጎ ፈቃደኛ ሆነ፡፡",
+            "አለም ፕሬዝዳንት ሆነች፡፡",
+            "ዮናስ እና ሃና ሾፌሮች ሆኑ፡፡",
+            "ከሁለት አመት በኋላ ነርስ እሆናለሁ፡፡"
+          ]
+        },
+        {
+          "id": "u5-l5",
+          "unit_id": "u5",
+          "title_en": null,
+          "title_am": "አለኝ፣ ነበረኝ እና አለ",
+          "source_pages": [
+            29,
+            30,
+            31
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u5-l5-b58",
+              "kind": "note",
+              "title": "Source section title",
+              "source_key": "title",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                29,
+                30,
+                31
+              ],
+              "qa_flag": null,
+              "text": "To Have, Had and Be Present"
+            },
+            {
+              "id": "u5-l5-b59",
+              "title": "Grammar — To have present",
+              "source_key": "grammar.to_have_present",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                29,
+                30,
+                31
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "አለኝ / አለህ / አለሽ / አለዎት / አለው / አላት / አላቸው with source negative forms."
+            },
+            {
+              "id": "u5-l5-b60",
+              "title": "Grammar — To have past",
+              "source_key": "grammar.to_have_past",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                29,
+                30,
+                31
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "እኔ",
+                  "ነበረኝ"
+                ],
+                [
+                  "አንተ",
+                  "ነበረህ"
+                ],
+                [
+                  "አንቺ",
+                  "ነበረሽ"
+                ],
+                [
+                  "እርስዎ",
+                  "ነበረዎት"
+                ],
+                [
+                  "እሱ",
+                  "ነበረው"
+                ],
+                [
+                  "እሷ",
+                  "ነበራት"
+                ],
+                [
+                  "እሳቸው",
+                  "ነበራቸው"
+                ],
+                [
+                  "እኛ",
+                  "ነበረን"
+                ],
+                [
+                  "እናንተ",
+                  "ነበራችሁ"
+                ]
+              ]
+            },
+            {
+              "id": "u5-l5-b61",
+              "title": "Grammar — Presence forms",
+              "source_key": "grammar.presence_forms",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                29,
+                30,
+                31
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "እኔ",
+                  "አለሁ"
+                ],
+                [
+                  "አንተ",
+                  "አለህ"
+                ],
+                [
+                  "አንቺ",
+                  "አለሽ"
+                ],
+                [
+                  "እርስዎ",
+                  "አሉ"
+                ],
+                [
+                  "እሱ",
+                  "አለ"
+                ],
+                [
+                  "እሷ",
+                  "አለች"
+                ],
+                [
+                  "እኛ",
+                  "አለን"
+                ],
+                [
+                  "እናንተ",
+                  "አላችሁ"
+                ],
+                [
+                  "እነሱ",
+                  "አሉ"
+                ]
+              ]
+            },
+            {
+              "id": "u5-l5-b62",
+              "title": "Examples",
+              "source_key": "examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                29,
+                30,
+                31
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "English"
+              ],
+              "rows": [
+                [
+                  "እኔ ሶስት ወንድሞች አሉኝ፡፡",
+                  "I have three brothers."
+                ],
+                [
+                  "ራሄል ቆንጆ ጫማ አላት፡፡",
+                  "Rahel has a beautiful pair of shoes."
+                ],
+                [
+                  "አቶ ጌታቸው መኪና አለው፡፡",
+                  "Ato Getachew has a car."
+                ],
+                [
+                  "ዮናታን እህት የለውም፡፡",
+                  "Yonatan has no sister."
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u5-a6",
+              "type": "fill_blank",
+              "title": "Fill in forms of 'to have'",
+              "interactive": false
+            },
+            {
+              "id": "u5-a7",
+              "type": "sentence_construction",
+              "title": "Use past 'to have' in sentences",
+              "interactive": false
+            },
+            {
+              "id": "u5-a8",
+              "type": "matching",
+              "title": "Match pronouns to presence forms",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "አለኝ / አለህ / አለሽ / አለዎት / አለው / አላት / አላቸው with source negative forms.",
+            "እኔ",
+            "ነበረኝ",
+            "አንተ",
+            "ነበረህ",
+            "አንቺ",
+            "ነበረሽ",
+            "እርስዎ",
+            "ነበረዎት",
+            "እሱ",
+            "ነበረው",
+            "እሷ",
+            "ነበራት",
+            "እሳቸው",
+            "ነበራቸው",
+            "እኛ",
+            "ነበረን",
+            "እናንተ",
+            "ነበራችሁ",
+            "አለሁ",
+            "አለህ",
+            "አለሽ",
+            "አሉ",
+            "አለ",
+            "አለች",
+            "አለን",
+            "አላችሁ",
+            "እነሱ",
+            "እኔ ሶስት ወንድሞች አሉኝ፡፡",
+            "ራሄል ቆንጆ ጫማ አላት፡፡",
+            "አቶ ጌታቸው መኪና አለው፡፡",
+            "ዮናታን እህት የለውም፡፡"
+          ]
+        },
+        {
+          "id": "u5-l6",
+          "unit_id": "u5",
+          "title_en": null,
+          "title_am": "የግስ ግንድ ማውጫ ሕጎች",
+          "source_pages": [
+            31,
+            32,
+            33
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u5-l6-b63",
+              "kind": "note",
+              "title": "Source section title",
+              "source_key": "title",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                31,
+                32,
+                33
+              ],
+              "qa_flag": null,
+              "text": "Rules for Deriving Verb Stems"
+            },
+            {
+              "id": "u5-l6-b64",
+              "title": "Grammar — Rules",
+              "source_key": "grammar.rules",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                31,
+                32,
+                33
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "Infinitives can be formed with mä....t or mä.... for consonant-initial stems.",
+                "If a stem begins with vowel sound a, mä can change to ma; these are called ma verbs in the source.",
+                "If the infinitive begins with mä/ma and ends with t, drop the prefix and suffix t to obtain the stem.",
+                "If the infinitive has mä/ma but does not end with t, drop the prefix and add ä at the end; the source notes exceptions.",
+                "If the infinitive has sixth-order ï between two consonants, change it to ä.",
+                "The source identifies mä verbs whose stems begin with a.",
+                "tä verbs start with tä and drop t in the infinitive; the source says t is retained in past tense but dropped in present/future and other expressions."
+              ]
+            },
+            {
+              "id": "u5-l6-b65",
+              "title": "Grammar — Ma verbs",
+              "source_key": "grammar.ma_verbs",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                31,
+                32,
+                33
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "makïbär",
+                  "akäbärä",
+                  "to respect"
+                ],
+                [
+                  "mafär",
+                  "afärä",
+                  "to be shy"
+                ],
+                [
+                  "maräs",
+                  "aräsä",
+                  "to plough"
+                ]
+              ]
+            },
+            {
+              "id": "u5-l6-b66",
+              "title": "Grammar — Ta verbs",
+              "source_key": "grammar.ta_verbs",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                31,
+                32,
+                33
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "mämäläs",
+                  "tämäläsä",
+                  "to come back"
+                ],
+                [
+                  "mäč’awät",
+                  "täč’awätä",
+                  "to play"
+                ],
+                [
+                  "mäsänabät",
+                  "tæsänabätä",
+                  "to say goodbye"
+                ],
+                [
+                  "mänäsat",
+                  "tänäsa",
+                  "to wake up/get up"
+                ],
+                [
+                  "mämar",
+                  "tämar",
+                  "to learn"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u5-a9",
+              "type": "rule_application",
+              "title": "Apply stem-formation rules",
+              "interactive": false
+            }
+          ],
+          "speakables": []
+        },
+        {
+          "id": "u5-l7",
+          "unit_id": "u5",
+          "title_en": null,
+          "title_am": "ልምምዶች እና ምዘና",
+          "source_pages": [
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u5-l7-b67",
+              "kind": "note",
+              "title": "Source section title",
+              "source_key": "title",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39
+              ],
+              "qa_flag": null,
+              "text": "Activities, Homework and Assessment Bank"
+            }
+          ],
+          "activities": [
+            {
+              "id": "u5-a10",
+              "type": "concept_question",
+              "title": "Verb Characteristics",
+              "interactive": false
+            },
+            {
+              "id": "u5-a11",
+              "type": "verb_type_identification",
+              "title": "Identifying Verb Types",
+              "interactive": false
+            },
+            {
+              "id": "u5-a12",
+              "type": "conjugation",
+              "title": "Conjugation Practice",
+              "interactive": false
+            },
+            {
+              "id": "u5-a13",
+              "type": "verb_usage",
+              "title": "Verb Types and Usage",
+              "interactive": false
+            },
+            {
+              "id": "u5-a14",
+              "type": "fill_blank",
+              "title": "Fill in the Gaps",
+              "interactive": false
+            },
+            {
+              "id": "u5-a15",
+              "type": "sentence_construction",
+              "title": "Sentence Construction",
+              "interactive": false
+            }
+          ],
+          "speakables": []
+        }
+      ],
+      "assessments": [
+        {
+          "id": "u5-assessment-1",
+          "title": "Unit 5 Source Assessment Bank",
+          "source_pages": [
+            35,
+            36,
+            37,
+            38,
+            39
+          ],
+          "question_policy": "source_as_written",
+          "questions": [
+            {
+              "id": "u5-q1",
+              "type": "short_answer",
+              "question": "What are the characteristics of active verbs in Amharic?",
+              "options": null,
+              "answer_as_written": "Active verbs express action, take the final position in a sentence, include subject, number, gender, object, tense, and a single verb can be a complete sentence depending on the context.",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q2",
+              "type": "short_answer",
+              "question": "How are root verbs formed in Amharic?",
+              "options": null,
+              "answer_as_written": "Root verbs in Amharic are formed by common patterns of consonants and become meaningful when they take on vowels.",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q3",
+              "type": "short_answer",
+              "question": "Identify the root and stem for the verb mähed.",
+              "options": null,
+              "answer_as_written": {
+                "root": "h-d",
+                "stem": "hedä"
+              },
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q4",
+              "type": "short_answer",
+              "question": "What is the infinitive form for the root verb that corresponds to the stem gäza?",
+              "options": null,
+              "answer_as_written": "mägїzat",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q5",
+              "type": "short_answer",
+              "question": "Conjugate the verb mäbїlat in the third person masculine form.",
+              "options": null,
+              "answer_as_written": "bäla (He ate)",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q6",
+              "type": "short_answer",
+              "question": "What is the conjugated past tense form of the verb to run (rot’ä) for እኔ (I)?",
+              "options": null,
+              "answer_as_written": "ሮጥ-ኩ (rot’ku)",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q7",
+              "type": "short_answer",
+              "question": "For mähon (to be), provide the affirmative and negative forms for አንቺ (you, female).",
+              "options": null,
+              "answer_as_written": {
+                "affirmative": "ነሽ (näš)",
+                "negative": "አይደለሽም (aydäläšm)"
+              },
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q8",
+              "type": "short_answer",
+              "question": "Create a sentence in Amharic using the verb to be for the pronoun እኛ in the present tense.",
+              "options": null,
+              "answer_as_written": "እኛ አሜሪካውያን ነን (We are Americans).",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q9",
+              "type": "short_answer",
+              "question": "Write a sentence using the verb to become for እናንተ (you, plural) in the past tense.",
+              "options": null,
+              "answer_as_written": "እናንተ ሃኪሞች ሆነች (You became doctors).",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q10",
+              "type": "short_answer",
+              "question": "Fill in the blank with the correct form of 'to become' for እሱ in present tense.",
+              "options": null,
+              "answer_as_written": "እሱ እሏንበሩ (He is becoming a teacher).",
+              "source_page": 35,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q11",
+              "type": "short_answer",
+              "question": "What is the affirmative form of 'to have' (mänor) for እሷ?",
+              "options": null,
+              "answer_as_written": "አላት (allat).",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q12",
+              "type": "short_answer",
+              "question": "Complete the sentence: ተሰናዳት ሞቃየታ የለውም using the verb 'to have.'",
+              "options": null,
+              "answer_as_written": "ተሰናዳት ሞቃየታ የለውም (They have no problem).",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q13",
+              "type": "short_answer",
+              "question": "Construct a sentence using the past tense form of 'to have' for እኔ.",
+              "options": null,
+              "answer_as_written": "እኔ ሶስት ወንድሞች ነበረኝ (I had three brothers).",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q14",
+              "type": "transformation",
+              "question": "Transform the sentence እሱ ባለፈው አመት ድመት ነበረው to indicate that the subject had two cats last year.",
+              "options": null,
+              "answer_as_written": "እሱ ባለፈው አመት ሁለት ...",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q15",
+              "type": "short_answer",
+              "question": "What does the term active verb refer to in Amharic?",
+              "options": null,
+              "answer_as_written": "An active verb expresses action and takes the final position in a sentence.",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q16",
+              "type": "short_answer",
+              "question": "What are the key components that active verbs include?",
+              "options": null,
+              "answer_as_written": "Subject, number, gender, object, and tense.",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q17",
+              "type": "short_answer",
+              "question": "How can a verb function as a complete sentence in Amharic?",
+              "options": null,
+              "answer_as_written": "A single verb can act as a complete sentence depending on the context.",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q18",
+              "type": "short_answer",
+              "question": "What are root verbs and how do they acquire meaning?",
+              "options": null,
+              "answer_as_written": "Root verbs are formed by consonants and acquire meaning upon taking vowels.",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q19",
+              "type": "short_answer",
+              "question": "What changes occur for verbs with infinitives starting with mä?",
+              "options": null,
+              "answer_as_written": "The initial syllable of the stem changes from the first order to the sixth.",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q20",
+              "type": "short_answer",
+              "question": "What is the infinitive form of the root b-l?",
+              "options": null,
+              "answer_as_written": "mäbïlat.",
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q21",
+              "type": "short_answer",
+              "question": "Identify the root and stem for the verb gäza.",
+              "options": null,
+              "answer_as_written": {
+                "root": "g-z",
+                "stem": "gäza"
+              },
+              "source_page": 36,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q22",
+              "type": "short_answer",
+              "question": "Which verb type has stems that drop the initial syllable tä?",
+              "options": null,
+              "answer_as_written": "tä verbs drop the initial syllable in the infinitive form.",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q23",
+              "type": "short_answer",
+              "question": "Give an example of a verb whose stem begins with k’o.",
+              "options": null,
+              "answer_as_written": "mäk’urät’ (to cut).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q24",
+              "type": "short_answer",
+              "question": "How do Amharic root verbs typically change in their forms?",
+              "options": null,
+              "answer_as_written": "They change by adding vowels to consonants to become meaningful.",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q25",
+              "type": "short_answer",
+              "question": "Conjugate to run (rot’ä) for the pronoun እንዴት (how).",
+              "options": null,
+              "answer_as_written": "እኔ ሮጥ-ኩ (rot’ku - I ran).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q26",
+              "type": "short_answer",
+              "question": "What is the third person masculine form of mähed?",
+              "options": null,
+              "answer_as_written": "hedä (He went).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q27",
+              "type": "short_answer",
+              "question": "How do you say He ate using mäbïlat?",
+              "options": null,
+              "answer_as_written": "እሱ በላ (He ate).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q28",
+              "type": "short_answer",
+              "question": "Provide the past tense form of to see (mayät).",
+              "options": null,
+              "answer_as_written": "እሱ አየ (He saw).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q29",
+              "type": "short_answer",
+              "question": "Conjugate to have (mänor) for አንቺ.",
+              "options": null,
+              "answer_as_written": "አለሽ (alläš - You have).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q30",
+              "type": "short_answer",
+              "question": "Formulate a sentence using the present tense of to be for the pronoun እንዴት.",
+              "options": null,
+              "answer_as_written": "እባክህ ነኝ (I am a student).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q31",
+              "type": "short_answer",
+              "question": "How would you express They became volunteers in Amharic?",
+              "options": null,
+              "answer_as_written": "እነሱ ፈቃደኞች ሆኑ (They became volunteers).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q32",
+              "type": "short_answer",
+              "question": "What is the conjugated present form of to be for እሷ?",
+              "options": null,
+              "answer_as_written": "እሷ ነች (She is).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q33",
+              "type": "short_answer",
+              "question": "Create a sentence for to possess using እርስዎ (formal).",
+              "options": null,
+              "answer_as_written": "አለው (He has).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q34",
+              "type": "short_answer",
+              "question": "What is the negative form of I am not in Amharic?",
+              "options": null,
+              "answer_as_written": "አይደለሁም (aydälähum).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q35",
+              "type": "short_answer",
+              "question": "Construct a sentence using the verb to play (mäč’awät) in past tense.",
+              "options": null,
+              "answer_as_written": "እሱ ጫወተ (He played).",
+              "source_page": 37,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q36",
+              "type": "multiple_choice",
+              "question": "What is a primary characteristic of active verbs in Amharic?",
+              "options": [
+                "They express passive actions.",
+                "They take the final position in a sentence.",
+                "They cannot be complete sentences.",
+                "They always use the prefix mä."
+              ],
+              "answer_as_written": "They take the final position in a sentence.",
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q37",
+              "type": "multiple_choice",
+              "question": "Which of the following is an example of a root verb?",
+              "options": [
+                "mämäläs",
+                "mäbïlat",
+                "affär",
+                "allä"
+              ],
+              "answer_as_written": "mäbïlat",
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q38",
+              "type": "multiple_choice",
+              "question": "In Amharic, verbs with infinitives starting with 'mä'...",
+              "options": [
+                "Do not change at all.",
+                "Change from the first order to the sixth order.",
+                "Always keep the prefix intact.",
+                "Are always transitive."
+              ],
+              "answer_as_written": "Change from the first order to the sixth order.",
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q39",
+              "type": "multiple_choice",
+              "question": "What is the past tense form of the verb to run (rot'ä) for እሱ (he)?",
+              "options": [
+                "ሮጥ-ኩ",
+                "ሮጥ-ሂይ",
+                "ሮጥ- rot’ä",
+                "ሮጥ- rot’u"
+              ],
+              "answer_as_written": "ሮጥ- rot’ä",
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q40",
+              "type": "multiple_choice",
+              "question": "Which verb means to help?",
+              "options": [
+                "mähed",
+                "mägïzat",
+                "mäsïrat",
+                "mät’äyäk’"
+              ],
+              "answer_as_written": "mäsïrat",
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q41",
+              "type": "true_false",
+              "question": "All Amharic verb stems are listed in their present tense forms in dictionaries.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q42",
+              "type": "true_false",
+              "question": "The verb mähon means to have.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q43",
+              "type": "true_false",
+              "question": "Verbs with infinitives that do not end in 't' drop only the prefix mä/ma when forming the stem.",
+              "options": null,
+              "answer_as_written": true,
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q44",
+              "type": "true_false",
+              "question": "The verb to possess in Amharic is männor.",
+              "options": null,
+              "answer_as_written": true,
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q45",
+              "type": "true_false",
+              "question": "In Amharic, the verb stem for to buy is gäza.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 38,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q46",
+              "type": "matching",
+              "question": "Match the verbs with their meanings.",
+              "options": null,
+              "source_page": 39,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q47",
+              "type": "multiple_choice",
+              "question": "What is the present form of to be for እኔ?",
+              "options": [
+                "እንዴት",
+                "ነኝ",
+                "ነው",
+                "አለ"
+              ],
+              "answer_as_written": "ነኝ",
+              "source_page": 39,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q48",
+              "type": "short_answer",
+              "question": "What does mägïzat mean?",
+              "options": null,
+              "answer_as_written": "To buy.",
+              "source_page": 39,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q49",
+              "type": "short_answer",
+              "question": "Which form does the stem verb of to wake up take?",
+              "options": null,
+              "answer_as_written": "tênäsa.",
+              "source_page": 39,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q50",
+              "type": "short_answer",
+              "question": "Conjugate to have in the negative form for አንተ.",
+              "options": null,
+              "answer_as_written": "የለህም (yällähm).",
+              "source_page": 39,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u5-q51",
+              "type": "short_answer",
+              "question": "What is the negative form of እሱ ነው (He is)?",
+              "options": null,
+              "answer_as_written": "እሱ አይደለም (He is not).",
+              "source_page": 39,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            }
+          ]
+        }
+      ],
+      "shell_unit": 5,
+      "status": "written",
+      "description": "Verb patterns, useful forms and practical sentence building.",
+      "key_phrase": {
+        "amharic": "ግስ",
+        "english": "Verb"
+      },
+      "shell_title_en": "Amharic Verbs",
+      "shell_title_am": "የአማርኛ ግሶች"
+    },
+    {
+      "id": "u6",
+      "source_chapter": "Unit 6",
+      "title_en": "Basic Shopping",
+      "title_am": "ግዢ / መሠረታዊ ግብይት",
+      "source_pages": [
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "learning_objectives": [
+        "Name items in markets and shops.",
+        "Ask for, bargain and buy items from markets or shops.",
+        "Count up to 100 and use cardinal, ordinal and basic fraction forms.",
+        "Use basic question words, conjunctions and definite articles."
+      ],
+      "lessons": [
+        {
+          "id": "u6-l1",
+          "unit_id": "u6",
+          "title_en": "Buying an Item and Asking the Price",
+          "title_am": "ዕቃ መግዛት እና ዋጋ መጠየቅ",
+          "source_pages": [
+            40
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u6-d1",
+              "title": "Buying a Pencil",
+              "source_key": "dialogues",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                40
+              ],
+              "qa_flag": null,
+              "kind": "dialogue",
+              "lines": [
+                {
+                  "speaker": null,
+                  "amharic": "ደምበኛ",
+                  "cells": [
+                    "ደምበኛ",
+                    "እርሳሰ አለ?",
+                    "Do you have it?"
+                  ]
+                },
+                {
+                  "speaker": null,
+                  "amharic": "ባለሱቅ",
+                  "cells": [
+                    "ባለሱቅ",
+                    "አዎ",
+                    "Yes."
+                  ]
+                },
+                {
+                  "speaker": null,
+                  "amharic": "ደምበኛ",
+                  "cells": [
+                    "ደምበኛ",
+                    "ዋጋው ስንት ነው?",
+                    "What is the price?"
+                  ]
+                },
+                {
+                  "speaker": null,
+                  "amharic": "ባለሱቅ",
+                  "cells": [
+                    "ባለሱቅ",
+                    "ሃምሳ ሳንቲም",
+                    "Fifty santims."
+                  ]
+                },
+                {
+                  "speaker": null,
+                  "amharic": "ደምበኛ",
+                  "cells": [
+                    "ደምበኛ",
+                    "ይኸው",
+                    "This is the total."
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "u6-l1-b69",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                40
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ደምበኛ",
+                  "Dämbäña",
+                  "Customer"
+                ],
+                [
+                  "ባለሱቅ",
+                  "Baläsuk",
+                  "Storekeeper"
+                ],
+                [
+                  "እርሳስ",
+                  "ïrsas",
+                  "pencil"
+                ],
+                [
+                  "አለ",
+                  "allä",
+                  "there is"
+                ],
+                [
+                  "የለም",
+                  "yälläm",
+                  "there is not"
+                ]
+              ]
+            },
+            {
+              "id": "u6-l1-b70",
+              "title": "Grammar — Question",
+              "source_key": "grammar.question",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                40
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "ስንት ነው? means how much/how many in the source examples."
+            }
+          ],
+          "activities": [
+            {
+              "id": "u6-a1",
+              "type": "dialogue_comprehension",
+              "title": "How does the customer ask the price?",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ደምበኛ",
+            "እርሳሰ አለ?",
+            "ባለሱቅ",
+            "አዎ",
+            "ዋጋው ስንት ነው?",
+            "ሃምሳ ሳንቲም",
+            "ይኸው",
+            "እርሳስ",
+            "አለ",
+            "የለም",
+            "ስንት ነው? means how much/how many in the source examples."
+          ]
+        },
+        {
+          "id": "u6-l2",
+          "unit_id": "u6",
+          "title_en": "Definite Articles",
+          "title_am": "የተወሰነ አንቀጽ",
+          "source_pages": [
+            40,
+            41
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u6-l2-b71",
+              "title": "Grammar — Rule",
+              "source_key": "grammar.rule",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                40,
+                41
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "For masculine nouns ending in a consonant, add -u.",
+                "For masculine nouns ending in a vowel, add -w.",
+                "For feminine nouns, add -wa.",
+                "The source notes that when a definite noun is modified by an adjective, the adjective rather than the noun takes the definite suffix -u or -w."
+              ]
+            },
+            {
+              "id": "u6-l2-b72",
+              "title": "Grammar — Examples",
+              "source_key": "grammar.examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                40,
+                41
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "ሙዝ",
+                  "ሙዙ"
+                ],
+                [
+                  "ብርቱካን",
+                  "ብርቱካኑ"
+                ],
+                [
+                  "ኣናናስ",
+                  "ኣናናሱ"
+                ],
+                [
+                  "ወይን",
+                  "ወይኑ"
+                ],
+                [
+                  "ፖም",
+                  "ፖሙ"
+                ],
+                [
+                  "ሎሚ",
+                  "ሎሚው"
+                ],
+                [
+                  "ፓፓያ",
+                  "ፓፓያው"
+                ],
+                [
+                  "ማንጎ",
+                  "ማንጎው"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u6-a2",
+              "type": "definiteness_transformation",
+              "title": "Change indefinite nouns to definite forms",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ሙዝ",
+            "ሙዙ",
+            "ብርቱካን",
+            "ብርቱካኑ",
+            "ኣናናስ",
+            "ኣናናሱ",
+            "ወይን",
+            "ወይኑ",
+            "ፖም",
+            "ፖሙ",
+            "ሎሚ",
+            "ሎሚው",
+            "ፓፓያ",
+            "ፓፓያው",
+            "ማንጎ",
+            "ማንጎው"
+          ]
+        },
+        {
+          "id": "u6-l3",
+          "unit_id": "u6",
+          "title_en": "Question Words and Market Questions",
+          "title_am": "የጥያቄ ቃላት",
+          "source_pages": [
+            41,
+            42
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u6-l3-b73",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                41,
+                42
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ማን",
+                  "man",
+                  "Who?"
+                ],
+                [
+                  "ምን / ምንድን",
+                  "mïn / mïndïn",
+                  "What?"
+                ],
+                [
+                  "ለምን",
+                  "lämïn",
+                  "Why?"
+                ],
+                [
+                  "እንዴት",
+                  "ïndet",
+                  "How?"
+                ],
+                [
+                  "የማን",
+                  "yäman",
+                  "Whose?"
+                ],
+                [
+                  "የቱ",
+                  "yätu",
+                  "Which?"
+                ],
+                [
+                  "ስንት",
+                  "sïnt",
+                  "How much/how many?"
+                ]
+              ]
+            },
+            {
+              "id": "u6-l3-b74",
+              "title": "Examples",
+              "source_key": "examples",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                41,
+                42
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": null,
+              "rows": [
+                [
+                  "ገበያው የት ነው?",
+                  "Where is the market?"
+                ],
+                [
+                  "ማን ነው?",
+                  "Who is it?"
+                ],
+                [
+                  "ስምሽ ማን ነው?",
+                  "What is your name? (female)"
+                ],
+                [
+                  "ስራህ ምንድን ነው?",
+                  "What is your job? (male)"
+                ],
+                [
+                  "ይህ ምንድን ነው?",
+                  "What's this?"
+                ],
+                [
+                  "ይህች ምንድን ነች?",
+                  "What's this? (feminine)"
+                ],
+                [
+                  "ለምን አትበላም?",
+                  "Why don't you eat? (male)"
+                ],
+                [
+                  "ለምን አትጫወትም?",
+                  "Why don't you talk? (male)"
+                ],
+                [
+                  "እንጀራ እንዴት ይጋገራል?",
+                  "How is injera made?"
+                ],
+                [
+                  "ይህ የማን እርሳስ ነው?",
+                  "Whose pencil is this?"
+                ],
+                [
+                  "ይህ የማን ቤት ነው?",
+                  "Whose house is this?"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u6-a3",
+              "type": "question_generation",
+              "title": "Create questions for market situations",
+              "interactive": false
+            },
+            {
+              "id": "u6-a4",
+              "type": "question_answer",
+              "title": "Answer market questions",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ማን",
+            "ምን / ምንድን",
+            "ለምን",
+            "እንዴት",
+            "የማን",
+            "የቱ",
+            "ስንት",
+            "ገበያው የት ነው?",
+            "ማን ነው?",
+            "ስምሽ ማን ነው?",
+            "ስራህ ምንድን ነው?",
+            "ይህ ምንድን ነው?",
+            "ይህች ምንድን ነች?",
+            "ለምን አትበላም?",
+            "ለምን አትጫወትም?",
+            "እንጀራ እንዴት ይጋገራል?",
+            "ይህ የማን እርሳስ ነው?",
+            "ይህ የማን ቤት ነው?"
+          ]
+        },
+        {
+          "id": "u6-l4",
+          "unit_id": "u6",
+          "title_en": "Shopping Vocabulary",
+          "title_am": "የገበያ ቃላት",
+          "source_pages": [
+            42,
+            43
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u6-l4-b75",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                42,
+                43
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ሻማ",
+                  "šama",
+                  "Candle"
+                ],
+                [
+                  "ሶፍት",
+                  "soft",
+                  "Tissue/Toilet Paper"
+                ],
+                [
+                  "ሻይ ቅጠል",
+                  "šay k'ït'äl",
+                  "Tea Leaves"
+                ],
+                [
+                  "ስኳር",
+                  "sïkwar",
+                  "Sugar"
+                ],
+                [
+                  "ጨው",
+                  "č’äw",
+                  "Salt"
+                ],
+                [
+                  "ቲማቲም ሳልሳ",
+                  "timatim salsa",
+                  "Tomato Sauce"
+                ],
+                [
+                  "መጥረጊያ",
+                  "mät’rägiya",
+                  "Broom"
+                ],
+                [
+                  "መወልወያ",
+                  "mäwälïwäya",
+                  "Mop"
+                ],
+                [
+                  "መቀስ",
+                  "mäk’ās",
+                  "Scissors"
+                ],
+                [
+                  "ሳሙና",
+                  "samuna",
+                  "Soap"
+                ],
+                [
+                  "የልብስ ሳሙና",
+                  "yälïbs samuna",
+                  "Laundry Soap"
+                ],
+                [
+                  "የገላ ሳሙና",
+                  "yägäla samuna",
+                  "Body/Face Soap"
+                ],
+                [
+                  "የጥርስ ሳሙና",
+                  "yät’ïrs samuna",
+                  "Toothpaste"
+                ],
+                [
+                  "የእቃ ሳሙና",
+                  "yä ïk’a mat’äbiya",
+                  "Kitchen Soap"
+                ],
+                [
+                  "ዘይት",
+                  "zäyt",
+                  "Cooking Oil"
+                ],
+                [
+                  "ፓስታ",
+                  "pasta",
+                  "Pasta"
+                ],
+                [
+                  "ቲማቲም",
+                  "timatim",
+                  "Tomatoes"
+                ],
+                [
+                  "ቆሎ",
+                  "k’olo",
+                  "Roasted Grains"
+                ],
+                [
+                  "ዳቦ ቆሎ",
+                  "dabo k’olo",
+                  "Dry Fried Bread Bits"
+                ],
+                [
+                  "ድንች",
+                  "dïnïč",
+                  "Potatoes"
+                ],
+                [
+                  "ጤፍ",
+                  "t’eff",
+                  "Teff"
+                ],
+                [
+                  "ገብስ",
+                  "gäbs",
+                  "Barley"
+                ],
+                [
+                  "ስንዴ",
+                  "sïnde",
+                  "Wheat"
+                ],
+                [
+                  "በቆሎ",
+                  "bäk’olo",
+                  "Maize"
+                ],
+                [
+                  "ሽንብራ",
+                  "šïnbïra",
+                  "Chickpea"
+                ],
+                [
+                  "ባቄላ",
+                  "bak’ela",
+                  "Beans"
+                ],
+                [
+                  "አተር",
+                  "atär",
+                  "Peas"
+                ],
+                [
+                  "ምስር",
+                  "mïsïr",
+                  "Lentils"
+                ],
+                [
+                  "ኦቾሎኒ",
+                  "očoloni",
+                  "Peanuts"
+                ],
+                [
+                  "ማስታጠቢያ",
+                  "mastat’äbiya",
+                  "Washing Basin"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u6-a5",
+              "type": "vocabulary_matching",
+              "title": "Match shopping items",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ሻማ",
+            "ሶፍት",
+            "ሻይ ቅጠል",
+            "ስኳር",
+            "ጨው",
+            "ቲማቲም ሳልሳ",
+            "መጥረጊያ",
+            "መወልወያ",
+            "መቀስ",
+            "ሳሙና",
+            "የልብስ ሳሙና",
+            "የገላ ሳሙና",
+            "የጥርስ ሳሙና",
+            "የእቃ ሳሙና",
+            "ዘይት",
+            "ፓስታ",
+            "ቲማቲም",
+            "ቆሎ",
+            "ዳቦ ቆሎ",
+            "ድንች",
+            "ጤፍ",
+            "ገብስ",
+            "ስንዴ",
+            "በቆሎ",
+            "ሽንብራ",
+            "ባቄላ",
+            "አተር",
+            "ምስር",
+            "ኦቾሎኒ",
+            "ማስታጠቢያ"
+          ]
+        },
+        {
+          "id": "u6-l5",
+          "unit_id": "u6",
+          "title_en": "Bargaining",
+          "title_am": "ዋጋ መከራከር / መደራደር",
+          "source_pages": [
+            43,
+            44,
+            46,
+            47
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u6-d2",
+              "title": "Bargaining",
+              "source_key": "dialogues",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                43,
+                44,
+                46,
+                47
+              ],
+              "qa_flag": null,
+              "kind": "dialogue",
+              "lines": [
+                {
+                  "speaker": null,
+                  "amharic": "ገዢ",
+                  "cells": [
+                    "ገዢ",
+                    "ባለሱቅ ሳሙና አለ?",
+                    "Do you have soap?"
+                  ]
+                },
+                {
+                  "speaker": null,
+                  "amharic": "ባለሱቅ",
+                  "cells": [
+                    "ባለሱቅ",
+                    "አዎ። ምን አይነት?",
+                    "Yes. Which type?"
+                  ]
+                },
+                {
+                  "speaker": null,
+                  "amharic": "ገዢ",
+                  "cells": [
+                    "ገዢ",
+                    "የልብስ ሳሙና",
+                    "Laundry soap."
+                  ]
+                },
+                {
+                  "speaker": null,
+                  "amharic": "ባለሱቅ",
+                  "cells": [
+                    "ባለሱቅ",
+                    "ስንት ልስጥህ?",
+                    "How many shall I give you?"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "u6-l5-b77",
+              "title": "Vocabulary",
+              "source_key": "vocabulary",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                43,
+                44,
+                46,
+                47
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "አንዱ ስንት ነው?",
+                  "andu sïnt näw?",
+                  "What is the price?"
+                ],
+                [
+                  "አምስት ብር",
+                  "amist bïrr",
+                  "Five birr"
+                ],
+                [
+                  "ውድ ነው አይቀንስም?",
+                  "wïdd näw. ayk'änïsm?",
+                  "Is this the best price?"
+                ],
+                [
+                  "እሺ ሶስት ብር ከሃምሳ ውሰድ",
+                  "ïšši sost bïrr kähamsa wïsäd",
+                  "Okay, add three birr to fifty."
+                ],
+                [
+                  "እሺ አራት ስጠኝ",
+                  "ïšši arrat sït'äñ",
+                  "Okay, give me four."
+                ],
+                [
+                  "ይኸው",
+                  "yïhäw",
+                  "This is the total price."
+                ],
+                [
+                  "ጠቅላላ",
+                  "t’äk’lala",
+                  "Total"
+                ],
+                [
+                  "መቀነስ",
+                  "mäkänäs",
+                  "To lower the price"
+                ],
+                [
+                  "ቅናሽ",
+                  "k’ïnaš",
+                  "Discount"
+                ],
+                [
+                  "ይቀንሱልኝ",
+                  "yïk’änïsulïñ",
+                  "Lower the price (politely)"
+                ],
+                [
+                  "ውድ",
+                  "wïdd",
+                  "Expensive"
+                ],
+                [
+                  "መጨረሻው ስንት ነው?",
+                  "mäčäräšaw sïnt näw?",
+                  "What is the best/lowest price?"
+                ],
+                [
+                  "አይቀንስም",
+                  "ayk'änïsïm",
+                  "Is this your best price?"
+                ],
+                [
+                  "ምን አይነት?",
+                  "mïn aynät?",
+                  "Which type?"
+                ]
+              ]
+            },
+            {
+              "id": "u6-l5-b78",
+              "title": "Cultural note",
+              "source_key": "cultural_note",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                43,
+                44,
+                46,
+                47
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "The source says market prices are often flexible and commercial centers such as supermarkets and restaurants usually have fixed prices."
+            }
+          ],
+          "activities": [
+            {
+              "id": "u6-a6",
+              "type": "role_play",
+              "title": "Customer/storekeeper role-play",
+              "interactive": false
+            },
+            {
+              "id": "u6-a7",
+              "type": "bargaining_simulation",
+              "title": "Negotiate a price",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "ገዢ",
+            "ባለሱቅ ሳሙና አለ?",
+            "ባለሱቅ",
+            "አዎ። ምን አይነት?",
+            "የልብስ ሳሙና",
+            "ስንት ልስጥህ?",
+            "አንዱ ስንት ነው?",
+            "አምስት ብር",
+            "ውድ ነው አይቀንስም?",
+            "እሺ ሶስት ብር ከሃምሳ ውሰድ",
+            "እሺ አራት ስጠኝ",
+            "ይኸው",
+            "ጠቅላላ",
+            "መቀነስ",
+            "ቅናሽ",
+            "ይቀንሱልኝ",
+            "ውድ",
+            "መጨረሻው ስንት ነው?",
+            "አይቀንስም",
+            "ምን አይነት?"
+          ]
+        },
+        {
+          "id": "u6-l6",
+          "unit_id": "u6",
+          "title_en": "Numbers, Ordinals and Fractions",
+          "title_am": "ቁጥሮች፣ ተራ ቁጥሮች እና ክፍልፋዮች",
+          "source_pages": [
+            44,
+            45,
+            46
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u6-l6-b79",
+              "title": "Numbers",
+              "source_key": "numbers",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                44,
+                45,
+                46
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "አስር",
+                  "asïr",
+                  "10"
+                ],
+                [
+                  "አስራ አንድ",
+                  "asïra and",
+                  "11"
+                ],
+                [
+                  "አስራ ሁለት",
+                  "asïra hulät",
+                  "12"
+                ],
+                [
+                  "አስራ ዘጠኝ",
+                  "asïra zät'äñ",
+                  "19"
+                ],
+                [
+                  "ሃያ",
+                  "haya",
+                  "20"
+                ],
+                [
+                  "ሃያ አንድ",
+                  "haya and",
+                  "21"
+                ],
+                [
+                  "ሰላሣ",
+                  "sälasa",
+                  "30"
+                ],
+                [
+                  "አርባ",
+                  "arba",
+                  "40"
+                ],
+                [
+                  "ሃምሳ",
+                  "hamsa",
+                  "50"
+                ],
+                [
+                  "ስልሣ",
+                  "sïlsa",
+                  "60"
+                ],
+                [
+                  "ሰባ",
+                  "säba",
+                  "70"
+                ],
+                [
+                  "ሰማንያ",
+                  "sämanya",
+                  "80"
+                ],
+                [
+                  "ዘጠና",
+                  "zät'äna",
+                  "90"
+                ],
+                [
+                  "መቶ",
+                  "mäto",
+                  "100"
+                ],
+                [
+                  "ሁለት መቶ",
+                  "hulät mäto",
+                  "200"
+                ],
+                [
+                  "አንድ ሺህ",
+                  "and ši",
+                  "1000"
+                ]
+              ]
+            },
+            {
+              "id": "u6-l6-b80",
+              "title": "Ordinals",
+              "source_key": "ordinals",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                44,
+                45,
+                46
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "አንድ",
+                  "አንደኛ",
+                  "andäňña"
+                ],
+                [
+                  "ሁለት",
+                  "ሁለተኛ",
+                  "hulätäňña"
+                ],
+                [
+                  "ሶስት",
+                  "ሶስተኛ",
+                  "sosttäňña"
+                ],
+                [
+                  "ዘጠኝ",
+                  "ዘጠነኛ",
+                  "zät'änäňña"
+                ],
+                [
+                  "ሃምሳ",
+                  "ሃምሳኛ",
+                  "hamsaňa"
+                ],
+                [
+                  "መቶ",
+                  "መቶኛ",
+                  "mätoňa"
+                ]
+              ]
+            },
+            {
+              "id": "u6-l6-b81",
+              "title": "Ordinal rules",
+              "source_key": "ordinal_rules",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                44,
+                45,
+                46
+              ],
+              "qa_flag": null,
+              "kind": "list",
+              "items": [
+                "If the cardinal ends in a vowel, add –ኛ–ňa.",
+                "If the cardinal ends in a consonant other than ኝ, add –ኛ äña.",
+                "If the cardinal ends in ኝ, change ኝ to n and add –ኛ äňa.",
+                "The source notes that the ordinal suffix is stressed and represents this by doubling ñ in transliteration."
+              ]
+            },
+            {
+              "id": "u6-l6-b82",
+              "title": "Fractions",
+              "source_key": "fractions",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                44,
+                45,
+                46
+              ],
+              "qa_flag": null,
+              "kind": "table",
+              "headers": [
+                "Amharic",
+                "Transliteration",
+                "English"
+              ],
+              "rows": [
+                [
+                  "ሩብ",
+                  "rub",
+                  "1/4"
+                ],
+                [
+                  "ሲሶ",
+                  "siso",
+                  "1/3"
+                ],
+                [
+                  "ግማሽ",
+                  "gïmaš",
+                  "1/2"
+                ]
+              ]
+            }
+          ],
+          "activities": [
+            {
+              "id": "u6-a8",
+              "type": "number_reading",
+              "title": "Read numbers",
+              "interactive": false
+            },
+            {
+              "id": "u6-a9",
+              "type": "ordinal_transformation",
+              "title": "Convert cardinals to ordinals",
+              "interactive": false
+            },
+            {
+              "id": "u6-a10",
+              "type": "fraction_recognition",
+              "title": "Identify basic fractions",
+              "interactive": false
+            }
+          ],
+          "speakables": [
+            "አስር",
+            "አስራ አንድ",
+            "አስራ ሁለት",
+            "አስራ ዘጠኝ",
+            "ሃያ",
+            "ሃያ አንድ",
+            "ሰላሣ",
+            "አርባ",
+            "ሃምሳ",
+            "ስልሣ",
+            "ሰባ",
+            "ሰማንያ",
+            "ዘጠና",
+            "መቶ",
+            "ሁለት መቶ",
+            "አንድ ሺህ",
+            "አንድ",
+            "አንደኛ",
+            "ሁለት",
+            "ሁለተኛ",
+            "ሶስት",
+            "ሶስተኛ",
+            "ዘጠኝ",
+            "ዘጠነኛ",
+            "ሃምሳኛ",
+            "መቶኛ",
+            "If the cardinal ends in a vowel, add –ኛ–ňa.",
+            "If the cardinal ends in a consonant other than ኝ, add –ኛ äña.",
+            "If the cardinal ends in ኝ, change ኝ to n and add –ኛ äňa.",
+            "ሩብ",
+            "ሲሶ",
+            "ግማሽ"
+          ]
+        },
+        {
+          "id": "u6-l7",
+          "unit_id": "u6",
+          "title_en": "Price Comparison, Market Practice and Assessment",
+          "title_am": "የዋጋ ንጽጽር እና ምዘና",
+          "source_pages": [
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54
+          ],
+          "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+          "blocks": [
+            {
+              "id": "u6-l7-b83",
+              "title": "Addis Ababa — Tomato",
+              "source_key": "price_table.Addis Ababa",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "6"
+            },
+            {
+              "id": "u6-l7-b84",
+              "title": "Addis Ababa — Potato",
+              "source_key": "price_table.Addis Ababa",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "5"
+            },
+            {
+              "id": "u6-l7-b85",
+              "title": "Addis Ababa — Carrot",
+              "source_key": "price_table.Addis Ababa",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "10"
+            },
+            {
+              "id": "u6-l7-b86",
+              "title": "Addis Ababa — Onion",
+              "source_key": "price_table.Addis Ababa",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "6"
+            },
+            {
+              "id": "u6-l7-b87",
+              "title": "Addis Ababa — Total",
+              "source_key": "price_table.Addis Ababa",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "27"
+            },
+            {
+              "id": "u6-l7-b88",
+              "title": "Assella — Tomato",
+              "source_key": "price_table.Assella",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "4"
+            },
+            {
+              "id": "u6-l7-b89",
+              "title": "Assella — Potato",
+              "source_key": "price_table.Assella",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "3"
+            },
+            {
+              "id": "u6-l7-b90",
+              "title": "Assella — Carrot",
+              "source_key": "price_table.Assella",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "8"
+            },
+            {
+              "id": "u6-l7-b91",
+              "title": "Assella — Onion",
+              "source_key": "price_table.Assella",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "8"
+            },
+            {
+              "id": "u6-l7-b92",
+              "title": "Assella — Total",
+              "source_key": "price_table.Assella",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "23"
+            },
+            {
+              "id": "u6-l7-b93",
+              "title": "Price table — Unit",
+              "source_key": "price_table.unit",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "birr/kg"
+            },
+            {
+              "id": "u6-l7-b94",
+              "title": "Source assessment bank",
+              "source_key": "source_assessment_bank",
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7",
+              "source_pages": [
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54
+              ],
+              "qa_flag": null,
+              "kind": "note",
+              "text": "u6-assessment-1"
+            }
+          ],
+          "activities": [
+            {
+              "id": "u6-a11",
+              "type": "table_comprehension",
+              "title": "Answer price-comparison questions",
+              "interactive": false
+            },
+            {
+              "id": "u6-a12",
+              "type": "market_visit",
+              "title": "Visit a local market and practice buying/bargaining",
+              "interactive": false
+            }
+          ],
+          "speakables": []
+        }
+      ],
+      "assessments": [
+        {
+          "id": "u6-assessment-1",
+          "title": "Unit 6 Source Assessment Bank",
+          "source_pages": [
+            49,
+            50,
+            51,
+            52,
+            53,
+            54
+          ],
+          "question_policy": "source_as_written",
+          "questions": [
+            {
+              "id": "u6-q1",
+              "type": "multiple_choice",
+              "question": "What does ዋጋው ስንት ነው? mean?",
+              "options": [
+                "Where is it?",
+                "What is the price?",
+                "How much is it?",
+                "Which item?"
+              ],
+              "answer_as_written": "What is the price?",
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q2",
+              "type": "multiple_choice",
+              "question": "How do you say five birr in Amharic?",
+              "options": [
+                "አንድ ብር",
+                "አምስት ብር",
+                "ወይን",
+                "ባለ ሃምሳ"
+              ],
+              "answer_as_written": "አምስት ብር",
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q3",
+              "type": "multiple_choice",
+              "question": "The definite article for masculine nouns that end in a consonant is:",
+              "options": [
+                "-wa",
+                "-w",
+                "-u",
+                "-u or -wa, depending"
+              ],
+              "answer_as_written": "-w",
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q4",
+              "type": "multiple_choice",
+              "question": "Which phrase means Is this your best price?",
+              "options": [
+                "ባለሱቅ ሳሙና አለ?",
+                "ውድ ነው አይቀንስም?",
+                "ዋጋው ስንት ነው?",
+                "እንዴት ነው?"
+              ],
+              "answer_as_written": "ውድ ነው አይቀንስም?",
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q5",
+              "type": "multiple_choice",
+              "question": "What does እንዴት mean?",
+              "options": [
+                "Who?",
+                "What?",
+                "How?",
+                "Why?"
+              ],
+              "answer_as_written": "How?",
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q6",
+              "type": "true_false",
+              "question": "ደምበኛ means customer.",
+              "options": null,
+              "answer_as_written": true,
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q7",
+              "type": "true_false",
+              "question": "ነው is used to indicate definiteness in nouns.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q8",
+              "type": "true_false",
+              "question": "ሚኖ means Why?",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 49,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q9",
+              "type": "true_false",
+              "question": "The price of onions is more expensive in Assella than in Addis Ababa.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q10",
+              "type": "true_false",
+              "question": "The expression እርሳሰ አለ? means Do you have it?",
+              "options": null,
+              "answer_as_written": true,
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q11",
+              "type": "matching",
+              "question": "Match the Amharic phrases with their English translations.",
+              "options": null,
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q12",
+              "type": "short_answer",
+              "question": "What does መቀነስ mean in English?",
+              "options": null,
+              "answer_as_written": "To lower the price.",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q13",
+              "type": "short_answer",
+              "question": "How do you ask What is this? in Amharic?",
+              "options": null,
+              "answer_as_written": "ይህ ምንድን ነው?",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q14",
+              "type": "short_answer",
+              "question": "Write the Amharic term for candle.",
+              "options": null,
+              "answer_as_written": "ሻማ",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q15",
+              "type": "short_answer",
+              "question": "What is the Amharic word for sugar?",
+              "options": null,
+              "answer_as_written": "ስኳር",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q16",
+              "type": "exam",
+              "question": "Describe how you would ask a vendor for the price of two kilos of tomatoes in Amharic.",
+              "options": null,
+              "answer_as_written": "You might say አንዱ ስንት ነው? while holding up the tomatoes.",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q17",
+              "type": "exam",
+              "question": "List at least three vocabulary items related to shopping in Amharic.",
+              "options": null,
+              "answer_as_written": [
+                "ሳሙና",
+                "ዘይት",
+                "ፓስታ"
+              ],
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q18",
+              "type": "exam",
+              "question": "Explain the rules for forming the definite articles for feminine nouns in Amharic.",
+              "options": null,
+              "answer_as_written": "For feminine nouns, add -wa to create the definite form.",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q19",
+              "type": "exam",
+              "question": "Explain ውድ ነው አይቀንስም? in bargaining.",
+              "options": null,
+              "answer_as_written": "It means Is this your best price? and is used when negotiating a lower price.",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q20",
+              "type": "exam",
+              "question": "Write a short dialogue simulating a bargaining scenario between a customer and a shopkeeper.",
+              "options": null,
+              "answer_as_written": "Example is indicated in the source but is incomplete on the page.",
+              "source_page": 50,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q21",
+              "type": "multiple_choice",
+              "question": "What does ዋጋው ስንት ነው? mean?",
+              "options": [
+                "How much is it?",
+                "Where is it?",
+                "What is your name?",
+                "What is this?"
+              ],
+              "answer_as_written": "How much is it?",
+              "source_page": 51,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q22",
+              "type": "multiple_choice",
+              "question": "What is the Amharic word for sugar?",
+              "options": [
+                "ዘይት",
+                "ስኳር",
+                "ጨው",
+                "ፓስታ"
+              ],
+              "answer_as_written": "ስኳር",
+              "source_page": 51,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q23",
+              "type": "multiple_choice",
+              "question": "The definite article for feminine nouns is:",
+              "options": [
+                "-u",
+                "-w",
+                "-wa",
+                "-i"
+              ],
+              "answer_as_written": "-wa",
+              "source_page": 51,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q24",
+              "type": "multiple_choice",
+              "question": "How do you say two in Amharic?",
+              "options": [
+                "ዕድሜ",
+                "ሁለት",
+                "ይዜ",
+                "ሀያ"
+              ],
+              "answer_as_written": "ሁለት",
+              "source_page": 51,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q25",
+              "type": "multiple_choice",
+              "question": "What does ውድ ነው አይቀንስም? mean?",
+              "options": [
+                "Is this the best price?",
+                "What is the price?",
+                "I will buy it.",
+                "Can you help me?"
+              ],
+              "answer_as_written": "Is this the best price?",
+              "source_page": 52,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q26",
+              "type": "true_false",
+              "question": "ደምበኛ means storekeeper.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 52,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q27",
+              "type": "true_false",
+              "question": "ስንት ነው? means What is it?",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 52,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q28",
+              "type": "true_false",
+              "question": "እርሳሰ አለ? means Do you have it?",
+              "options": null,
+              "answer_as_written": true,
+              "source_page": 52,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q29",
+              "type": "true_false",
+              "question": "ክርክር means to bargain.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 52,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q30",
+              "type": "true_false",
+              "question": "Prices in a market are usually fixed.",
+              "options": null,
+              "answer_as_written": false,
+              "source_page": 52,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q31",
+              "type": "matching",
+              "question": "Match the Amharic term to its English translation.",
+              "options": null,
+              "answer_as_written": "11a-C, 11b-B, 11c-D, 11d-A",
+              "source_page": 53,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q32",
+              "type": "short_answer",
+              "question": "What does ምን mean in English?",
+              "options": null,
+              "answer_as_written": "What",
+              "source_page": 53,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q33",
+              "type": "short_answer",
+              "question": "How do you ask How many? in Amharic?",
+              "options": null,
+              "answer_as_written": "ስንት (sïnt)",
+              "source_page": 53,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q34",
+              "type": "short_answer",
+              "question": "Write the Amharic term for candle.",
+              "options": null,
+              "answer_as_written": "ሻማ (šama)",
+              "source_page": 53,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q35",
+              "type": "short_answer",
+              "question": "What is the Amharic word for cooking oil?",
+              "options": null,
+              "answer_as_written": "ዘይት (zäyt)",
+              "source_page": 53,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q36",
+              "type": "short_answer",
+              "question": "Give an example of a question using ለምን.",
+              "options": null,
+              "answer_as_written": "ለምን ገዛሽ? (Why did you buy it?)",
+              "source_page": 53,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q37",
+              "type": "exam",
+              "question": "Describe how you would ask a vendor to lower the price in Amharic.",
+              "options": null,
+              "answer_as_written": "ትቀንሱልኝ? (Can you lower the price for me?)",
+              "source_page": 54,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q38",
+              "type": "exam",
+              "question": "List at least three shopping items in Amharic.",
+              "options": null,
+              "answer_as_written": [
+                "ሳሙና",
+                "ስኳር",
+                "ፓስታ"
+              ],
+              "source_page": 54,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q39",
+              "type": "exam",
+              "question": "Explain how you would bargain for four items if the price is five birr each.",
+              "options": null,
+              "answer_as_written": "እሺ አራት ስጠኝ (Okay, give me four).",
+              "source_page": 54,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            },
+            {
+              "id": "u6-q40",
+              "type": "exam",
+              "question": "Write a short dialogue where a customer asks about the price of onions.",
+              "options": null,
+              "answer_as_written": "Customer: አንዱ ስንት ነው የሾኮይ? Storekeeper: ለርዳ ሶስት ብር ...",
+              "source_page": 54,
+              "source_file_id": "file_00000000d6d0820ebf70c7ea157326a7"
+            }
+          ]
+        }
+      ],
+      "shell_unit": 6,
+      "status": "written",
+      "description": "Prices, quantities, market expressions and practical buying language.",
+      "key_phrase": {
+        "amharic": "ይህ ስንት ነው?",
+        "english": "How much is this?"
+      },
+      "shell_title_en": "Basic Shopping",
+      "shell_title_am": "መግዛት"
+    },
+    {
+      "id": "u7",
+      "shell_unit": 7,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Food & Drink",
+      "title_am": "ምግብ እና መጠጥ",
+      "shell_title_en": "Food & Drink",
+      "shell_title_am": "ምግብ እና መጠጥ",
+      "description": "Food, drinks, ordering and everyday eating situations.",
+      "key_phrase": {
+        "amharic": "ቡና እጠጣለሁ።",
+        "english": "I drink coffee."
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u8",
+      "shell_unit": 8,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Telling Time",
+      "title_am": "ሰዓት",
+      "shell_title_en": "Telling Time",
+      "shell_title_am": "ሰዓት",
+      "description": "Asking and answering about time and arranging activities.",
+      "key_phrase": {
+        "amharic": "መቼ እንገናኝ?",
+        "english": "When shall we meet?"
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u9",
+      "shell_unit": 9,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Telling a Story",
+      "title_am": "ታሪክ መናገር",
+      "shell_title_en": "Telling a Story",
+      "shell_title_am": "ታሪክ መናገር",
+      "description": "Narrating events and describing what happened.",
+      "key_phrase": {
+        "amharic": "ጓደኛዬ መጣ።",
+        "english": "My friend came."
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u10",
+      "shell_unit": 10,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Finding Your Way Around",
+      "title_am": "መንገድ መጠየቅ",
+      "shell_title_en": "Finding Your Way Around",
+      "shell_title_am": "መንገድ መጠየቅ",
+      "description": "Directions, landmarks, location questions and movement.",
+      "key_phrase": {
+        "amharic": "መንገዱ የት ነው?",
+        "english": "Where is the road?"
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u11",
+      "shell_unit": 11,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Shopping II",
+      "title_am": "ልብስ መግዛት",
+      "shell_title_en": "Shopping II",
+      "shell_title_am": "ልብስ መግዛት",
+      "description": "Clothing, items, descriptions, sizes and preferences.",
+      "key_phrase": {
+        "amharic": "ጥቁር ሱሪ እፈልጋለሁ።",
+        "english": "I want black trousers."
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u12",
+      "shell_unit": 12,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Months, Seasons & Weather",
+      "title_am": "ወራት፣ ወቅቶች እና አየር ሁኔታ",
+      "shell_title_en": "Months, Seasons & Weather",
+      "shell_title_am": "ወራት፣ ወቅቶች እና አየር ሁኔታ",
+      "description": "Months, seasons, calendar language and weather.",
+      "key_phrase": {
+        "amharic": "ዛሬ ማታ",
+        "english": "Tonight."
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u13",
+      "shell_unit": 13,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Sentence Structure",
+      "title_am": "የአረፍተ ነገር አወቃቀር",
+      "shell_title_en": "Sentence Structure",
+      "shell_title_am": "የአረፍተ ነገር አወቃቀር",
+      "description": "Core sentence organization and practical grammar patterns.",
+      "key_phrase": {
+        "amharic": "በቤት ነኝ።",
+        "english": "I am at home."
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u14",
+      "shell_unit": 14,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Appointments & Invitations",
+      "title_am": "ቀጠሮ እና ግብዣ",
+      "shell_title_en": "Appointments & Invitations",
+      "shell_title_am": "ቀጠሮ እና ግብዣ",
+      "description": "Making arrangements, appointments and invitations.",
+      "key_phrase": {
+        "amharic": "መቼ እንገናኝ?",
+        "english": "When shall we meet?"
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u15",
+      "shell_unit": 15,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Boundaries & Responding to Harassment",
+      "title_am": "ድንበሮች እና እምቢ ማለት",
+      "shell_title_en": "Boundaries & Responding to Harassment",
+      "shell_title_am": "ድንበሮች እና እምቢ ማለት",
+      "description": "Clear, polite and firm language for personal boundaries.",
+      "key_phrase": {
+        "amharic": "እባክዎ ያቁሙ።",
+        "english": "Please stop."
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u16",
+      "shell_unit": 16,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Personal Health & Wellbeing",
+      "title_am": "ጤና",
+      "shell_title_en": "Personal Health & Wellbeing",
+      "shell_title_am": "ጤና",
+      "description": "Body and health vocabulary and communicating about symptoms.",
+      "key_phrase": {
+        "amharic": "ራሴ ያመኛል።",
+        "english": "My head hurts."
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u17",
+      "shell_unit": 17,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Personal Safety & Emergency Language",
+      "title_am": "ደህንነት እና አስቸኳይ ቋንቋ",
+      "shell_title_en": "Personal Safety & Emergency Language",
+      "shell_title_am": "ደህንነት እና አስቸኳይ ቋንቋ",
+      "description": "Urgent communication, safety and asking for help.",
+      "key_phrase": {
+        "amharic": "እርዳታ!",
+        "english": "Help!"
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u18",
+      "shell_unit": 18,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Describing the Household",
+      "title_am": "ቤትን መግለጽ",
+      "shell_title_en": "Describing the Household",
+      "shell_title_am": "ቤትን መግለጽ",
+      "description": "Household vocabulary, rooms, objects and family context.",
+      "key_phrase": {
+        "amharic": "ቤት",
+        "english": "Home"
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u19",
+      "shell_unit": 19,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Job-Specific Vocabulary",
+      "title_am": "የሥራ ቃላት",
+      "shell_title_en": "Job-Specific Vocabulary",
+      "shell_title_am": "የሥራ ቃላት",
+      "description": "Workplace vocabulary and practical professional communication.",
+      "key_phrase": {
+        "amharic": "ስራ",
+        "english": "Work"
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    },
+    {
+      "id": "u20",
+      "shell_unit": 20,
+      "status": "not_written",
+      "source_chapter": null,
+      "title_en": "Ongoing Learning",
+      "title_am": "ቀጣይ ትምህርት",
+      "shell_title_en": "Ongoing Learning",
+      "shell_title_am": "ቀጣይ ትምህርት",
+      "description": "Review, practice, contextual use and continuing fluency.",
+      "key_phrase": {
+        "amharic": "እንማር!",
+        "english": "Let us learn!"
+      },
+      "source_pages": [],
+      "learning_objectives": [],
+      "lessons": [],
+      "assessments": []
+    }
+  ]
+}
