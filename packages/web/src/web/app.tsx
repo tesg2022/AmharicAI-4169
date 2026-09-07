@@ -11,6 +11,8 @@ import PracticePage from "./pages/practice";
 import TutorPage from "./pages/tutor";
 import ProgressPage from "./pages/progress";
 import SignInPage from "./pages/sign-in";
+import SubscriptionPage from "./pages/subscription";
+import AdminPage from "./pages/admin";
 import { AgentFeedback, RunableBadge } from "@runablehq/website-runtime";
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
           <Route path="/tutor" component={TutorPage} />
           <Route path="/progress" component={ProgressPage} />
           <Route path="/sign-in" component={SignInPage} />
+          <Route path="/subscription" component={SubscriptionPage} />
+          <Route path="/admin" component={AdminPage} />
           <Route>
             <div className="mx-auto max-w-2xl px-6 py-24 text-center">
               <p className="font-display text-3xl font-bold">Page not found</p>

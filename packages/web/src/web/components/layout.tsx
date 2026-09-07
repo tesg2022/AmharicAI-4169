@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import {
   AudioLines,
+  BadgeCheck,
   BookOpen,
   Flame,
   Globe,
@@ -22,6 +23,7 @@ const NAV = [
   { to: "/practice", label: "Practice", icon: Sparkles },
   { to: "/tutor", label: "AI Tutor", icon: MessageCircle },
   { to: "/progress", label: "Progress", icon: User },
+  { to: "/subscription", label: "Plan", icon: BadgeCheck },
 ];
 
 export function Layout({ children }: { children: ReactNode }) {

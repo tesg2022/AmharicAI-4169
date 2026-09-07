@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ORPCError } from "@orpc/server";
 import { and, desc, eq, gt, sql } from "drizzle-orm";
 import { authed, withUser } from "../middleware/auth";
+import { isAdminEmail } from "../middleware/admin";
 import { db } from "../database";
 import {
   accessCodeAttempts,
@@ -95,6 +96,15 @@ export const access = {
         user: context.user
           ? { id: context.user.id, email: context.user.email, name: context.user.name }
           : null,
+        /**
+         * Whether this session's email is named in ADMIN_EMAILS. It rides
+         * along here purely so a learner's own page never has to ask
+         * `admin.status` — that call can only answer 401/403 for them, which
+         * would put a permanent red herring in every learner's console. This
+         * flag decides nothing: every privileged call is still gated by
+         * `adminOnly` on the server.
+         */
+        is_admin: isAdminEmail(context.user?.email),
       };
     }),
 

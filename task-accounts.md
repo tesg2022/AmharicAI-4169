@@ -87,3 +87,58 @@ Own-redemption check now runs first -> 409 already_redeemed, no attempt consumed
 Verified: preview switch is IGNORED for signed-in users; gate really opens on redeem (u3-l1
 403 -> 200) and really closes again on admin revoke; lockout at 5 failures blocks even a valid
 code; listCodes never returns plaintext or hash; pepper falls back to BETTER_AUTH_SECRET.
+
+## Stage B (in progress) — web admin + account UI
+
+Done so far, all in `packages/web/src/web/`:
+- `queries/access.ts`  — useAccess (access.me), useMyRedemptions, useRedeemCode
+                         (invalidates access/catalog/content on success), useCheckout
+- `queries/admin.ts`   — status/summary/listCodes/grants + issueCode/revokeCode/revokeGrant,
+                         all `retry: false` so a 403 for a non-admin resolves immediately
+- `pages/subscription.tsx` — resolved plan + source + expires_at + `expired_notice` banner
+                         ("Your access code has expired"), feature rows gated on `usable`
+                         (never `granted`), plan-gated rows keep the "Even on a higher plan:"
+                         caveat prefix, redeem form (6 digits, server error text verbatim),
+                         redemption history, paid plans with the honest checkout refusal
+                         rendering `blockers` verbatim, `tts_per_day` keeps "not enforced yet"
+- `pages/admin.tsx`    — renders the 403 honestly for non-admins (naming ADMIN_EMAILS rather
+                         than showing a blank page); deployment status incl. billing blockers
+                         verbatim; 4 counters; issue form (plan/durationDays/expiresInDays/
+                         maxRedemptions/features/note); plaintext shown ONCE with the server's
+                         `warning` + copy button; code list (hint only) with Revoke code;
+                         grants list with Revoke access; explicit note that the two revokes
+                         are different decisions
+- `app.tsx`            — routes `/subscription`, `/admin`
+- `components/layout.tsx` — nav item "Plan" -> /subscription. Admin link appears on the
+                         subscription page only when `admin.status` succeeds (cosmetic only).
+
+Gates: root `bun run lint` clean (40 files), root `bun run build` clean (tsc --noEmit + vite).
+
+## Stage B web — VERIFIED and complete
+
+Browser suite `/tmp/ui_verify.py`: **32/32**, three states (anonymous / signed-in non-admin /
+admin). Backend gate `/tmp/acc_verify.py` still **45/45**. Lint and build clean.
+
+Two things the suite caught, both worth keeping in mind:
+
+1. FALSE ALARM — "redemption history row missing". The panel rendered fine; the heading is
+   CSS-`uppercase`d, so a case-sensitive assertion could never match. Fixed the *test*, not
+   the page. Third text-extraction false alarm in this project: verify with a DOM dump before
+   "fixing" a suspected bug.
+
+2. REAL — `/subscription` was calling `admin.status`, which for a learner can only ever answer
+   401 or 403. That put a permanent red herring in every learner's console. Passing
+   `enabled: isSignedIn` only silenced the anonymous 401; signed-in non-admins still 403'd.
+   Proper fix: `access.me` now returns `is_admin` (computed server-side from the *verified*
+   session email vs ADMIN_EMAILS), and the subscription page reads that. `/subscription` now
+   makes no privileged call at all, and the suite asserts that as its own check.
+   The flag decides nothing — every privileged call is still gated by `adminOnly` server-side.
+
+The console check is now attributed by phase rather than blanket: it allows the three console
+errors this suite deliberately provokes (checkout that cannot charge -> 503, wrong code -> 404,
+non-admin explicitly opening /admin -> 403) and fails on anything else, so a stray call on a
+page that had no business making it still breaks the build.
+
+Next: mobile (packages/mobile) — login, subscription screen reading `access.me`, redeem-code
+screen, Restore Purchases affordance; replace `lib/preview-plan.tsx` usage (do NOT persist it).
+Then Stage C, the Nuxt BFF integration.
