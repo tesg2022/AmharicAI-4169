@@ -15,7 +15,7 @@
       "runableAuthIssuer": "https://api.runable.com/api/auth"
     },
     "ios": {
-      "bundleIdentifier": "com.amharicai_zoin.runable",
+      "bundleIdentifier": "com.amharicai_zoin.capetown",
       "supportsTablet": true
     },
     "splash": {
