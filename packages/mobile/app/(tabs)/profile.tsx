@@ -33,6 +33,13 @@ import { SpeechStatusCard } from "@/components/speech-status";
 
 const GOAL_OPTIONS = [20, 50, 100, 200];
 
+const LEGAL_LINKS = [
+  { slug: "about", label: "About", icon: "information-circle-outline" },
+  { slug: "contact", label: "Contact", icon: "mail-outline" },
+  { slug: "privacy", label: "Privacy", icon: "lock-closed-outline" },
+  { slug: "terms", label: "Terms", icon: "document-text-outline" },
+] as const;
+
 function ActivityChart({ data }: { data: { date: string; xp: number }[] }) {
   const colors = useColors();
   const recent = data.slice(-28);
@@ -361,6 +368,33 @@ export default function ProfileScreen() {
             has 20 units with 6 written. The two are not the same curriculum yet — trust the Course
             tab for what has actually been written from the textbook.
           </Body>
+        </Card>
+
+        {/* Legal and support. The privacy policy has to be reachable from
+            inside the app, not only from the store listing — Play checks it. */}
+        <Card style={{ gap: 12 }}>
+          <Title size={FontSize.body}>About &amp; legal</Title>
+          <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+            {LEGAL_LINKS.map((item) => (
+              <Button
+                key={item.slug}
+                label={item.label}
+                variant="secondary"
+                icon={item.icon}
+                onPress={() => router.push(`/legal/${item.slug}`)}
+              />
+            ))}
+          </View>
+          <Body size={FontSize.caption} color={colors.mutedForeground}>
+            Questions or a data request: admin@amharicai.org
+          </Body>
+          <Button
+            label="Account & data"
+            variant="secondary"
+            icon="person-circle-outline"
+            full
+            onPress={() => router.push("/account")}
+          />
         </Card>
 
         {isSignedIn ? (

@@ -14,6 +14,7 @@ import {
   TibebRule,
   isAmharic,
 } from "../components/ui/kit";
+import { useSeo } from "../hooks/use-seo";
 
 /**
  * Quiz runner — one route for both question sources.
@@ -33,6 +34,12 @@ type Result = {
 };
 
 export default function QuizPage() {
+  useSeo({
+    title: "Quiz",
+    description: "Check what stuck from the lesson.",
+    noIndex: true,
+  });
+
   const params = useParams<{ lessonId: string }>();
   const raw = params.lessonId ?? "";
   const isUnitExam = raw.startsWith("unit-");

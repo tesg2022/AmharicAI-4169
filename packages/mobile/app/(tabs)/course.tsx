@@ -6,6 +6,7 @@ import { FontSize, Radius } from "@/constants/theme";
 import { useColors } from "@/hooks/use-colors";
 import { t } from "@/i18n/messages";
 import { usePreview } from "@/lib/preview-plan";
+import { useSession } from "@/hooks/use-session";
 import { useCourseMap, failureMessage } from "@/queries/catalog";
 import {
   Am,
@@ -258,6 +259,7 @@ function UnitCard({
 export default function CourseScreen() {
   const colors = useColors();
   const { locale } = usePreview();
+  const { isSignedIn } = useSession();
   const course = useCourseMap();
 
   const stats = course.data?.stats;
@@ -309,10 +311,12 @@ export default function CourseScreen() {
 
           {/*
             Said out loud, because an interface with no progress numbers is
-            easily read as "0% complete". Nothing is recorded at all: there is
-            no account store in this build, so a completion, score or streak
-            here could only be invented.
+            easily read as "0% complete". Signed out there is no account to
+            record against, so a completion, score or streak here could only be
+            invented. Signed in, progress is real and the card would be a lie —
+            so it is shown to signed-out visitors only.
           */}
+          {isSignedIn ? null : (
           <Card tone="muted" style={{ gap: 4 }}>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <Ionicons name="information-circle-outline" size={16} color={colors.mutedForeground} />
@@ -336,6 +340,7 @@ export default function CourseScreen() {
               </Body>
             )}
           </Card>
+          )}
 
           {(course.data?.units ?? []).map((unit) => (
             <UnitCard key={unit.id} unit={unit as Parameters<typeof UnitCard>[0]["unit"]} />

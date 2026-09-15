@@ -54,10 +54,14 @@ export function useTranslate() {
   };
 }
 
-/** Always refuses: there are no payment keys and no account store. */
-export function useCheckout() {
-  return useMutation({ ...orpc.catalog.checkout.mutationOptions(), retry: false });
-}
+/**
+ * There is no checkout hook here any more. Purchases go through
+ * `queries/billing.ts` — `billing.preflight`, then `billing.checkout` for the
+ * Paystack authorization URL, then `billing.verify` on the way back — which is
+ * the same path the website takes. The old `catalog.checkout` mutation always
+ * refused ("there are no payment keys and no account store"), and both halves
+ * of that stopped being true: accounts landed, then billing did.
+ */
 
 /** Pulls the machine-readable reason out of an oRPC error, if there is one. */
 export function failureReason(error: unknown): string | null {

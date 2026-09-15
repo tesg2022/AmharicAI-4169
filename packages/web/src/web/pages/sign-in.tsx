@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { AlertCircle, ArrowRight, Eye, EyeOff, Globe } from "lucide-react";
 import { authClient } from "../lib/auth";
 import { Am, Card, TibebRule } from "../components/ui/kit";
+import { useSeo } from "../hooks/use-seo";
 
 /**
  * Sign-in / sign-up.
@@ -13,6 +14,12 @@ import { Am, Card, TibebRule } from "../components/ui/kit";
  */
 
 export default function SignInPage() {
+  useSeo({
+    title: "Sign in",
+    description: "Sign in to AmharicAI.",
+    noIndex: true,
+  });
+
   const [, navigate] = useLocation();
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -32,7 +39,7 @@ export default function SignInPage() {
       if (result.error && result.error.code !== "AUTH_SESSION_DISMISSED") {
         setError(result.error.message ?? "Google sign-in failed.");
       } else if (!result.error) {
-        navigate("/");
+        navigate("/app");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Google sign-in failed.");
@@ -69,7 +76,7 @@ export default function SignInPage() {
       setError(result.error.message ?? "Something went wrong. Try again.");
       return;
     }
-    navigate("/");
+    navigate("/app");
   }
 
   const inputClass =
@@ -208,7 +215,7 @@ export default function SignInPage() {
 
       <p className="text-center text-xs text-muted-foreground">
         You can keep reading{" "}
-        <Link to="/" className="font-medium hover:underline">
+        <Link to="/app" className="font-medium hover:underline">
           lessons
         </Link>{" "}
         and the{" "}

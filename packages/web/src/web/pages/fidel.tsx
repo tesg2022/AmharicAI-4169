@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Search, Type } from "lucide-react";
 import { useFidel } from "../queries/content";
+import { useSeo } from "../hooks/use-seo";
 import {
   Am,
   Card,
@@ -23,6 +24,14 @@ import {
 export default function FidelPage() {
   const fidel = useFidel();
   const [query, setQuery] = useState("");
+
+  useSeo({
+    title: "The ፊደል — all 34 consonants across seven vowel orders",
+    description:
+      "The full Amharic syllabary as a grid: every base consonant through its seven vowel orders, with transliteration and audio.",
+    path: "/fidel",
+  });
+
   const [selected, setSelected] = useState<{
     character: string;
     transliteration: string | null;

@@ -1,5 +1,5 @@
 import type { RouterClient } from "@orpc/server";
-import { createAgentUIStreamResponse } from "ai";
+import { createAgentUIStreamResponse, safeValidateUIMessages } from "ai";
 import { createApp } from "./__core/app";
 import { cacheKey, readCache, writeCache } from "./speech/cache";
 import { estimateDurationMs, prepareSpeech } from "./speech/normalize";
@@ -7,10 +7,18 @@ import { activeProvider, activeRecognizer } from "./speech/providers";
 import { VOICE_MODES, type VoiceMode } from "./speech/ssml";
 import { tutorAgent } from "./agent";
 import { auth } from "./auth";
+import { paystackWebhook } from "./billing/webhook";
+import { identify } from "./entitlements/request";
+import { consume, refund, refusalMessage } from "./entitlements/usage";
+import { account } from "./routes/account";
+import { billing } from "./routes/billing";
+import { usage } from "./routes/usage";
+import { waitlist } from "./routes/waitlist";
 import { access } from "./routes/access";
 import { admin } from "./routes/admin";
 import { catalog } from "./routes/catalog";
 import { content } from "./routes/content";
+import { legal } from "./routes/legal";
 import { ping } from "./routes/ping";
 import { practice } from "./routes/practice";
 import { progress } from "./routes/progress";
@@ -29,9 +37,12 @@ import { tutor } from "./routes/tutor";
 export const router = {
   ping,
   access,
+  account,
   admin,
+  billing,
   catalog,
   content,
+  legal,
   practice,
   pronunciation,
   srs,
@@ -39,6 +50,8 @@ export const router = {
   speaking,
   speech,
   tutor,
+  usage,
+  waitlist,
 };
 
 export type AppRouter = typeof router;
@@ -49,6 +62,19 @@ const app = createApp(router);
 // Rare plain-HTTP endpoints (webhooks, streaming, the Better Auth handler)
 // register here with full paths, e.g. app.post("/api/webhooks/example", ...)
 app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
+
+/**
+ * Paystack webhooks — renewals, failed cards, cancellations.
+ *
+ * A plain route, and it has to be: the signature is an HMAC over the raw
+ * request bytes, so a body parsed by oRPC before the handler sees it cannot
+ * be verified. The handler reads `c.req.text()` itself and nothing else
+ * touches the body first.
+ *
+ * This URL goes in Paystack Dashboard → Settings → API Keys & Webhooks, in
+ * both test and live mode.
+ */
+app.post("/api/webhooks/paystack", (c) => paystackWebhook(c));
 
 /**
  * Native Amharic audio. A plain route because `<audio src>` and the mobile
@@ -66,6 +92,10 @@ app.get("/api/speech/audio", async (c) => {
   const mode: VoiceMode = requested && VOICE_MODES.includes(requested) ? requested : "native";
 
   const provider = activeProvider();
+
+  // Quota is checked before synthesis but AFTER the cache read below would
+  // have been free — so the cache lookup happens first and only a real
+  // provider call spends allowance. A replayed lesson line costs nothing.
   const prepared = prepareSpeech(text, { mode });
   const voice = c.req.query("voice") || provider?.defaultVoice || "";
 
@@ -97,6 +127,27 @@ app.get("/api/speech/audio", async (c) => {
     );
   }
 
+  // Cache missed: this call will reach the provider and cost money, so it is
+  // metered. Anonymous callers are metered by hashed address, which is what
+  // stops the free tier being bypassed by signing out.
+  const who = await identify(c);
+  const spend = await consume(who.subject, who.plan, "tts_synthesis");
+  if (!spend.consumed) {
+    return c.json(
+      {
+        error: "quota_exceeded",
+        message: who.userId
+          ? refusalMessage(spend, who.plan)
+          : "Anonymous playback is limited. Sign in for the full free allowance.",
+        limit: spend.limit,
+        used: spend.used,
+        resets_at: spend.resets_at,
+        normalized: prepared.normalized,
+      },
+      429,
+    );
+  }
+
   try {
     const result = await provider.synthesize({ text, voice, mode });
     await writeCache({
@@ -121,6 +172,9 @@ app.get("/api/speech/audio", async (c) => {
       },
     });
   } catch (error) {
+    // The provider failed, so no audio was produced and no money was spent.
+    // Hand the unit back rather than charging for a 502.
+    await refund(who.subject, "tts_synthesis").catch(() => undefined);
     return c.json(
       { error: "synthesis_failed", message: error instanceof Error ? error.message : "unknown" },
       502,
@@ -166,10 +220,66 @@ app.post("/api/speech/recognize", async (c) => {
   }
 });
 
-/** Streaming AI tutor turn — streaming responses cannot be oRPC procedures. */
+/**
+ * Streaming AI tutor turn — streaming responses cannot be oRPC procedures.
+ *
+ * This is the single most expensive endpoint in the product: one POST is one
+ * LLM completion against the operator's key. It is therefore metered before
+ * the model is reached, for signed-in and anonymous callers alike, and the
+ * refusal is a 429 with the reset date rather than a silent empty stream.
+ */
 app.post("/api/agent/messages", async (c) => {
-  const { messages } = await c.req.json();
-  return createAgentUIStreamResponse({ agent: tutorAgent, uiMessages: messages });
+  const body = await c.req.json().catch(() => null);
+  const messages = body?.messages;
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return c.json({ error: "bad_request", message: "messages[] is required." }, 400);
+  }
+
+  // Validate the transcript *before* spending quota. The stream helper
+  // validates again internally and throws on a bad shape; if that happened
+  // after `consume()` the caller would be charged a tutor turn for a request
+  // that never reached the model.
+  // The cast is type-only: the tutor's tools have specific input schemas, and
+  // the validator's `tools` parameter is invariant in that input type, so a
+  // concrete tool set is not assignable to it. Mobile's stricter tsconfig
+  // rejects it without this; the value passed is unchanged.
+  const validated = await safeValidateUIMessages({
+    messages,
+    tools: tutorAgent.tools as Parameters<typeof safeValidateUIMessages>[0]["tools"],
+  });
+  if (!validated.success) {
+    return c.json(
+      {
+        error: "bad_request",
+        message:
+          "messages[] must be UIMessage objects with an `id` and a `parts` array.",
+        detail: validated.error.message,
+      },
+      400,
+    );
+  }
+
+  const who = await identify(c);
+  const spend = await consume(who.subject, who.plan, "tutor_turn");
+  if (!spend.consumed) {
+    return c.json(
+      {
+        error: "quota_exceeded",
+        message: who.userId
+          ? refusalMessage(spend, who.plan)
+          : `Anonymous visitors get ${spend.limit} tutor questions. Sign in for the free plan's monthly allowance.`,
+        limit: spend.limit,
+        used: spend.used,
+        remaining: spend.remaining,
+        resets_at: spend.resets_at,
+        plan: who.plan,
+        signed_in: Boolean(who.userId),
+      },
+      429,
+    );
+  }
+
+  return createAgentUIStreamResponse({ agent: tutorAgent, uiMessages: validated.data });
 });
 
 export default app;

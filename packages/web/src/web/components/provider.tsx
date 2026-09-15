@@ -18,5 +18,13 @@ export function Provider({ children }: ProviderProps) {
     void authClient.managedAuth.handleRedirect();
   }, []);
 
+  /*
+    No billing provider here any more.
+    Billing used to need its own React context so a client SDK could talk to
+    the provider from the browser. Paystack checkout is opened by the server
+    (billing.checkout returns an authorization_url) and verified by the server,
+    so the browser holds no billing credentials and needs no billing context —
+    just the query client, like every other feature.
+  */
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

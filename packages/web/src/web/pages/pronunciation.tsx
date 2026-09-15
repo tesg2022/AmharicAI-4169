@@ -17,6 +17,7 @@ import {
   Translit,
 } from "../components/ui/kit";
 import { speakAmharic, type VoiceMode } from "../lib/speech";
+import { useSeo } from "../hooks/use-seo";
 
 /**
  * Amharic Pronunciation for English Speakers — ለእንግሊዝኛ ተናጋሪዎች የአማርኛ አነባበብ
@@ -159,6 +160,13 @@ export default function PronunciationPage() {
   const drills = usePronunciationDrills();
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("sounds");
   const [mode, setMode] = useState<VoiceMode>("native");
+
+  useSeo({
+    title: "Amharic pronunciation for English speakers",
+    description:
+      "Ejectives, minimal pairs and the sounds English does not have — each Amharic sound with IPA, mouth position and the trap that catches English speakers.",
+    path: "/pronunciation",
+  });
 
   if (guide.isLoading) return <Loading label="Loading the pronunciation guide…" />;
   if (guide.isError)

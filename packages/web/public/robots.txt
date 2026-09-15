@@ -1,0 +1,14 @@
+# AmharicAI — https://amharicai.org
+# The public pages are the course's shop window. Everything behind a session is
+# either useless to a crawler or actively private, so it is kept out by path
+# rather than relying on a meta tag a client-rendered page may write too late.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /account
+Disallow: /progress
+Disallow: /subscription
+Disallow: /sign-in
+
+Sitemap: https://amharicai.org/sitemap.xml

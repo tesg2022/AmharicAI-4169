@@ -2,27 +2,21 @@ import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { FontSize, Radius } from "@/constants/theme";
+import { FontSize } from "@/constants/theme";
 import { useColors } from "@/hooks/use-colors";
 import { useSession } from "@/hooks/use-session";
 import { t } from "@/i18n/messages";
 import { usePreview, type PreviewPlan } from "@/lib/preview-plan";
-import {
-  failureBlockers,
-  failureMessage,
-  useCheckout,
-  useEntitlements,
-} from "@/queries/catalog";
+import { failureMessage, useEntitlements } from "@/queries/catalog";
+import { PaidPlans } from "@/components/paid-plans";
 import {
   Am,
   Body,
   Button,
   Card,
-  Chip,
   ErrorState,
   Loading,
   ScreenHeader,
-  Title,
 } from "@/components/ui";
 
 /**
@@ -30,13 +24,7 @@ import {
  *
  * Two things this screen refuses to do:
  *
- *  1. Pretend it can charge. The Autumn billing integration is not wired into
- *     this build, so checkout fails and reports that as the real blocker. The
- *     notice above the buttons says so before anyone taps. (The older copy
- *     here also claimed there was no account store to record a subscription
- *     against — that stopped being true when accounts landed, and a stale
- *     honesty notice is just another false statement.)
- *  2. Sell a capability that does not exist. A plan can GRANT a feature while
+ *  1. Sell a capability that does not exist. A plan can GRANT a feature while
  *     the feature is `coming_soon` (custom voice, speaking feedback),
  *     `preview` (AI tutor) or `not_configured` (TTS host, translation key).
  *     The server folds the grant axis and the capability axis into one
@@ -44,10 +32,15 @@ import {
  *     screen cannot word it differently from the website. `coming_soon` is
  *     reported ahead of `plan_gated` on purpose: never invite an upgrade for
  *     something that does not exist.
- *  3. Offer a preview switch to somebody who is signed in. The server resolves
+ *  2. Offer a preview switch to somebody who is signed in. The server resolves
  *     a signed-in learner's plan from their session and ignores the switch
- *     entirely, so those buttons would do nothing at all. They are replaced by
- *     a link to the real plan screen.
+ *     entirely, so those buttons would do nothing at all.
+ *
+ * It used to refuse a third thing — to pretend it could charge — with a notice
+ * saying billing was not wired into this build. That notice outlived its
+ * truth: Paystack is connected, checkout opens, and a card is charged. A stale
+ * honesty notice is just another false statement, so it is gone and the real
+ * state of checkout now comes from `billing.catalogue`, which knows.
  */
 
 type CapabilityStatus = "available" | "preview" | "coming_soon" | "not_configured";
@@ -140,10 +133,9 @@ export default function PricingScreen() {
   const { plan, setPlan, locale, toggleLocale } = usePreview();
   const { isSignedIn } = useSession();
   const me = useEntitlements();
-  const checkout = useCheckout();
 
-  const plans = me.data?.plans ?? [];
   const features = (me.data?.features ?? []) as Feature[];
+  const previewPlans = me.data?.plans ?? [];
 
   return (
     <SafeAreaView
@@ -173,155 +165,73 @@ export default function PricingScreen() {
           contentContainerStyle={{ padding: 20, gap: 14, paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          {/* Stated BEFORE the buttons, not after a failed tap. */}
-          <View
-            style={{
-              backgroundColor: colors.accent + "22",
-              borderLeftWidth: 3,
-              borderLeftColor: colors.warning,
-              borderRadius: 10,
-              padding: 12,
-              gap: 4,
-            }}
-          >
-            <Body size={FontSize.small} bold color={colors.warning}>
-              Nothing here can be purchased yet
-            </Body>
-            <Body size={FontSize.caption} color={colors.foreground}>
-              Payment is not connected: the Autumn billing integration is not wired into this
-              build, so no plan on this screen can be bought. Tapping a subscribe button will tell
-              you exactly what is missing, and nothing is charged.
-            </Body>
-            <Body size={FontSize.caption} color={colors.foreground}>
-              {isSignedIn
-                ? "You are signed in, so your plan is resolved on the server from your account and the preview switch is ignored. Open Your plan to see what you actually hold, or to redeem an access code."
-                : "The plan switch below only previews how the app gates content. It grants nothing, and it is ignored once you sign in."}
-            </Body>
-            {isSignedIn ? (
+          {/* Who the purchase would belong to, said before anyone taps. A
+              subscription has to have an owner, so a signed-out tap is refused
+              by the server — better to know now. */}
+          {isSignedIn ? (
+            <Button
+              label="Your plan"
+              variant="secondary"
+              icon="ribbon-outline"
+              onPress={() => router.push("/subscription")}
+              style={{ alignSelf: "flex-start" }}
+            />
+          ) : (
+            <View
+              style={{
+                backgroundColor: colors.accent + "22",
+                borderLeftWidth: 3,
+                borderLeftColor: colors.primary,
+                borderRadius: 10,
+                padding: 12,
+                gap: 4,
+              }}
+            >
+              <Body size={FontSize.small} bold>
+                Sign in before you buy
+              </Body>
+              <Body size={FontSize.caption} color={colors.foreground}>
+                A subscription belongs to an account, so there is nothing to attach one to yet.
+                Checkout will say the same thing if you try — nothing is charged.
+              </Body>
               <Button
-                label="Your plan"
+                label="Sign in"
+                icon="log-in-outline"
                 variant="secondary"
-                icon="ribbon-outline"
-                onPress={() => router.push("/subscription")}
+                onPress={() => router.push("/sign-in")}
                 style={{ alignSelf: "flex-start", marginTop: 4 }}
               />
-            ) : null}
-          </View>
+            </View>
+          )}
 
-          {plans.map((p) => {
-            const isCurrent = p.id === plan;
-            return (
-              <Card
-                key={p.id}
-                style={{
-                  gap: 10,
-                  borderColor: isCurrent ? colors.primary : colors.border,
-                  borderWidth: isCurrent ? 2 : 1,
-                }}
-              >
-                <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 10 }}>
-                  <View style={{ flex: 1 }}>
-                    <Title size={FontSize.h3}>{p.name_en}</Title>
-                    <Am size={FontSize.small} color={colors.primary}>
-                      {p.name_am}
-                    </Am>
-                  </View>
-                  <View style={{ alignItems: "flex-end" }}>
-                    <Title size={FontSize.h2}>
-                      {p.price_usd_month === 0 ? "Free" : `$${p.price_usd_month.toFixed(2)}`}
-                    </Title>
-                    {p.price_usd_month > 0 ? (
-                      <Body size={FontSize.caption} color={colors.mutedForeground}>
-                        {t(locale, "perMonth")}
-                      </Body>
-                    ) : null}
-                  </View>
-                </View>
+          {/* Prices, terms and checkout — the same block Your plan renders, so
+              the two screens cannot quote different numbers. */}
+          <PaidPlans />
 
-                <Body size={FontSize.small} color={colors.mutedForeground}>
-                  {p.tagline_en}
-                </Body>
-
-                <View style={{ flexDirection: "row", gap: 6, flexWrap: "wrap" }}>
-                  <Chip
-                    label={
-                      p.max_units === null
-                        ? "Every written unit"
-                        : `Units 1-${p.max_units} only`
-                    }
-                    icon="book-outline"
+          {/* The preview switch grants nothing and is ignored once signed in,
+              so it is only offered to people it can actually do something
+              for: anonymous readers deciding what to buy. */}
+          {isSignedIn ? null : (
+            <Card tone="muted" style={{ gap: 10 }}>
+              <Body size={FontSize.small} bold>
+                Look around first
+              </Body>
+              <Body size={FontSize.caption} color={colors.mutedForeground}>
+                {t(locale, "previewNote")}
+              </Body>
+              <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+                {previewPlans.map((p) => (
+                  <Button
+                    key={p.id}
+                    label={p.id === plan ? `${p.name_en} ✓` : p.name_en}
+                    variant={p.id === plan ? "primary" : "secondary"}
+                    icon="eye-outline"
+                    onPress={() => setPlan(p.id as PreviewPlan)}
                   />
-                  <Chip
-                    label={
-                      p.tts_per_day === null
-                        ? "Unmetered listening · not enforced yet"
-                        : `${p.tts_per_day} listens/day · not enforced yet`
-                    }
-                    icon="volume-medium-outline"
-                  />
-                </View>
-
-                <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                  {isSignedIn ? null : isCurrent ? (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: 6,
-                        paddingHorizontal: 14,
-                        paddingVertical: 10,
-                        borderRadius: Radius.pill,
-                        backgroundColor: colors.muted,
-                      }}
-                    >
-                      <Ionicons name="eye-outline" size={15} color={colors.foreground} />
-                      <Body size={FontSize.small} medium>
-                        {t(locale, "current")}
-                      </Body>
-                    </View>
-                  ) : (
-                    <Button
-                      label={`Preview as ${p.name_en}`}
-                      variant="secondary"
-                      icon="eye-outline"
-                      onPress={() => setPlan(p.id as PreviewPlan)}
-                    />
-                  )}
-                  {p.price_usd_month > 0 ? (
-                    <Button
-                      label="Try to subscribe"
-                      variant="ghost"
-                      icon="card-outline"
-                      loading={checkout.isPending && checkout.variables?.plan === p.id}
-                      onPress={() => checkout.mutate({ plan: p.id })}
-                    />
-                  ) : null}
-                </View>
-              </Card>
-            );
-          })}
-
-          {checkout.isError ? (
-            <Card style={{ gap: 8, borderColor: colors.destructive }}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                <Ionicons name="close-circle-outline" size={18} color={colors.destructive} />
-                <Body size={FontSize.small} bold color={colors.destructive}>
-                  Nothing was charged
-                </Body>
+                ))}
               </View>
-              <Body size={FontSize.small}>{failureMessage(checkout.error)}</Body>
-              {failureBlockers(checkout.error).map((blocker, i) => (
-                <View key={`b-${i}`} style={{ flexDirection: "row", gap: 8 }}>
-                  <Body size={FontSize.caption} color={colors.mutedForeground}>
-                    •
-                  </Body>
-                  <Body size={FontSize.caption} color={colors.mutedForeground} style={{ flex: 1 }}>
-                    {blocker}
-                  </Body>
-                </View>
-              ))}
             </Card>
-          ) : null}
+          )}
 
           <Card tone="muted" style={{ gap: 10 }}>
             <Body size={FontSize.small} bold>
@@ -339,11 +249,6 @@ export default function PricingScreen() {
             ) : (
               <Body size={FontSize.caption} color={colors.mutedForeground}>
                 {t(locale, "stateLegend")}
-              </Body>
-            )}
-            {isSignedIn ? null : (
-              <Body size={FontSize.caption} color={colors.mutedForeground}>
-                {t(locale, "previewNote")}
               </Body>
             )}
           </Card>

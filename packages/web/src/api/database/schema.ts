@@ -752,5 +752,112 @@ export const accessCodeAttempts = sqliteTable(
   (t) => [index("idx_code_attempts_user_time").on(t.userId, t.createdAt)],
 );
 
+/* ---------------------------------------------------------- usage metering */
+
+/** Metered resources. Each one costs the operator real money per call. */
+export const METERS = ["tutor_turn", "tts_synthesis", "translate_request"] as const;
+export type Meter = (typeof METERS)[number];
+
+/**
+ * One counter per (subject, meter, period). This is the server-side quota
+ * ledger and the only thing standing between the AI provider bill and a bad
+ * actor with a loop, so it is written on the request path, not asynchronously.
+ *
+ * `subject` is the user id for a signed-in caller. Anonymous callers are keyed
+ * by a salted hash of their client address instead — never the raw address,
+ * which is personal data we have no reason to retain.
+ *
+ * `period` is the bucket label, not a timestamp: "2026-09" for monthly meters
+ * and "2026-09-12" for daily ones. Making it a string means the reset is a key
+ * change rather than a scheduled job that can fail to run.
+ *
+ * The unique index is the concurrency control: two simultaneous requests race
+ * to insert, one loses, and the loser falls back to an atomic increment. A
+ * read-then-write would let a burst of parallel calls all pass the same check.
+ */
+export const usageCounters = sqliteTable(
+  "usage_counters",
+  {
+    id: text("id").primaryKey(),
+    subject: text("subject").notNull(),
+    subjectKind: text("subject_kind").$type<"user" | "anon">().notNull(),
+    meter: text("meter").$type<Meter>().notNull(),
+    period: text("period").notNull(),
+    count: integer("count").notNull().default(0),
+    /** The plan in force when the bucket was opened — for support, not for gating. */
+    planAtOpen: text("plan_at_open"),
+    firstAt: integer("first_at", { mode: "timestamp" }).notNull().default(now),
+    lastAt: integer("last_at", { mode: "timestamp" }).notNull().default(now),
+  },
+  (t) => [
+    uniqueIndex("usage_counter_bucket").on(t.subject, t.meter, t.period),
+    index("idx_usage_last").on(t.lastAt),
+  ],
+);
+
+/* ------------------------------------------------------- account deletion */
+
+export const DELETION_STATUS = ["pending", "completed", "cancelled"] as const;
+export type DeletionStatus = (typeof DELETION_STATUS)[number];
+
+/**
+ * Account-deletion requests.
+ *
+ * Google Play requires an in-app route to delete the account *and* its data,
+ * so deletion here is real: the learner's rows are removed, not flagged. This
+ * table is the audit trail of that having happened, and it deliberately keeps
+ * no personal data — only the opaque user id, so a later "did you actually
+ * delete me" question can be answered without retaining what was deleted.
+ *
+ * A grace window exists because deletion is irreversible and an angry tap at
+ * midnight is not informed consent. `executeAfter` is when the purge may run;
+ * the user can cancel by signing in before then.
+ */
+export const accountDeletions = sqliteTable(
+  "account_deletions",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    status: text("status").$type<DeletionStatus>().notNull().default("pending"),
+    reason: text("reason"),
+    requestedAt: integer("requested_at", { mode: "timestamp" }).notNull().default(now),
+    executeAfter: integer("execute_after", { mode: "timestamp" }).notNull(),
+    completedAt: integer("completed_at", { mode: "timestamp" }),
+    cancelledAt: integer("cancelled_at", { mode: "timestamp" }),
+    /** Row counts per table, for the audit trail. No content, no personal data. */
+    purged: text("purged", { mode: "json" }).$type<Record<string, number> | null>(),
+  },
+  (t) => [
+    index("idx_deletion_user").on(t.userId),
+    index("idx_deletion_due").on(t.status, t.executeAfter),
+  ],
+);
+
+
+/**
+ * Launch notification list — the only thing /download can honestly offer while
+ * the Android build is not on Google Play.
+ *
+ * Deliberately minimal: an address, where it was typed, and when. No name, no
+ * marketing profile, nothing that would turn a "tell me when it ships" into a
+ * contact record the privacy policy would then have to account for. The email
+ * is stored lowercased and is unique, so a second submission is a no-op rather
+ * than a duplicate send.
+ */
+export const launchSignups = sqliteTable(
+  "launch_signups",
+  {
+    id: text("id").primaryKey(),
+    email: text("email").notNull().unique(),
+    /** Which surface captured it, e.g. "download" — for nothing but attribution. */
+    source: text("source").notNull().default("download"),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(now),
+    /** Set when a launch mail has actually been sent, so nobody is mailed twice. */
+    notifiedAt: integer("notified_at", { mode: "timestamp" }),
+  },
+  (t) => [index("idx_launch_signup_email").on(t.email)],
+);
+
 
 export * from "./auth-schema";
+export * from "./billing-schema";

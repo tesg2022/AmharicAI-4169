@@ -122,7 +122,7 @@ export function DialoguePlayer({ dialogueId, lines }: Props) {
         </span>
 
         <div className="ml-auto">
-          <VoiceModeToggle value={mode} onChange={setMode} />
+          <VoiceModeToggle mode={mode} onChange={setMode} />
         </div>
       </div>
 

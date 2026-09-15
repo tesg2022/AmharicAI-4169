@@ -8,6 +8,7 @@ import {
   Globe,
   LogIn,
   MessageCircle,
+  Smartphone,
   Sparkles,
   Type,
   User,
@@ -16,8 +17,16 @@ import { useSession } from "../hooks/use-session";
 import { useMyProgress } from "../queries/progress";
 import { Am, Chip } from "./ui/kit";
 
-const NAV = [
-  { to: "/", label: "Course", icon: BookOpen },
+interface NavItem {
+  to: string;
+  label: string;
+  icon: typeof BookOpen;
+  amharic?: boolean;
+}
+
+/** Shown once someone is inside the product. */
+const APP_NAV: NavItem[] = [
+  { to: "/app", label: "Course", icon: BookOpen },
   { to: "/fidel", label: "ፊደል", icon: Type, amharic: true },
   { to: "/pronunciation", label: "Pronunciation", icon: AudioLines },
   { to: "/practice", label: "Practice", icon: Sparkles },
@@ -26,10 +35,50 @@ const NAV = [
   { to: "/subscription", label: "Plan", icon: BadgeCheck },
 ];
 
+/** Shown on the public pages, where the job is to explain rather than to study. */
+const MARKETING_NAV: NavItem[] = [
+  { to: "/features", label: "Features", icon: Sparkles },
+  { to: "/pricing", label: "Pricing", icon: BadgeCheck },
+  { to: "/faq", label: "FAQ", icon: MessageCircle },
+  { to: "/download", label: "Get the app", icon: Smartphone },
+];
+
+/**
+ * The public pages. A visitor on one of these gets the marketing nav even when
+ * signed in, because the alternative — a pricing page wearing the study nav —
+ * reads as though they took a wrong turn inside the app.
+ */
+const MARKETING_ROUTES = new Set(["/", "/features", "/pricing", "/faq", "/download"]);
+
+/** Legal pages sit in both worlds; the session decides which nav frames them. */
+const SHARED_ROUTES = new Set(["/privacy", "/terms", "/about", "/contact"]);
+
+const LEGAL_LINKS = [
+  { to: "/features", label: "Features" },
+  { to: "/pricing", label: "Pricing" },
+  { to: "/faq", label: "FAQ" },
+  { to: "/download", label: "Get the app" },
+  { to: "/about", label: "About" },
+  // Play requires the account-deletion path to be reachable on the web without
+  // installing the app, so it lives in the footer of every page.
+  { to: "/account", label: "Account & data" },
+  { to: "/contact", label: "Contact" },
+  { to: "/privacy", label: "Privacy Policy" },
+  { to: "/terms", label: "Terms of Service" },
+];
+
+/** Mirrors OPERATOR.supportEmail in api/content/legal.ts — the source of truth. */
+const SUPPORT_EMAIL = "admin@amharicai.org";
+
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const { isSignedIn, user } = useSession();
   const progress = useMyProgress(isSignedIn);
+
+  const isMarketing =
+    MARKETING_ROUTES.has(location) || (SHARED_ROUTES.has(location) && !isSignedIn);
+  const NAV = isMarketing ? MARKETING_NAV : APP_NAV;
+  const isActive = (to: string) => (to === "/" ? location === "/" : location.startsWith(to));
 
   return (
     <div className="min-h-dvh">
@@ -49,7 +98,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
           <nav className="ml-auto hidden items-center gap-1 md:flex">
             {NAV.map((item) => {
-              const active = item.to === "/" ? location === "/" : location.startsWith(item.to);
+              const active = isActive(item.to);
               return (
                 <Link
                   key={item.to}
@@ -67,6 +116,14 @@ export function Layout({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="ml-auto flex items-center gap-3 md:ml-0">
+            {isSignedIn && isMarketing ? (
+              <Link
+                to="/app"
+                className="hidden rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 sm:inline-flex"
+              >
+                Open the course
+              </Link>
+            ) : null}
             {isSignedIn ? (
               <>
                 <Chip
@@ -98,7 +155,7 @@ export function Layout({ children }: { children: ReactNode }) {
         {/* Mobile nav */}
         <nav className="flex items-center gap-1 overflow-x-auto border-t border-border px-4 py-2 md:hidden">
           {NAV.map((item) => {
-            const active = item.to === "/" ? location === "/" : location.startsWith(item.to);
+            const active = isActive(item.to);
             return (
               <Link
                 key={item.to}
@@ -117,8 +174,29 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <main className="mx-auto max-w-6xl px-5 py-8">{children}</main>
 
-      <footer className="mx-auto max-w-6xl px-5 pb-16 pt-4 text-xs text-muted-foreground">
-        Course content is kept verbatim as written — nothing is silently corrected.
+      {/* The policy links are a Play requirement, not decoration: the privacy
+          policy has to be reachable from inside the app, not only from the
+          store listing. Keep them on every page. */}
+      <footer className="mt-8 border-t border-border">
+        <div className="mx-auto max-w-6xl px-5 pb-16 pt-6 text-xs text-muted-foreground">
+          <nav aria-label="Site links" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {LEGAL_LINKS.map((item) => (
+              <Link key={item.to} to={item.to} className="font-medium hover:text-foreground">
+                {item.label}
+              </Link>
+            ))}
+            <a href={`mailto:${SUPPORT_EMAIL}`} className="font-medium hover:text-foreground">
+              {SUPPORT_EMAIL}
+            </a>
+          </nav>
+          <p className="mt-4 leading-relaxed">
+            Course content is kept verbatim as written — nothing is silently corrected.
+          </p>
+          <p className="mt-1.5">
+            © {new Date().getFullYear()} AmharicAI · Tesfaye Tessema Gintamo · Cape Town, South
+            Africa
+          </p>
+        </div>
       </footer>
     </div>
   );

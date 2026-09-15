@@ -31,6 +31,7 @@ import {
   TibebRule,
   Translit,
 } from "../components/ui/kit";
+import { useSeo } from "../hooks/use-seo";
 
 /**
  * Practice hub: the review deck, pronunciation drills and the word list.
@@ -39,6 +40,13 @@ import {
  */
 
 export default function PracticePage() {
+  useSeo({
+    title: "Practice — quizzes, flashcards and speaking drills",
+    description:
+      "Practise what you have studied: lesson quizzes, spaced-repetition flashcards and speaking drills.",
+    path: "/practice",
+  });
+
   const outline = useOutline();
   const { isSignedIn } = useSession();
   const srs = useSrsSummary(isSignedIn);

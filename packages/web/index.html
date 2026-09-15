@@ -4,8 +4,27 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" href="/favicon.ico" />
-		<meta property="og:image" content="/og-image.png" />
-		<title>Web</title>
+		<!-- Per-page title, description and canonical are written at runtime by
+		     src/web/hooks/use-seo.ts. These are the fallbacks a crawler sees
+		     before any of our code runs, so they describe the site rather than
+		     any one page. og:image must be absolute — a relative path resolves
+		     against the scraper, not against us. -->
+		<title>AmharicAI — Learn Amharic from the ፊደል up</title>
+		<meta
+			name="description"
+			content="Learn Amharic as an English speaker: the ፊደል syllabary, pronunciation built around the sounds English lacks, and a written beginner course with spaced-repetition practice. Free to start."
+		/>
+		<meta property="og:site_name" content="AmharicAI" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="AmharicAI — Learn Amharic from the ፊደል up" />
+		<meta
+			property="og:description"
+			content="The ፊደል syllabary, pronunciation for English speakers, and a written beginner course. Free to start, no card."
+		/>
+		<meta property="og:url" content="https://amharicai.org/" />
+		<meta property="og:image" content="https://amharicai.org/og-image.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link rel="canonical" href="https://amharicai.org/" />
 	</head>
 	<body>
 		<div id="root"></div>

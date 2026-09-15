@@ -6,6 +6,7 @@ import { authClient } from "../lib/auth";
 import { useSession } from "../hooks/use-session";
 import { useClearTutor, useSaveTutorMessage, useTutorHistory } from "../queries/tutor";
 import { Am, Card, Loading, MixedText, TibebRule } from "../components/ui/kit";
+import { useSeo } from "../hooks/use-seo";
 
 /**
  * AI tutor chat.
@@ -42,6 +43,13 @@ function toolLabel(type: string): string | null {
 }
 
 export default function TutorPage() {
+  useSeo({
+    title: "AI Tutor",
+    description:
+      "Ask questions about Amharic grammar, spelling and usage, grounded in the course material.",
+    path: "/tutor",
+  });
+
   const { isSignedIn } = useSession();
   const history = useTutorHistory(isSignedIn);
   const saveMessage = useSaveTutorMessage();

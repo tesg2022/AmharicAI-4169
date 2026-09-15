@@ -15,7 +15,9 @@ import { t } from "@/i18n/messages";
 import { usePreview } from "@/lib/preview-plan";
 import { useSession } from "@/hooks/use-session";
 import { useAccess, useMyRedemptions, useRedeemCode } from "@/queries/access";
-import { failureBlockers, failureMessage, useCheckout } from "@/queries/catalog";
+import { useRefreshEntitlements } from "@/queries/billing";
+import { failureMessage } from "@/queries/catalog";
+import { PaidPlans } from "@/components/paid-plans";
 import {
   Am,
   Body,
@@ -42,11 +44,12 @@ import {
  *     server can set `plan_is_verified`.
  *   - a lapsed access-code grant is stated outright (`expired_notice`), never
  *     silently downgraded.
- *   - checkout cannot charge, so the button reports the real blockers instead
- *     of opening something that fails later.
- *   - Restore Purchases is present because the store requires it, and it says
- *     plainly that there is no purchase mechanism to restore from yet rather
- *     than spinning and pretending to look.
+ *   - checkout is real and is asked for permission first: `billing.preflight`
+ *     answers whether a purchase makes sense, and its refusal is shown as
+ *     written rather than dressed up as a generic error.
+ *   - Restore Purchases is present because the stores require it. It re-reads
+ *     the entitlement from the server, which is the only place a purchase
+ *     exists — it never grants anything itself.
  */
 
 type CapabilityStatus = "available" | "preview" | "coming_soon" | "not_configured";
@@ -73,8 +76,14 @@ const STATE_ICON: Record<FeatureState, keyof typeof Ionicons.glyphMap> = {
   plan_gated: "lock-closed-outline",
 };
 
+/**
+ * Keyed on what the server actually sends. It used to key the paid case on
+ * `paid_subscription`, which `resolvePlan` has never returned — so a paying
+ * subscriber fell through to the default and was told "You are on the Free
+ * plan" underneath their Premium badge.
+ */
 const SOURCE_COPY: Record<string, { label: string; body: string }> = {
-  paid_subscription: {
+  subscription: {
     label: "Paid subscription",
     body: "This plan comes from a subscription the payment provider has confirmed.",
   },
@@ -154,7 +163,7 @@ export default function SubscriptionScreen() {
   const access = useAccess();
   const redemptions = useMyRedemptions(isSignedIn);
   const redeem = useRedeemCode();
-  const checkout = useCheckout();
+  const refreshEntitlements = useRefreshEntitlements();
 
   const [code, setCode] = useState("");
   const [restoreNote, setRestoreNote] = useState(false);
@@ -279,9 +288,9 @@ export default function SubscriptionScreen() {
                   />
                   <Chip
                     label={
-                      currentPlan.tts_per_day === null
-                        ? "Unmetered listening · not enforced yet"
-                        : `${currentPlan.tts_per_day} listens/day · not enforced yet`
+                      currentPlan.quotas.tts_per_day === null
+                        ? "Unmetered listening"
+                        : `${currentPlan.quotas.tts_per_day} listens/day`
                     }
                     icon="volume-medium-outline"
                   />
@@ -406,67 +415,25 @@ export default function SubscriptionScreen() {
               </Card>
             ) : null}
 
-            {/* Paid plans. The button attempts a real checkout and reports the
-                real refusal — it never opens a screen that cannot charge. */}
-            <Card style={{ gap: 12 }}>
-              <Body size={FontSize.small} bold>
-                Paid plans
-              </Body>
-              <Body size={FontSize.caption} color={colors.mutedForeground}>
-                Payment is not connected in this build. Tapping below asks the server and shows
-                exactly what is missing — nothing is charged either way.
-              </Body>
-              {plans
-                .filter((p) => p.price_usd_month > 0)
-                .map((p) => (
-                  <View key={p.id} style={{ gap: 6 }}>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                      <Body size={FontSize.small} medium style={{ flex: 1 }}>
-                        {p.name_en} · ${p.price_usd_month.toFixed(2)}/{t(locale, "perMonth")}
-                      </Body>
-                    </View>
-                    <Button
-                      label={`Upgrade to ${p.name_en}`}
-                      variant="secondary"
-                      icon="card-outline"
-                      loading={checkout.isPending && checkout.variables?.plan === p.id}
-                      onPress={() => checkout.mutate({ plan: p.id })}
-                    />
-                  </View>
-                ))}
+            {/* Paid plans — the same block the Pricing screen renders, from
+                the same `billing.catalogue` call the website uses. Checkout is
+                real: it opens a Paystack payment page, charges a card in
+                rand, and the entitlement comes back from the server — never
+                from this screen. */}
+            <View style={{ gap: 10 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                <Ionicons name="card-outline" size={18} color={colors.primary} />
+                <Body size={FontSize.small} bold>
+                  Paid plans
+                </Body>
+              </View>
+              <PaidPlans />
+            </View>
 
-              {checkout.isError ? (
-                <View
-                  style={{
-                    gap: 6,
-                    borderLeftWidth: 3,
-                    borderLeftColor: colors.destructive,
-                    paddingLeft: 10,
-                  }}
-                >
-                  <Body size={FontSize.small} bold color={colors.destructive}>
-                    Nothing was charged
-                  </Body>
-                  <Body size={FontSize.small}>{failureMessage(checkout.error)}</Body>
-                  {failureBlockers(checkout.error).map((blocker, i) => (
-                    <Body
-                      key={`b-${i}`}
-                      size={FontSize.caption}
-                      color={colors.mutedForeground}
-                    >
-                      • {blocker}
-                    </Body>
-                  ))}
-                  <Body size={FontSize.caption} color={colors.mutedForeground}>
-                    An administrator-issued access code is the only way to hold a paid plan in this
-                    build.
-                  </Body>
-                </View>
-              ) : null}
-            </Card>
-
-            {/* Restore Purchases. Required by the stores, so it exists and is
-                honest about having nothing to restore from yet. */}
+            {/* Restore Purchases. Required by the stores. It does the only
+                honest thing available: re-reads the entitlement from the
+                server, which is where a purchase lives. It cannot grant
+                anything, and it never pretends to have found something. */}
             <Card tone="muted" style={{ gap: 8 }}>
               <Body size={FontSize.small} bold>
                 Restore purchases
@@ -476,19 +443,24 @@ export default function SubscriptionScreen() {
                 variant="secondary"
                 icon="refresh"
                 full
-                onPress={() => setRestoreNote(true)}
+                loading={access.isFetching}
+                onPress={() => {
+                  setRestoreNote(true);
+                  refreshEntitlements();
+                }}
               />
               {restoreNote ? (
-                <Body size={FontSize.caption} color={colors.warning}>
-                  There is nothing to restore. This build has no in-app purchase mechanism, so no
-                  purchase has ever been made through the App Store or Play Store. When purchasing
-                  is added, this button will ask the store for your receipts and re-apply anything
-                  it finds — it will never grant a plan on its own.
+                <Body size={FontSize.caption} color={colors.mutedForeground}>
+                  Your plan has been re-read from the server just now, and the card above is what
+                  it says you hold. Subscriptions are bought by card rather than through the App
+                  Store or Play Store, so there are no store receipts to ask for — a plan is tied
+                  to your account and follows you onto any device you sign in on. If you paid and
+                  nothing changed here, contact support rather than paying again.
                 </Body>
               ) : (
                 <Body size={FontSize.caption} color={colors.mutedForeground}>
-                  If you have bought a subscription on another device, this asks the store to
-                  re-apply it to this account.
+                  Bought a plan on another device? This re-reads your account from the server and
+                  applies whatever it finds.
                 </Body>
               )}
             </Card>

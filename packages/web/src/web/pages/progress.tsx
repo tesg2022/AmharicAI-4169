@@ -14,12 +14,19 @@ import { authClient } from "../lib/auth";
 import { ProtectedRoute } from "../components/protected-route";
 import { SpeechStatusCard } from "../components/speech-status";
 import { Am, Card, Chip, ErrorState, Loading, ProgressBar, TibebRule } from "../components/ui/kit";
+import { useSeo } from "../hooks/use-seo";
 
 /** Learner dashboard: streak, daily goal, XP history, lesson mastery, leaderboard. */
 
 const GOALS = [20, 50, 100, 200];
 
 export default function ProgressPage() {
+  useSeo({
+    title: "Your progress",
+    description: "Your streak, XP and unit mastery.",
+    noIndex: true,
+  });
+
   return (
     <div className="space-y-8">
       <ProtectedRoute message="Your streak, XP and mastery only exist once you have an account.">
@@ -54,7 +61,7 @@ function Dashboard() {
   const days = activity.data ?? [];
   const peak = Math.max(1, ...days.map((d) => d.xp));
   const completed = (lessons.data ?? []).filter(
-    (row) => row.status === "completed" || row.status === "mastered",
+    (row) => row.status === "mastered",
   ).length;
 
   return (

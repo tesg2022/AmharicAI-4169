@@ -6,10 +6,10 @@
     ".": "./src/api/index.ts"
   },
   "scripts": {
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc -b && vite build",
     "dev": "vite",
     "start": "bun src/__server.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -b",
     "preview": "bun run build && vite preview",
     "db:generate": "bun --env-file=../../.env drizzle-kit generate",
     "db:migrate": "bun --env-file=../../.env drizzle-kit migrate",

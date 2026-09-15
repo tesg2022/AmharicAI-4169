@@ -15,6 +15,7 @@ import {
   TibebRule,
   Translit,
 } from "../components/ui/kit";
+import { useSeo } from "../hooks/use-seo";
 
 /**
  * Spaced-repetition review.
@@ -32,6 +33,12 @@ const GRADES = [
 ] as const;
 
 export default function FlashcardsPage() {
+  useSeo({
+    title: "Flashcards",
+    description: "Your spaced-repetition review deck.",
+    noIndex: true,
+  });
+
   return (
     <ProtectedRoute message="Your review deck lives with your account, so it follows you between web and phone.">
       <Deck />
@@ -74,7 +81,7 @@ function Deck() {
           }
           action={
             <Link
-              to="/"
+              to="/app"
               className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
             >
               Browse lessons

@@ -1,8 +1,8 @@
 {
     "id": "website",
-    "name": "Runable",
-    "description": "A template for building a React application with Vite, Hono, and Cloudflare Workers",
-    "url": "https://example.com",
+    "name": "AmharicAI",
+    "description": "Learn Amharic from the ፊደል up — the syllabary, pronunciation for English speakers, and a written beginner course.",
+    "url": "https://amharicai.org",
     "hostname": "xyz.runable.site",
     "port": 8080
 }

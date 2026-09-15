@@ -10,6 +10,9 @@ import {
 } from "../content/course-model";
 import {
   entitlements,
+  entryPrice,
+  formatApproxUsd,
+  formatZar,
   planById,
   planFromInput,
   unitAccess,
@@ -136,8 +139,8 @@ export const catalog = {
       });
       if (plan === "free") {
         throw new ORPCError("FORBIDDEN", {
-          message: "Translating your own text is included from the Learner plan.",
-          data: { reason: "plan_required", required_plan: "learner" as PlanId },
+          message: "Translating your own text is included from the Basic plan.",
+          data: { reason: "plan_required", required_plan: "basic" as PlanId },
         });
       }
 
@@ -189,11 +192,16 @@ export const catalog = {
   /**
    * Checkout. A deliberate refusal, not a fake stub.
    *
-   * The account store now exists, so that blocker is gone and is no longer
-   * claimed. What remains is genuine: no payment provider is configured, and
-   * the managed billing layer is Autumn, so a key alone is not the whole job.
-   * Until then the only way to hold a paid plan is an administrator-issued
-   * access code, which is stated here rather than left for the user to guess.
+   * This is the OLD checkout procedure, kept only because older mobile builds
+   * still call it. It has never taken a payment and must not start now: real
+   * checkout is `billing.checkout`, which creates a Paystack transaction and
+   * returns an authorization URL, and duplicating that here would be a second
+   * way to charge somebody — written once, maintained never.
+   *
+   * So it refuses, and the refusal explains itself with the live price and
+   * where to buy. When no Paystack key is configured at all it says that
+   * instead, because "not available in the app" and "this deployment cannot
+   * take payments" are different problems with different answers.
    */
   checkout: withUser
     .input(z.object({ plan: z.string() }))
@@ -208,10 +216,27 @@ export const catalog = {
 
       const billing = billingStatus();
       const blockers = billing.blockers;
+      const entry = entryPrice(target);
+      const priceNote = entry
+        ? `${planById(target).name_en} starts at ${formatZar(entry.price_zar)} (${formatApproxUsd(entry.price_zar)}, approximate — billed in ZAR).`
+        : `${planById(target).name_en} has no purchasable option configured.`;
 
+      /**
+       * Paystack checkout lives on the website (billing.checkout), which needs
+       * a browser to complete the hosted payment page and a callback URL to
+       * return to. The mobile client has neither wired yet, so this stays a
+       * refusal rather than returning a URL the app cannot finish. It reports
+       * the real ZAR price so the app can still show what a plan costs, and it
+       * never implies a charge was attempted.
+       */
       throw new ORPCError("SERVICE_UNAVAILABLE", {
-        message: `Payment is not connected, so nothing was charged. ${planById(target).name_en} costs $${planById(target).price_usd_month.toFixed(2)}/month once billing is wired.`,
-        data: { reason: "payment_not_configured", blockers },
+        message: billing.key_present
+          ? `In-app purchase is not available yet, so nothing was charged. ${priceNote} Please subscribe on the website.`
+          : `Payment is not connected, so nothing was charged. ${priceNote}`,
+        data: {
+          reason: billing.key_present ? "checkout_not_available_on_mobile" : "payment_not_configured",
+          blockers,
+        },
       });
     }),
 };

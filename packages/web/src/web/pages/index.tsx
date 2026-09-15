@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, CheckCircle2, Flame, GraduationCap, Layers, Spark
 import { useCourseStats, useOutline } from "../queries/content";
 import { useLessonProgress, useMyProgress } from "../queries/progress";
 import { useSession } from "../hooks/use-session";
+import { useSeo } from "../hooks/use-seo";
 import { Am, Card, Chip, ErrorState, Loading, ProgressBar, TibebRule } from "../components/ui/kit";
 
 /**
@@ -18,9 +19,16 @@ export default function IndexPage() {
   const progress = useMyProgress(isSignedIn);
   const lessonProgress = useLessonProgress(isSignedIn);
 
+  useSeo({
+    title: "The course — every unit, lesson by lesson",
+    description:
+      "Browse the AmharicAI beginner course: the ፊደል syllabary, pronunciation, vocabulary and grammar, unit by unit.",
+    path: "/app",
+  });
+
   const doneIds = new Set(
     (lessonProgress.data ?? [])
-      .filter((row) => row.status === "completed" || row.status === "mastered")
+      .filter((row) => row.status === "mastered")
       .map((row) => row.lessonId),
   );
 

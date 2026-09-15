@@ -207,3 +207,37 @@ allows exactly one error — the 403 from the gate it deliberately closes — an
   no purchase mechanism to restore from yet.
 
 Next: Stage C, the Nuxt BFF integration (`/home/user/gh/AmharicAI`).
+
+## User manual (documentation round)
+
+Written to `/home/user/amharicai-manual.report/content.md` (~3,780 words, 6-8 pages), Markdown per
+the report skill ("user manual" is a document, not DOCX/PDF).
+
+Audience split: learners (sign in, plan page, redeem, refusal reference) + administrator
+(ADMIN_EMAILS/ACCESS_CODE_PEPPER prerequisites, status cards, issue form field-by-field,
+revoke-code vs revoke-grant, the 0.02% residual-risk figure, the iOS App Review risk).
+
+Sources: repo code + driving the live servers. No web research (the repos are authoritative).
+12 real Playwright screenshots in `images/`, captured 2026-09-08 against :4200 / :4300 / :3000,
+9 of them referenced by absolute path. The capture ran a genuine end-to-end flow: admin issued a
+Premium code (852939) -> fresh learner `manual1788833374@amharicai.test` redeemed it -> Premium /
+Verified / 30 days left -> same grant visible on mobile with no second redemption -> that learner
+opening /admin gets the honest "Not an administrator" page naming ADMIN_EMAILS.
+
+Recaptured the admin page as clipped sections: the full-page shot was 5802px tall, dominated by
+~30 leftover smoke-test codes, so the issue form and the once-only plaintext were an unreadable
+sliver. `web-admin-status.png` (viewport) + `web-admin-issue-form.png` (section clip) replace it.
+A second code (336073, learner/60d/5 redemptions) was issued for that shot and is live in the
+local DB.
+
+The Note field in `web-admin-issue-form.png` shows its grey placeholder, not typed text - the fill
+did not take. Not captioned as filled.
+
+Two follow-ups noticed while writing, both recorded in the manual's closing section, neither fixed:
+1. `packages/web/src/api/content/plans.ts` header comment still claims the active plan is "a
+   client-side preview switch, not an entitlement" - untrue since Stage A.
+2. Nuxt `server/api/billing/checkout.post.ts` still emits the dead "there is no account store yet"
+   blocker (already fixed on web and mobile). Belongs to Stage C item 7.
+
+Stage C remains untouched: `server/utils/managed.ts` is still the single uncommitted, uncompiled
+file in /home/user/gh/AmharicAI.

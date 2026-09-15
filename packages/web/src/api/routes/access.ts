@@ -12,6 +12,7 @@ import {
 import {
   hashCode,
   hashesEqual,
+  isUniqueViolation,
   isWellFormedCode,
   pepperConfig,
 } from "../entitlements/codes";
@@ -278,6 +279,15 @@ export const access = {
           .update(accessCodes)
           .set({ redemptionCount: sql`${accessCodes.redemptionCount} - 1` })
           .where(eq(accessCodes.id, code.id));
+        // The unique (code_id, user_id) index firing means this account
+        // redeemed the same code twice at once and lost the race. That is not
+        // a server fault, so say what happened instead of throwing a 500.
+        if (isUniqueViolation(error)) {
+          throw new ORPCError("CONFLICT", {
+            message: "You have already redeemed this code.",
+            data: { reason: "already_redeemed" },
+          });
+        }
         throw error;
       }
 

@@ -88,3 +88,26 @@ export function hashesEqual(a: string, b: string): boolean {
   if (left.length !== right.length || left.length === 0) return false;
   return timingSafeEqual(left, right);
 }
+
+/**
+ * Whether a thrown database error is a uniqueness violation.
+ *
+ * This walks the cause chain rather than testing the top-level message,
+ * because Drizzle wraps the driver error in a plain `Error: Failed query: …`
+ * that mentions neither UNIQUE nor constraint. Matching only the outer
+ * message — which this codebase used to do — silently never matched, so a
+ * code-hash collision surfaced as a 500 instead of being retried, and a
+ * double redemption as a 500 instead of "you already redeemed this".
+ */
+export function isUniqueViolation(error: unknown): boolean {
+  let current: unknown = error;
+  for (let depth = 0; current && depth < 6; depth++) {
+    const err = current as { message?: unknown; code?: unknown; cause?: unknown };
+    const code = typeof err.code === "string" ? err.code : "";
+    const message = typeof err.message === "string" ? err.message : "";
+    if (code.startsWith("SQLITE_CONSTRAINT")) return true;
+    if (/UNIQUE constraint failed/i.test(message)) return true;
+    current = err.cause;
+  }
+  return false;
+}

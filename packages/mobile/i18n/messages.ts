@@ -20,19 +20,19 @@ export const MESSAGES = {
     notWritten: "Coming soon",
     notWrittenBody:
       "Coming soon — not yet written. This unit is advertised scope only: it has a title and a key phrase, and no lessons have been written for it yet. It is not locked and no plan unlocks it; there is nothing behind it yet.",
-    planRequired: "Included from the Learner plan",
+    planRequired: "Included from the Basic plan",
     upgrade: "See plans",
     pricing: "Plans",
     pricingSubtitle: "What each plan includes — and what does not exist yet",
     translate: "Translate",
     translateSubtitle: "Free text, English and Amharic",
-    translateGate: "Translating your own text is included from the Learner plan.",
+    translateGate: "Translating your own text is included from the Basic plan.",
     translateCta: "Translate",
     translatePlaceholder: "Type the text to translate",
     plan: "Plan",
     preview: "preview",
     previewNote:
-      "The plan is a preview switch on this device, not a subscription. There are no accounts in this build.",
+      "This switch only previews what each plan looks like on this device. It is not a subscription and it is ignored once you sign in — your real plan then comes from your account.",
     granted: "Included",
     notIncluded: "Not included",
     stateLegend:
@@ -40,9 +40,9 @@ export const MESSAGES = {
     // Prefixed onto a capability caveat when the plan is what blocks the
     // feature, so "needs a higher plan" is never read as "upgrading fixes it".
     evenThen: "Even on a higher plan:",
-    progressNotTracked: "Progress is not tracked",
+    progressNotTracked: "Sign in to track your progress",
     progressNotTrackedBody:
-      "This build has no accounts and stores nothing about you, so there are no completions, scores or streaks to show. An empty list here is not zero progress — nothing is being recorded at all.",
+      "Completions, XP and streaks are recorded on your account. Signed out, nothing is stored and nothing is shown — an empty list here is not zero progress, it is no account to record it against.",
     perMonth: "/month",
     choose: "Choose",
     current: "Current preview plan",
@@ -65,27 +65,27 @@ export const MESSAGES = {
     notWritten: "በቅርቡ ይመጣል",
     notWrittenBody:
       "በቅርቡ ይመጣል — እስካሁን አልተጻፈም። ይህ ምዕራፍ ርዕስና ቁልፍ ሐረግ ብቻ አለው፤ ትምህርቶቹ እስካሁን አልተጻፉም። አልተቆለፈም፤ የሚከፍተው ዕቅድም የለም — እስካሁን ከኋላው ምንም የለም።",
-    planRequired: "ከተማሪ ዕቅድ ጀምሮ ይካተታል",
+    planRequired: "ከመሠረታዊ ዕቅድ ጀምሮ ይካተታል",
     upgrade: "ዕቅዶችን ይመልከቱ",
     pricing: "ዕቅዶች",
     pricingSubtitle: "እያንዳንዱ ዕቅድ የያዘው — እና እስካሁን የሌለው",
     translate: "ተርጉም",
     translateSubtitle: "ነጻ ጽሑፍ፣ እንግሊዝኛና አማርኛ",
-    translateGate: "የራስዎን ጽሑፍ መተርጎም ከተማሪ ዕቅድ ጀምሮ ይካተታል።",
+    translateGate: "የራስዎን ጽሑፍ መተርጎም ከመሠረታዊ ዕቅድ ጀምሮ ይካተታል።",
     translateCta: "ተርጉም",
     translatePlaceholder: "የሚተረጎመውን ጽሑፍ ይጻፉ",
     plan: "ዕቅድ",
     preview: "ቅድመ-ዕይታ",
     previewNote:
-      "ዕቅዱ በዚህ መሣሪያ ላይ የቅድመ-ዕይታ ማብሪያ ነው፣ ክፍያ የተከፈለበት አይደለም። በዚህ ግንባታ ውስጥ መለያዎች የሉም።",
+      "ይህ ማብሪያ እያንዳንዱ ዕቅድ እንዴት እንደሚታይ በዚህ መሣሪያ ላይ ብቻ ያሳያል። ክፍያ የተከፈለበት አይደለም፤ ከገቡ በኋላም ችላ ይባላል — እውነተኛው ዕቅድዎ ከመለያዎ ይመጣል።",
     granted: "ተካትቷል",
     notIncluded: "አልተካተተም",
     stateLegend:
       "«ይሠራል» ማለት አሁን ይሠራል። «በቅድመ እይታ» ማለት ተገንብቷል ግን ሙሉ በሙሉ አልተፈተነም፤ ውጤቱን እንደ ረቂቅ ይያዙት። «በቅርቡ ይመጣል» ማለት በዚህ ግንባታ ውስጥ የለም፤ የሚከፍተው ዕቅድም የለም። «አልተዘጋጀም» ማለት ኮዱ አለ ግን ለዚህ ማሰማራት ቁልፍ ወይም አገልጋይ አልተሰጠም። «ከፍ ያለ ዕቅድ ያስፈልጋል» ማለት ነገሩ አለ ግን ዕቅድዎ አልያዘውም።",
     evenThen: "በከፍ ያለ ዕቅድም እንኳ፦",
-    progressNotTracked: "እድገት አይመዘገብም",
+    progressNotTracked: "እድገትዎን ለመመዝገብ ይግቡ",
     progressNotTrackedBody:
-      "በዚህ ግንባታ ውስጥ መለያዎች የሉም፤ ስለ እርስዎ ምንም አይቀመጥም። በመሆኑም የተጠናቀቁ ትምህርቶች፣ ነጥቦች ወይም ተከታታይ ቀናት አይታዩም። ባዶ መሆኑ ዜሮ እድገት ማለት አይደለም — ምንም አይመዘገብም።",
+      "የተጠናቀቁ ትምህርቶች፣ ነጥቦችና ተከታታይ ቀናት በመለያዎ ላይ ይመዘገባሉ። ሳይገቡ ምንም አይቀመጥም፤ ምንም አይታይም — ባዶ መሆኑ ዜሮ እድገት ማለት አይደለም፣ የሚመዘገብበት መለያ የለም ማለት ነው።",
     perMonth: "/ወር",
     choose: "ይምረጡ",
     current: "የአሁኑ የቅድመ-ዕይታ ዕቅድ",

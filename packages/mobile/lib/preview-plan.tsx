@@ -13,7 +13,7 @@ import { createContext, useContext, useMemo, useState, type ReactNode } from "re
  * saved account state. It resets to Free on reload.
  */
 
-export type PreviewPlan = "free" | "learner" | "premium";
+export type PreviewPlan = "free" | "basic" | "premium";
 export type Locale = "en" | "am";
 
 interface PreviewState {

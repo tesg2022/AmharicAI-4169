@@ -26,6 +26,7 @@ import {
   TibebRule,
   Translit,
 } from "../components/ui/kit";
+import { useSeo } from "../hooks/use-seo";
 
 /**
  * One lesson, rendered source-faithfully.
@@ -49,6 +50,17 @@ export default function LessonPage() {
   const completeLesson = useCompleteLesson();
   const addDeck = useAddLessonToDeck();
   const [deckMessage, setDeckMessage] = useState<string | null>(null);
+
+  // Written before the early returns: hooks cannot sit behind a loading branch,
+  // and the lesson title arrives a tick later than the route does.
+  useSeo({
+    title: lesson.data?.lesson.titleEn ?? "Lesson",
+    description:
+      lesson.data?.unit.titleEn
+        ? `${lesson.data.lesson.titleEn} — vocabulary, grammar and dialogue from ${lesson.data.unit.titleEn}.`
+        : "An AmharicAI lesson: vocabulary, grammar, verbs and dialogue.",
+    path: lessonId ? `/lesson/${lessonId}` : undefined,
+  });
 
   if (lesson.isLoading) return <Loading label="Loading the lesson…" />;
   if (lesson.isError)
@@ -74,7 +86,7 @@ export default function LessonPage() {
       <header className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
           <Link
-            to="/"
+            to="/app"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="size-4" /> Course
