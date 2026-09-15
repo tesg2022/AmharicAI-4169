@@ -41,11 +41,18 @@ export interface Seo {
   path?: string;
   /** Keep search engines off account-only screens. */
   noIndex?: boolean;
+  /**
+   * Use `title` verbatim instead of appending " · AmharicAI". For the homepage,
+   * where the brand token has to lead the title so search results read
+   * "AmharicAI — ..." rather than burying the brand at the end.
+   */
+  exactTitle?: boolean;
 }
 
-export function useSeo({ title, description, path, noIndex }: Seo) {
+export function useSeo({ title, description, path, noIndex, exactTitle }: Seo) {
   useEffect(() => {
-    const full = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
+    const full =
+      exactTitle || title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
     document.title = full;
 
     upsertMeta('meta[name="description"]', "name", "description", description);
@@ -71,6 +78,9 @@ export function useSeo({ title, description, path, noIndex }: Seo) {
     if (path) {
       upsertLink("canonical", `${ORIGIN}${path}`);
       upsertMeta('meta[property="og:url"]', "property", "og:url", `${ORIGIN}${path}`);
+      // Stated explicitly rather than left to fall back to og:url, so the card
+      // URL can never resolve against a non-canonical host.
+      upsertMeta('meta[name="twitter:url"]', "name", "twitter:url", `${ORIGIN}${path}`);
     }
-  }, [title, description, path, noIndex]);
+  }, [title, description, path, noIndex, exactTitle]);
 }

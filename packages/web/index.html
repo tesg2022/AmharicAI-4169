@@ -9,14 +9,14 @@
 		     before any of our code runs, so they describe the site rather than
 		     any one page. og:image must be absolute — a relative path resolves
 		     against the scraper, not against us. -->
-		<title>AmharicAI — Learn Amharic from the ፊደል up</title>
+		<title>AmharicAI — Learn Amharic with AI</title>
 		<meta
 			name="description"
-			content="Learn Amharic as an English speaker: the ፊደል syllabary, pronunciation built around the sounds English lacks, and a written beginner course with spaced-repetition practice. Free to start."
+			content="Learn Amharic as an English speaker with AmharicAI: the ፊደል syllabary, pronunciation built around the sounds English lacks, a written beginner course with spaced-repetition practice, and an AI tutor in preview. Free to start."
 		/>
 		<meta property="og:site_name" content="AmharicAI" />
 		<meta property="og:type" content="website" />
-		<meta property="og:title" content="AmharicAI — Learn Amharic from the ፊደል up" />
+		<meta property="og:title" content="AmharicAI — Learn Amharic with AI" />
 		<meta
 			property="og:description"
 			content="The ፊደል syllabary, pronunciation for English speakers, and a written beginner course. Free to start, no card."
@@ -24,7 +24,27 @@
 		<meta property="og:url" content="https://amharicai.org/" />
 		<meta property="og:image" content="https://amharicai.org/og-image.png" />
 		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content="https://amharicai.org/" />
+		<meta name="twitter:image" content="https://amharicai.org/og-image.png" />
 		<link rel="canonical" href="https://amharicai.org/" />
+		<!-- Organization identity, stated once and statically so a crawler reads it
+		     without running our JavaScript. The url here is the canonical origin;
+		     it must match the canonical tag above and the sitemap. -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Organization",
+				"name": "AmharicAI",
+				"url": "https://amharicai.org/",
+				"logo": "https://amharicai.org/og-image.png",
+				"description": "Learn Amharic as an English speaker: the ፊደል syllabary, pronunciation built around the sounds English lacks, and a written beginner course with spaced-repetition practice.",
+				"address": {
+					"@type": "PostalAddress",
+					"addressLocality": "Cape Town",
+					"addressCountry": "ZA"
+				}
+			}
+		</script>
 	</head>
 	<body>
 		<div id="root"></div>

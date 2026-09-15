@@ -53,9 +53,16 @@ export default function LandingPage() {
   const { isSignedIn } = useSession();
 
   useSeo({
-    title: "Learn Amharic from the ፊደል up",
+    // Brand token leads the homepage title: the search competition is against
+    // other "Amharic AI" results, so "AmharicAI" has to be the first thing
+    // both a reader and a ranker see.
+    title: "AmharicAI — Learn Amharic with AI",
+    exactTitle: true,
+    // Deliberately does not mention translation: it needs a provider key this
+    // build has not been given (see plans.ts). The tutor is named as a preview
+    // because that is its real status on /features.
     description:
-      "AmharicAI teaches Amharic to English speakers — the ፊደል syllabary, pronunciation built around the sounds English lacks, and a written beginner course with spaced-repetition practice. Free to start.",
+      "Learn Amharic as an English speaker with AmharicAI: the ፊደል syllabary, pronunciation built around the sounds English lacks, a written beginner course with spaced-repetition practice, and an AI tutor in preview. Free to start.",
     path: "/",
   });
 

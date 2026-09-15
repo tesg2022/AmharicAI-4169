@@ -193,8 +193,7 @@ export function Layout({ children }: { children: ReactNode }) {
             Course content is kept verbatim as written — nothing is silently corrected.
           </p>
           <p className="mt-1.5">
-            © {new Date().getFullYear()} AmharicAI · Tesfaye Tessema Gintamo · Cape Town, South
-            Africa
+            © {new Date().getFullYear()} AmharicAI · amharicai.org · Cape Town, South Africa
           </p>
         </div>
       </footer>
