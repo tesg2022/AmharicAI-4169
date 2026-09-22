@@ -7,6 +7,7 @@ import {
   paystackEvents,
   paystackPayments,
   paystackSubscriptions,
+  type PaypalStatus,
   type PaystackStatus,
 } from "../database/schema";
 import { billingOptionById, type PlanId } from "../content/plans";
@@ -23,8 +24,34 @@ import { createCustomer, isTestMode } from "./paystack";
  * reference — rather than inserting and hoping.
  */
 
-/** One live paid entitlement. Provider-agnostic on purpose. */
+/** Which provider a grant was paid through. */
+export type GrantProvider = "paystack" | "paypal";
+
+/**
+ * One live paid entitlement. Provider-agnostic on purpose — and now that there
+ * are genuinely two providers, that is load-bearing rather than aspirational.
+ *
+ * Read by `resolve.ts`, by the website and by the app. Everything above the
+ * merge in `billing/grants.ts` sees Paystack and PayPal grants in this one
+ * shape, and the booleans below are the shared vocabulary they are translated
+ * into: `cancel_pending` means "will stop at `until`" whether that is
+ * Paystack's `non-renewing` or PayPal's immediate `CANCELLED` with time left
+ * on the clock, and `payment_failed` means "the last renewal was declined"
+ * whether that is Paystack's `attention` or PayPal's `SUSPENDED`.
+ *
+ * Only two fields exist for the benefit of callers that must know which
+ * provider they are dealing with — `provider` and `status` — and they exist
+ * because cancelling, resuming or updating a card means calling one specific
+ * provider's API. Nothing that merely gates a feature should read either.
+ */
 export interface LiveGrant {
+  /**
+   * Who took the money. Needed by the cancel/resume path, which has to call
+   * the right API, and by nothing else. Feature gating must not branch on it:
+   * a PayPal Premium subscriber and a Paystack Premium subscriber are the same
+   * kind of Premium subscriber.
+   */
+  provider: GrantProvider;
   /** The BILLING_OPTIONS id, e.g. "premium_lifetime". */
   option_id: string;
   plan: PlanId;
@@ -38,11 +65,28 @@ export interface LiveGrant {
   cancel_pending: boolean;
   /**
    * True when the last renewal charge FAILED. Access continues to `until` and
-   * Paystack retries on the next payment date — but the customer has to be
-   * told, which is the whole reason this is carried up to the UI.
+   * the provider retries — but the customer has to be told, which is the whole
+   * reason this is carried up to the UI.
    */
   payment_failed: boolean;
-  status: PaystackStatus;
+  /**
+   * The provider's own status string, in the provider's own spelling:
+   * Paystack's lowercase `active`/`non-renewing`/`attention`, or PayPal's
+   * uppercase `ACTIVE`/`SUSPENDED`/`CANCELLED`.
+   *
+   * Deliberately not normalised into one enum. The UI reads the booleans
+   * above; this field is for support and for the admin screen, where the
+   * answer to "what does the provider think is going on" has to be the
+   * provider's own answer rather than this app's summary of it.
+   */
+  status: PaystackStatus | PaypalStatus;
+  /**
+   * The provider's handle for the subscription: Paystack's `SUB_xxxx` code or
+   * PayPal's `I-xxxx` id. Null for a one-off purchase, which has neither.
+   *
+   * Paired with `provider` — the same string means nothing without knowing
+   * which API to send it to.
+   */
   subscription_code: string | null;
 }
 
@@ -326,7 +370,12 @@ export async function subscriptionByCode(code: string) {
 }
 
 /**
- * Everything this user currently holds that still entitles them.
+ * Everything this user currently holds ON PAYSTACK that still entitles them.
+ *
+ * Half of the answer, not the answer. `billing/grants.ts` merges this with the
+ * PayPal side and exports the `liveGrants` that `resolve.ts` calls — nothing
+ * outside that merge should call this function, or it will resolve a PayPal
+ * subscriber to Free.
  *
  * A local indexed read, deliberately. Resolving entitlement through a call to
  * Paystack on every authenticated request would mean their availability is
@@ -337,7 +386,7 @@ export async function subscriptionByCode(code: string) {
  * are included: the period was paid for, the failure is the next charge, and
  * the expiry filter below already ends access when the paid time runs out.
  */
-export async function liveGrants(userId: string): Promise<LiveGrant[]> {
+export async function paystackLiveGrants(userId: string): Promise<LiveGrant[]> {
   const nowMs = new Date();
   const rows = await db
     .select()
@@ -356,6 +405,7 @@ export async function liveGrants(userId: string): Promise<LiveGrant[]> {
   return rows.map((row) => {
     const option = billingOptionById(row.optionId);
     return {
+      provider: "paystack" as const,
       option_id: row.optionId,
       // The row's own copy is authoritative over the current price list, so
       // renaming or retiring an option cannot revoke a grant somebody paid

@@ -123,7 +123,10 @@ async function main() {
     process.exit(0);
   }
 
-  const voice = provider.defaultVoice;
+  // A provider with no named voice reports null; the empty string is what the
+  // rest of the codebase passes in that case (see `api/index.ts`), and the
+  // cache key has to match what the server writes or nothing ever hits.
+  const voice = provider.defaultVoice ?? "";
   let made = 0;
   let skipped = 0;
   let failed = 0;

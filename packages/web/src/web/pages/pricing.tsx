@@ -9,6 +9,7 @@ import {
   billingOptionsFor,
   featureState,
   formatApproxUsd,
+  formatUsd,
   formatZar,
   tutorAllowanceLabel,
   type BillingTerm,
@@ -69,27 +70,43 @@ const ROWS: { id: string; label: string; note?: string }[] = [
 ];
 
 /**
- * The charged figure is the rand one — that is what Paystack takes and what
- * appears on the card statement. The dollar figure underneath is a rough
- * conversion at a fixed reference rate, shown because most learners here do
- * not price things in rand, and marked approximate every time so nobody reads
- * it as the amount being charged.
+ * The rand figure is what a card payment through Paystack takes, and what
+ * appears on the statement.
+ *
+ * Underneath it, one of two different dollar figures:
+ *   - `usd` — a real price, charged in dollars by PayPal, on options PayPal can
+ *     sell (every option carrying `price_usd`). Shown without hedging, because
+ *     it is an amount somebody actually pays.
+ *   - `approx` — a rough conversion of the rand price at a fixed reference
+ *     rate, for options PayPal cannot sell (lifetime). Marked approximate every
+ *     time so nobody reads it as an amount being charged.
+ *
+ * Never both. Two dollar figures on one card, one real and one notional, is a
+ * price list nobody can read.
  */
 function priceLine(
   plan: PlanId,
   term: BillingTerm,
-): { amount: string; sub: string; approx: string | null } | null {
-  if (plan === "free") return { amount: formatZar(0), sub: "forever, no card", approx: null };
+): { amount: string; sub: string; approx: string | null; usd: string | null } | null {
+  if (plan === "free")
+    return { amount: formatZar(0), sub: "forever, no card", approx: null, usd: null };
   const options = billingOptionsFor(plan);
   const exact = options.find((o) => o.term === term);
   const chosen = exact ?? options.find((o) => o.term === "monthly");
   if (!chosen) return null;
   const suffix =
     chosen.term === "monthly" ? "per month" : chosen.term === "annual" ? "per year" : "once";
+  const usd = chosen.price_usd;
   return {
     amount: formatZar(chosen.price_zar),
     sub: suffix,
-    approx: `${formatApproxUsd(chosen.price_zar)} — approximate`,
+    approx: usd === undefined ? `${formatApproxUsd(chosen.price_zar)} — approximate` : null,
+    usd:
+      usd === undefined
+        ? null
+        : `or ${formatUsd(usd)} ${
+            chosen.term === "monthly" ? "a month" : chosen.term === "annual" ? "a year" : ""
+          } through PayPal`.trimEnd(),
   };
 }
 
@@ -100,7 +117,7 @@ export default function PricingPage() {
   useSeo({
     title: "Pricing — free to start, R89 a month for the full course",
     description:
-      "AmharicAI plans: Free (ፊደል, pronunciation and the first two units), Basic at R89 a month, and Premium at R179 a month, R1,399 a year or R2,599 once. All prices in South African rand.",
+      "AmharicAI plans: Free (ፊደል, pronunciation and the first two units), Basic at R89 a month, and Premium at R179 a month, R1,399 a year or R2,599 once. Card payments in South African rand; PayPal in US dollars.",
     path: "/pricing",
   });
 
@@ -116,8 +133,11 @@ export default function PricingPage() {
         <p className="text-base leading-relaxed text-muted-foreground">
           The free plan is not a trial. It does not expire and it does not ask for a card — you
           get the ፊደል, the pronunciation guide and the first two units for as long as you want
-          them. Every price here is charged in South African rand (ZAR); the dollar figures are
-          approximate conversions for reference only.
+          them. Card payments are charged in South African rand (ZAR) through Paystack. If you
+          would rather pay with PayPal, the monthly and annual plans are also sold in US dollars
+          at the dollar price shown on each card — that is the amount PayPal charges, not a
+          conversion. Only the lifetime purchase is rand-only, and its dollar figure is an
+          approximate conversion for reference.
         </p>
       </header>
 
@@ -179,6 +199,10 @@ export default function PricingPage() {
                 <p className="text-sm text-muted-foreground">{price?.sub ?? ""}</p>
                 {price?.approx ? (
                   <p className="text-xs text-muted-foreground">{price.approx}</p>
+                ) : null}
+                {/* A real charged price, in the currency PayPal takes. */}
+                {price?.usd ? (
+                  <p className="text-xs font-medium text-muted-foreground">{price.usd}</p>
                 ) : null}
                 {!hasTerm ? (
                   <p className="mt-1.5 text-xs text-muted-foreground">

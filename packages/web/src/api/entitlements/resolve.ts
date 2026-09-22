@@ -3,8 +3,10 @@ import { db } from "../database";
 import { accessCodeRedemptions } from "../database/schema";
 import type { PlanSource } from "../database/schema";
 import { PLAN_ORDER, planFromInput, type PlanId } from "../content/plans";
-import { liveGrants, type LiveGrant } from "../billing/store";
+import type { LiveGrant } from "../billing/store";
+import { anyProviderConfigured, liveGrants } from "../billing/grants";
 import { billingConfigured, billingStatus, type BillingStatus } from "../billing/config";
+import { paypalBillingStatus, paypalConfigured } from "../billing/paypal-config";
 
 /**
  * The single place that answers "what plan is this person actually on".
@@ -36,7 +38,14 @@ import { billingConfigured, billingStatus, type BillingStatus } from "../billing
  * this module for `liveGrants`/`billingStatus` and none of them should have to
  * learn which provider file it moved to.
  */
-export { liveGrants, billingConfigured, billingStatus };
+export {
+  liveGrants,
+  anyProviderConfigured,
+  billingConfigured,
+  billingStatus,
+  paypalConfigured,
+  paypalBillingStatus,
+};
 export type { LiveGrant, BillingStatus };
 
 export interface ResolvedPlan {

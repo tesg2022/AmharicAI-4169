@@ -15,40 +15,62 @@
  */
 
 import { amharicaiProvider } from "./amharicai";
+import { amharicaiRecognizer } from "./amharicai-asr";
 import type { ProviderStatus, SpeechProvider } from "./types";
 
 export * from "./types";
-export { amharicaiProvider };
+export { amharicaiProvider, amharicaiRecognizer };
 
-export const PROVIDERS: SpeechProvider[] = [amharicaiProvider];
+/**
+ * Both halves of the same GPU service: one speaks, one listens.
+ *
+ * They are separate entries rather than one provider with two methods because
+ * they are separately configured and separately deployable — a box can serve
+ * `AMHARICAI_TTS_URL` with no ASR, or the reverse, and each must report its own
+ * missing env var instead of hiding behind the other's.
+ */
+export const PROVIDERS: SpeechProvider[] = [amharicaiProvider, amharicaiRecognizer];
 
 export function allStatuses(): ProviderStatus[] {
   return PROVIDERS.map((p) => p.status());
 }
 
-/** The provider that will actually be used, or null when no key is present. */
+/**
+ * The provider that will actually be used, or null when no key is present.
+ *
+ * `supportsSynthesis` is part of the test, not decoration: the registry now
+ * holds a listen-only entry, and without that filter a configured recognizer
+ * sitting earlier in the array would be handed every audio request and reject
+ * it. A pinned id that cannot synthesize returns null rather than silently
+ * falling through to another provider — if someone pinned it, they should be
+ * told it is the wrong half.
+ */
 export function activeProvider(): SpeechProvider | null {
+  const usable = (p: SpeechProvider) => {
+    const s = p.status();
+    return s.configured && s.supportsSynthesis;
+  };
   const pinned = process.env.SPEECH_PROVIDER?.trim();
   if (pinned) {
     const match = PROVIDERS.find((p) => p.id === pinned);
-    return match?.status().configured ? match : null;
+    return match && usable(match) ? match : null;
   }
-  return PROVIDERS.find((p) => p.status().configured) ?? null;
+  return PROVIDERS.find(usable) ?? null;
 }
 
 /**
  * The provider that will actually transcribe a learner's take.
  *
- * Today this always returns null, and that is a stated consequence rather than
- * an oversight: the AmharicAI backend synthesizes but does not listen, and it is
- * now the only provider. Every caller already handles a null recognizer — the
- * speaking loop falls back to the deterministic typed self-check, scored by the
- * same Levenshtein rules — so the loop keeps working and the UI says plainly
- * that no recognizer is configured.
+ * This returns null until `AMHARICAI_ASR_URL` is set, and that is a stated
+ * consequence rather than an oversight: the registry now contains a real ASR
+ * adapter, but an unconfigured one reports itself unconfigured instead of
+ * pretending. Every caller already handles a null recognizer — the speaking
+ * loop falls back to the deterministic typed self-check, scored by the same
+ * Levenshtein rules — so the loop keeps working and the UI says plainly that
+ * no recognizer is configured.
  *
- * The function stays because the seam is the point: give `amharicaiProvider` a
- * `recognize` implementation (or add an Amharic ASR provider) and recognition
- * turns back on with no changes at the call sites.
+ * Turning recognition on is therefore one environment variable and no code
+ * change, which is why the seam was kept rather than deleted.
  */
 export function activeRecognizer(): SpeechProvider | null {
   const pinned = process.env.SPEECH_RECOGNIZER?.trim() || process.env.SPEECH_PROVIDER?.trim();

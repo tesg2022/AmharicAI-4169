@@ -18,6 +18,7 @@ import ProgressPage from "./pages/progress";
 import SignInPage from "./pages/sign-in";
 import SubscriptionPage from "./pages/subscription";
 import BillingCallbackPage from "./pages/billing-callback";
+import BillingCallbackPaypalPage from "./pages/billing-callback-paypal";
 import AdminPage from "./pages/admin";
 import AccountPage from "./pages/account";
 import { AboutPage, ContactPage, PrivacyPage, TermsPage } from "./pages/legal";
@@ -48,6 +49,10 @@ function App() {
               it carries is verified server-side; the redirect itself proves
               nothing. */}
           <Route path="/billing/callback" component={BillingCallbackPage} />
+          {/* And where PayPal returns them. A separate route because PayPal
+              sends back `subscription_id`, not a Paystack reference — the two
+              redirects carry different things and cannot share a page. */}
+          <Route path="/billing/callback/paypal" component={BillingCallbackPaypalPage} />
           <Route path="/admin" component={AdminPage} />
           <Route path="/account" component={AccountPage} />
           <Route path="/privacy" component={PrivacyPage} />

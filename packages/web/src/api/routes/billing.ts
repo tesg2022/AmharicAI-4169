@@ -1,7 +1,14 @@
 import { z } from "zod";
 import { ORPCError } from "@orpc/server";
 import { authed, withUser } from "../middleware/auth";
-import { billingStatus, liveGrants, resolvePlan } from "../entitlements/resolve";
+import {
+  billingStatus,
+  liveGrants,
+  paypalBillingStatus,
+  paypalConfigured,
+  resolvePlan,
+} from "../entitlements/resolve";
+import { paypalPaymentsFor } from "../billing/paypal-store";
 import { reconcileSubscriptions } from "../entitlements/supersede";
 import {
   checkoutCallbackUrl,
@@ -39,11 +46,21 @@ import {
   billingOptionsFor,
   entryPrice,
   formatApproxUsd,
+  formatUsd,
   formatZar,
   tutorAllowanceLabel,
   type BillingOption,
   type PlanId,
 } from "../content/plans";
+
+/**
+ * One receipt row, whichever provider raised it.
+ *
+ * Declared as the union of the two view builders rather than hand-written, so
+ * adding a field to one and forgetting the other is a type error here instead
+ * of a missing column in the client.
+ */
+type InvoiceView = ReturnType<typeof invoiceView> | ReturnType<typeof paypalInvoiceView>;
 
 /**
  * The pricing surface and the whole server side of checkout.
@@ -487,27 +504,48 @@ export const billing = {
       /** True when there is a live recurring subscription to manage. */
       has_subscription: false,
       holdings: [] as ReturnType<typeof holdingView>[],
-      invoices: [] as ReturnType<typeof invoiceView>[],
+      invoices: [] as InvoiceView[],
       billing_status: status,
     };
 
     if (!context.user) return empty;
 
-    const grants = await liveGrants(context.user.id);
-    const payments = await paymentsFor(context.user.id);
+    // Both providers, read in parallel. `liveGrants` already merges the two
+    // subscription tables; the receipts have to be merged here, in the one
+    // route that shows them, for the same reason: one customer, one history.
+    const [grants, payments, paypalPayments] = await Promise.all([
+      liveGrants(context.user.id),
+      paymentsFor(context.user.id),
+      paypalConfigured() ? paypalPaymentsFor(context.user.id) : Promise.resolve([]),
+    ]);
+
+    /**
+     * Successful charges only. A failed attempt is not a receipt, and listing
+     * one next to real payments makes a customer think they were charged
+     * twice. Each provider names success differently — Paystack "success",
+     * PayPal "COMPLETED" — so the filter is per provider rather than shared.
+     *
+     * Refunds and reversals are kept: money that came back is part of the
+     * history a customer is owed a view of, and `status` carries which it is.
+     */
+    const invoices: InvoiceView[] = [
+      ...payments.filter((p) => p.status === "success").map(invoiceView),
+      ...paypalPayments.filter((p) => p.status !== "failed").map(paypalInvoiceView),
+    ].sort((a, b) => b.created_at.localeCompare(a.created_at));
 
     return {
       signed_in: true,
       reachable: true,
       has_subscription: grants.some((g) => g.recurring),
       holdings: grants.map(holdingView),
-      /**
-       * Successful charges only. A failed attempt is not a receipt, and
-       * listing one next to real payments makes a customer think they were
-       * charged twice.
-       */
-      invoices: payments.filter((p) => p.status === "success").map(invoiceView),
+      invoices,
       billing_status: status,
+      /**
+       * Whether PayPal is configured at all, so the account page can decide
+       * whether a PayPal-held subscription is manageable here or only a
+       * historical record.
+       */
+      paypal_status: paypalBillingStatus(),
     };
   }),
 
@@ -680,14 +718,35 @@ export const billing = {
 function holdingView(grant: LiveGrant) {
   const option = billingOptionById(grant.option_id);
   const tier = PLANS.find((p) => p.id === grant.plan)?.name_en ?? grant.plan;
+  const paypal = grant.provider === "paypal";
+  /**
+   * The price this holding is actually billed at, in the currency it is
+   * actually billed in. A PayPal subscriber pays `price_usd` in dollars; the
+   * rand figure beside it is a number nobody ever charged them, and printing
+   * it here is the sort of mistake a customer reads as an overcharge.
+   */
+  const priceLabel = paypal
+    ? option?.price_usd !== undefined
+      ? formatUsd(option.price_usd)
+      : null
+    : option
+      ? formatZar(option.price_zar)
+      : null;
   return {
     option_id: grant.option_id,
+    /**
+     * Which provider holds this subscription, and therefore which cancel
+     * procedure can end it: `billing.cancel` takes a Paystack subscription
+     * code, `billingPaypal.cancel` takes a PayPal subscription id, and
+     * neither recognises the other's identifier. The UI must branch on this.
+     */
+    provider: grant.provider,
     subscription_code: grant.subscription_code,
     plan: grant.plan,
     term: grant.term,
-    /** "Premium — R179 / month", not "premium_monthly". */
-    label_en: option ? `${tier} — ${option.label_en}` : tier,
-    price_label: option ? formatZar(option.price_zar) : null,
+    /** "Premium — R179 / month" on Paystack, "Premium — US$11.99" on PayPal. */
+    label_en: option ? `${tier} — ${paypal ? (priceLabel ?? option.label_en) : option.label_en}` : tier,
+    price_label: priceLabel,
     recurring: grant.recurring,
     cancel_pending: grant.cancel_pending,
     /**
@@ -721,6 +780,7 @@ function invoiceView(payment: {
   const tier = option ? PLANS.find((p) => p.id === option.plan)?.name_en : null;
   return {
     id: payment.reference,
+    provider: "paystack" as const,
     status: payment.status,
     /**
      * Formatted from subunits, which is what Paystack stores and what this
@@ -746,6 +806,54 @@ function invoiceView(payment: {
      */
     test_mode: payment.testMode,
     /** Paystack issues no hosted receipt page, so there is nothing to link to. */
+    url: null as string | null,
+  };
+}
+
+/**
+ * One PayPal receipt, in the same shape as a Paystack one.
+ *
+ * Same shape on purpose: the account page shows the customer a single history,
+ * because it is a single history — one person, one subscription record, paid
+ * through whichever provider suited them. A client that had to render two
+ * differently-shaped receipt lists would drift into showing two sections, and
+ * a customer who once paid by card and later by PayPal would have to work out
+ * which of two tables their charge is in.
+ *
+ * The amounts come from different places, which is why the formatting is not
+ * shared: Paystack states subunits (17900 cents) and PayPal states major units
+ * as a decimal string ("11.99").
+ */
+function paypalInvoiceView(payment: {
+  id: string;
+  optionId: string | null;
+  amountUsd: string;
+  currency: string;
+  status: string;
+  paidAt: Date | null;
+  createdAt: Date;
+  sandbox: boolean;
+}) {
+  const option = billingOptionById(payment.optionId);
+  const tier = option ? PLANS.find((p) => p.id === option.plan)?.name_en : null;
+  const amount = Number(payment.amountUsd);
+  return {
+    /** PayPal's sale id — the reference a customer can quote to PayPal. */
+    id: payment.id,
+    provider: "paypal" as const,
+    status: payment.status,
+    total_label: Number.isFinite(amount)
+      ? formatMajor(amount, payment.currency)
+      : `${payment.amountUsd} ${payment.currency}`,
+    created_at: (payment.paidAt ?? payment.createdAt).toISOString(),
+    label_en: option && tier ? `${tier} (${option.term})` : (payment.optionId ?? "Payment"),
+    /** Sandbox credentials took no money, exactly as Paystack test mode did. */
+    test_mode: payment.sandbox,
+    /**
+     * PayPal does host a receipt per transaction, but only inside the payer's
+     * own logged-in account and not at a URL we can construct, so there is
+     * still nothing to link to.
+     */
     url: null as string | null,
   };
 }

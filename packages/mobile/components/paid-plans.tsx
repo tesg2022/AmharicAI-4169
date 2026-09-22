@@ -5,6 +5,7 @@ import { FontSize, Radius } from "@/constants/theme";
 import { useColors } from "@/hooks/use-colors";
 import { useBuyPlan } from "@/hooks/use-buy-plan";
 import { useCatalogue } from "@/queries/billing";
+import { usePaypalCatalogue } from "@/queries/billing-paypal";
 import { failureMessage } from "@/queries/catalog";
 import { Am, Body, Button, Card, Chip, ErrorState, Loading, Title } from "@/components/ui";
 
@@ -35,7 +36,11 @@ function termSuffix(term: string | null | undefined): string {
 export function PaidPlans() {
   const colors = useColors();
   const catalogue = useCatalogue();
-  const { buy, buying, error, stopped } = useBuyPlan();
+  // Loaded alongside the rand catalogue, never instead of it. If PayPal is
+  // unconfigured or this call fails, the card path still sells — the screen
+  // simply draws no PayPal button, which is the honest failure.
+  const paypalCatalogue = usePaypalCatalogue();
+  const { buy, buying, buyWithPaypal, buyingPaypal, error, stopped } = useBuyPlan();
 
   /** Which billing term is selected per plan — Premium is sold three ways. */
   const [chosen, setChosen] = useState<Record<string, string>>({});
@@ -91,6 +96,14 @@ export function PaidPlans() {
         const selected = options.find((o) => o.id === selectedId) ?? options[0];
         const isCurrentTier = p.id === data.current_plan;
         const holdsThisOption = Boolean(selected && data.held_option_ids.includes(selected.id));
+        // The PayPal view of the same option id — both catalogues are built
+        // from one option list, so the ids line up. Absent for lifetime (no
+        // USD price) and whenever PayPal cannot sell, and then no PayPal
+        // button is drawn rather than one that fails when tapped.
+        const selectedPaypal = selected
+          ? paypalCatalogue.data?.options.find((o) => o.id === selected.id)
+          : undefined;
+        const paypalSellable = Boolean(selectedPaypal?.sellable && selectedPaypal.price_label);
 
         return (
           <Card
@@ -240,34 +253,76 @@ export function PaidPlans() {
                 </Body>
               </View>
             ) : (
-              <Button
-                label={
-                  !data.checkout_available
-                    ? "Checkout unavailable"
-                    : isCurrentTier
-                      ? // Same tier, different term: a change of how they pay,
-                        // not a new plan. "Get Premium" to a Premium
-                        // subscriber reads as a mistake.
-                        selected?.term === "lifetime"
-                        ? `Buy ${p.name_en} for life — ${selected?.price_label}`
-                        : `Switch to ${selected?.term ?? ""} — ${selected?.price_label}`
-                      : `Get ${p.name_en} — ${selected?.price_label}`
-                }
-                icon="card-outline"
-                full
-                loading={buying === selected?.id}
-                disabled={!selected || buying !== null || !data.checkout_available}
-                onPress={() => selected && void buy(selected.id)}
-              />
+              /* Two ways to pay the same thing, side by side, because which
+                 one works depends on where the learner banks: a card in rand
+                 through Paystack, or PayPal in dollars. Nothing here guesses
+                 at their country — both are offered and they choose. */
+              <View style={{ gap: 8 }}>
+                <Button
+                  label={
+                    !data.checkout_available
+                      ? "Checkout unavailable"
+                      : isCurrentTier
+                        ? // Same tier, different term: a change of how they pay,
+                          // not a new plan. "Get Premium" to a Premium
+                          // subscriber reads as a mistake.
+                          selected?.term === "lifetime"
+                          ? `Buy ${p.name_en} for life — ${selected?.price_label}`
+                          : `Switch to ${selected?.term ?? ""} — ${selected?.price_label}`
+                        : `Get ${p.name_en} — ${selected?.price_label}`
+                  }
+                  icon="card-outline"
+                  full
+                  loading={buying === selected?.id}
+                  disabled={
+                    !selected || buying !== null || buyingPaypal !== null || !data.checkout_available
+                  }
+                  onPress={() => selected && void buy(selected.id)}
+                />
+                {paypalSellable ? (
+                  <>
+                    <Button
+                      label={
+                        buyingPaypal === selected?.id
+                          ? "Opening PayPal…"
+                          : `Pay with PayPal — ${selectedPaypal!.price_label}`
+                      }
+                      icon="logo-paypal"
+                      variant="secondary"
+                      full
+                      loading={buyingPaypal === selected?.id}
+                      disabled={!selected || buying !== null || buyingPaypal !== null}
+                      onPress={() => selected && void buyWithPaypal(selected.id)}
+                    />
+                    {/* The dollar figure on that button is charged, not
+                        converted — so it is said once, plainly, instead of
+                        leaving somebody to wonder which number applies. */}
+                    <Body
+                      size={FontSize.caption}
+                      color={colors.mutedForeground}
+                      style={{ textAlign: "center" }}
+                    >
+                      Billed in US dollars by PayPal
+                    </Body>
+                  </>
+                ) : null}
+              </View>
             )}
           </Card>
         );
       })}
 
+      {/* This used to read "Prices are in US dollars", which was wrong about
+          the card path and is now wrong about only half of a screen that has
+          two currencies on it. Both are stated, each attached to the way of
+          paying that actually charges it. */}
       <Body size={FontSize.caption} color={colors.mutedForeground}>
-        Prices are in US dollars. Monthly and annual subscriptions renew until you cancel; Lifetime
-        is a single payment. Annual and Lifetime are billing terms for Premium — they unlock
-        exactly what monthly Premium does, no more.
+        Card payments are charged in South African rand (ZAR) — that is the price shown on each
+        card. Paying with PayPal is charged in US dollars at the dollar price on its own button,
+        which is an amount charged rather than a conversion. Monthly and annual subscriptions
+        renew until you cancel; Lifetime is a single payment, sold by card only. Annual and
+        Lifetime are billing terms for Premium — they unlock exactly what monthly Premium does,
+        no more.
       </Body>
 
       {stopped.length > 0 ? (

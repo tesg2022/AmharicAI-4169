@@ -1,5 +1,20 @@
 # Round: accounts + entitlements + admin comp codes (Phase 2)
 
+> **Which codebase is production? Read this first.** [note added 2026-09-15]
+>
+> This log refers to a "Nuxt website" and a Stage C "Nuxt BFF proxy". That Nuxt codebase is
+> real — it lives in a *separate* repo at `/home/user/gh/AmharicAI`
+> (`amharicai-nuxt-production-tts`, GitHub `tesg2022/AmharicAI`, last commit 2026-09-07) —
+> but it is **not what serves the public site.**
+>
+> Production is **this** repo: the Vite + React + Hono app on Bun in `packages/web`,
+> serving at `www.amharicai.org` via fly.io behind Cloudflare. Confirmed 2026-09-15 by
+> md5-matching the live `index.html` against `packages/web/dist/index.html`.
+>
+> The Nuxt repo also still uses **Stripe**, which this project has since moved off in favour
+> of Paystack. Treat Stage C and every "Nuxt" reference below as an unshipped plan, not as a
+> description of the live system.
+
 ## Binding answers from the user
 1. Authority for accounts + entitlements: the managed Hono + Drizzle + better-auth backend.
 2. The 6-digit code is a comp/access code (admin issues, user redeems once for a plan without paying).

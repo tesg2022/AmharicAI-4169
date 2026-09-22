@@ -3,6 +3,7 @@ import { ORPCError } from "@orpc/server";
 import { base } from "../__core/app";
 import { withUser } from "../middleware/auth";
 import { billingStatus, resolvePlan } from "../entitlements/resolve";
+import { activeTranslator } from "../translate";
 import {
   getCourseFlags,
   getCourseSummary,
@@ -34,16 +35,6 @@ import {
 const planInput = z.object({
   plan: z.string().optional(),
 });
-
-/** Reads the translation provider config at request time, like the website does. */
-function translateConfig() {
-  const url = process.env["AMHARICAI_TRANSLATE_URL"]?.trim() ?? "";
-  const key = process.env["AMHARICAI_TRANSLATE_KEY"]?.trim() ?? "";
-  const model = process.env["AMHARICAI_TRANSLATE_MODEL"]?.trim() ?? "";
-  return { url, key, model, configured: Boolean(url && key) };
-}
-
-
 
 export const catalog = {
   /** Plans + per-feature grant/capability, so the client never guesses a gate. */
@@ -144,8 +135,17 @@ export const catalog = {
         });
       }
 
-      const cfg = translateConfig();
-      if (!cfg.configured) {
+      /**
+       * The vendor call now lives behind the translation provider registry
+       * (`api/translate/`), the same seam `speech/providers/` gives synthesis.
+       * This handler keeps the two things that are actually its business — the
+       * plan gate above, and turning a provider failure into an oRPC error the
+       * clients already handle — and knows nothing about the request shape or
+       * the env vars behind it. Moving translation onto a GPU service is then a
+       * URL in the environment, with no edit to this route.
+       */
+      const translator = activeTranslator();
+      if (!translator) {
         throw new ORPCError("SERVICE_UNAVAILABLE", {
           message:
             "No translation provider is configured, so this build cannot translate free text. Set AMHARICAI_TRANSLATE_URL and AMHARICAI_TRANSLATE_KEY to enable it.",
@@ -153,40 +153,25 @@ export const catalog = {
         });
       }
 
-      const res = await fetch(cfg.url, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: `Bearer ${cfg.key}`,
-        },
-        body: JSON.stringify({
-          model: cfg.model || undefined,
+      try {
+        const result = await translator.translate({
           text: input.text,
-          source: input.direction === "en2am" ? "en" : "am",
-          target: input.direction === "en2am" ? "am" : "en",
-        }),
-      }).catch(() => null);
-
-      if (!res || !res.ok) {
+          direction: input.direction,
+        });
+        return {
+          translation: result.translation,
+          direction: result.direction,
+          source: "provider" as const,
+        };
+      } catch (error) {
         throw new ORPCError("BAD_GATEWAY", {
-          message: `The translation provider did not return a translation${
-            res ? ` (HTTP ${res.status})` : ""
-          }.`,
+          message:
+            error instanceof Error
+              ? error.message
+              : "The translation provider did not return a translation.",
           data: { reason: "translation_failed" },
         });
       }
-
-      const body = (await res.json().catch(() => null)) as
-        | { translation?: string; text?: string; output?: string }
-        | null;
-      const translation = body?.translation ?? body?.output ?? body?.text ?? "";
-      if (!translation.trim()) {
-        throw new ORPCError("BAD_GATEWAY", {
-          message: "The translation provider returned an empty translation.",
-          data: { reason: "translation_empty" },
-        });
-      }
-      return { translation, direction: input.direction, source: "provider" as const };
     }),
 
   /**

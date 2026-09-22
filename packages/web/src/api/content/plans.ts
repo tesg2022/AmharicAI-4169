@@ -180,25 +180,35 @@ export const PLANS: Plan[] = [
 export type BillingTerm = "monthly" | "annual" | "lifetime";
 
 /**
- * EVERYTHING IS PRICED AND CHARGED IN SOUTH AFRICAN RAND.
+ * TWO PROVIDERS, TWO CURRENCIES, AND THE PRICE DEPENDS ON WHICH IS USED.
  *
- * Not a preference — a constraint. Billing runs on Paystack under a South
- * African legal entity, and Paystack's currency support is per country: a
- * Nigerian or Kenyan account may charge in USD, a South African one may charge
- * in ZAR and nothing else. There is no setting to change this and no plan
- * shape that works around it.
+ * Paystack charges in SOUTH AFRICAN RAND, and that is a constraint rather than
+ * a preference: Paystack's currency support is per country, and a South
+ * African account may charge in ZAR and nothing else. There is no setting to
+ * change this and no plan shape that works around it.
  *
- * International customers can still pay, once international payments are
- * enabled on the account: their own bank converts at the card network's rate
- * and settles Paystack in ZAR. What they see at checkout, and on their
- * statement, is a rand amount.
+ * PayPal charges in US DOLLARS, at the `price_usd` figure on each option. Not
+ * a conversion performed at checkout — a real, separately set retail price, so
+ * the amount a PayPal customer approves is a round number they recognise
+ * rather than a rand amount their bank converted for them.
  *
- * Which is why every option carries a USD figure that is explicitly
- * approximate and explicitly not charged. Most learners here do not think in
- * rand, and a price list that only says "R179" to somebody in Chicago is a
- * price list they cannot evaluate. Showing a converted figure without saying
- * it is converted would be worse: their card would be billed a different
- * number and the difference would look like a bait and switch.
+ * So each option can carry two prices, and both are real:
+ *
+ *   - `price_zar` is charged by Paystack, to anyone paying by card or by a
+ *     local South African method.
+ *   - `price_usd` is charged by PayPal, to anyone paying from a PayPal
+ *     balance or from outside South Africa. Absent means the option is not
+ *     sold on PayPal at all.
+ *
+ * They are close to each other but they are not equal, and they are not meant
+ * to be: a currency's retail price is a decision, not an exchange-rate output.
+ *
+ * `approxUsd()` / `formatApproxUsd()` below remain what they always were — an
+ * indicative conversion of a RAND price, for a learner in Chicago reading a
+ * rand price list and needing to know roughly what it costs. That is a
+ * different number from `price_usd`, which is a price actually charged, and
+ * the two must never be mixed up in the UI: one carries a "≈", the other does
+ * not.
  */
 
 /**
@@ -234,24 +244,52 @@ export function formatApproxUsd(zar: number): string {
 }
 
 /**
+ * "US$11.99" — a price PayPal really charges, so NO approximation mark.
+ *
+ * Deliberately shaped so it cannot be confused with `formatApproxUsd` at a
+ * glance in the UI or in a diff: the "≈" is the entire difference between "we
+ * think this is about what it costs" and "this is the number that will leave
+ * your account", and putting one where the other belongs is a
+ * misrepresentation either way round.
+ *
+ * Cents are always shown. $5.99 with the cents dropped is $6, which is not
+ * the price, and PayPal will show the customer the cents regardless.
+ */
+export function formatUsd(usd: number): string {
+  return `US$${usd.toFixed(2)}`;
+}
+
+/**
  * One purchasable thing.
  *
- * There is deliberately no Paystack plan code here. Plan codes are
- * account-specific — a code created in test mode does not exist in live mode
- * — so they live in the deployment's environment and are mapped to these ids
- * by `billing/config.ts`. Putting them in this file would make the price list
- * unusable against a second Paystack account, which is exactly what test mode
- * is.
+ * There is deliberately no provider plan identifier here — no Paystack plan
+ * code and no PayPal plan id. Both are account-specific: a `PLN_xxxx` created
+ * in Paystack test mode does not exist in live mode, and a PayPal sandbox
+ * `P-xxxx` does not exist in production. So they live in the deployment's
+ * environment and are mapped to these ids by `billing/config.ts` and
+ * `billing/paypal-config.ts`. Putting them in this file would make the price
+ * list unusable against a second account of either provider, which is exactly
+ * what test/sandbox mode is.
  */
 export interface BillingOption {
   id: string;
   plan: PlanId;
   term: BillingTerm;
   /**
-   * What the customer is actually charged, in rand, for one term. Not a
+   * What a Paystack customer is actually charged, in rand, for one term. Not a
    * monthly rate for the annual or lifetime options.
    */
   price_zar: number;
+  /**
+   * What a PayPal customer is actually charged, in US dollars, for one term.
+   *
+   * Absent means this option is NOT sold on PayPal, and the PayPal button must
+   * not be offered for it. `premium_lifetime` is the case: a one-off payment
+   * needs PayPal's Orders API rather than its Subscriptions API, which is a
+   * separate integration and is not built. Absent here is what stops it being
+   * half-sold.
+   */
+  price_usd?: number;
   label_en: string;
   label_am: string;
   /** Marketing note, e.g. the saving against paying monthly. Honest arithmetic only. */
@@ -279,6 +317,10 @@ export const BILLING_OPTIONS: BillingOption[] = [
     plan: "basic",
     term: "monthly",
     price_zar: 89,
+    // ≈R97 at the reference rate: a little above the rand price, which is the
+    // right direction — PayPal's fees on a cross-border subscription are
+    // higher than Paystack's on a local card.
+    price_usd: 5.99,
     label_en: "R89 / month",
     label_am: "R89 በወር",
   },
@@ -287,6 +329,7 @@ export const BILLING_OPTIONS: BillingOption[] = [
     plan: "premium",
     term: "monthly",
     price_zar: 179,
+    price_usd: 11.99,
     label_en: "R179 / month",
     label_am: "R179 በወር",
   },
@@ -295,6 +338,9 @@ export const BILLING_OPTIONS: BillingOption[] = [
     plan: "premium",
     term: "annual",
     price_zar: 1399,
+    // 11.99 * 12 = 143.88; 89.99 is 37% less, so the saving the rand copy
+    // claims holds in dollars too and no second note is needed.
+    price_usd: 89.99,
     label_en: "R1 399 / year",
     label_am: "R1 399 በዓመት",
     // 179 * 12 = 2148; 2148 - 1399 = 749 saved, which is 34.9% off.
@@ -305,6 +351,11 @@ export const BILLING_OPTIONS: BillingOption[] = [
     plan: "premium",
     term: "lifetime",
     price_zar: 2599,
+    // No `price_usd`, and that is the switch that keeps lifetime off PayPal.
+    // A lifetime purchase is a single payment, which on PayPal means the
+    // Orders API; this integration only speaks Subscriptions. Adding a price
+    // here without building that path would put a button on the page that
+    // cannot take the money.
     label_en: "R2 599 once",
     label_am: "R2 599 አንዴ",
     // 2599 / 1399 = 1.86 years against annual; 2599 / 179 = 14.5 months

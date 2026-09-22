@@ -1,17 +1,18 @@
 import type { RouterClient } from "@orpc/server";
 import { createAgentUIStreamResponse, safeValidateUIMessages } from "ai";
 import { createApp } from "./__core/app";
-import { cacheKey, readCache, writeCache } from "./speech/cache";
-import { estimateDurationMs, prepareSpeech } from "./speech/normalize";
-import { activeProvider, activeRecognizer } from "./speech/providers";
+import { hearSpeech, serveSpeech, type ResponseBody } from "./speech/serve";
 import { VOICE_MODES, type VoiceMode } from "./speech/ssml";
 import { tutorAgent } from "./agent";
 import { auth } from "./auth";
+import { paypalWebhook } from "./billing/paypal-webhook";
 import { paystackWebhook } from "./billing/webhook";
-import { identify } from "./entitlements/request";
-import { consume, refund, refusalMessage } from "./entitlements/usage";
+import { identify, type RequestIdentity } from "./entitlements/request";
+import { consume, refusalMessage } from "./entitlements/usage";
+import { mountV1 } from "./v1";
 import { account } from "./routes/account";
 import { billing } from "./routes/billing";
+import { billingPaypal } from "./routes/billing-paypal";
 import { usage } from "./routes/usage";
 import { waitlist } from "./routes/waitlist";
 import { access } from "./routes/access";
@@ -40,6 +41,7 @@ export const router = {
   account,
   admin,
   billing,
+  billingPaypal,
   catalog,
   content,
   legal,
@@ -64,6 +66,14 @@ const app = createApp(router);
 app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 
 /**
+ * The versioned REST surface. Its own pipeline (request id, caller, rate limit,
+ * structured log) and its own error envelope live under `./v1`, so nothing in
+ * this file has to know about them. See `v1/index.ts` for why it exists
+ * alongside the oRPC router rather than replacing it.
+ */
+mountV1(app);
+
+/**
  * Paystack webhooks — renewals, failed cards, cancellations.
  *
  * A plain route, and it has to be: the signature is an HMAC over the raw
@@ -75,6 +85,21 @@ app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
  * both test and live mode.
  */
 app.post("/api/webhooks/paystack", (c) => paystackWebhook(c));
+
+/**
+ * PayPal webhooks — subscription activation, renewals, cancellations, refunds.
+ *
+ * Also a plain route, for a different reason than Paystack's: PayPal has no
+ * local HMAC. Verification is a call back to PayPal's
+ * /v1/notifications/verify-webhook-signature with the parsed event plus the
+ * PAYPAL-* headers, so this handler parses JSON first and verifies second.
+ * An unverifiable result answers 500 on purpose, so PayPal retries rather
+ * than dropping the event.
+ *
+ * This URL goes in PayPal Developer Dashboard → your app → Webhooks, in both
+ * sandbox and live, and the resulting webhook id in PAYPAL_WEBHOOK_ID.
+ */
+app.post("/api/webhooks/paypal", (c) => paypalWebhook(c));
 
 /**
  * Native Amharic audio. A plain route because `<audio src>` and the mobile
@@ -91,95 +116,78 @@ app.get("/api/speech/audio", async (c) => {
   const requested = c.req.query("mode") as VoiceMode | undefined;
   const mode: VoiceMode = requested && VOICE_MODES.includes(requested) ? requested : "native";
 
-  const provider = activeProvider();
+  /**
+   * Cache-then-quota-then-provider now lives in `speech/serve.ts`, shared with
+   * `POST /v1/tts`. The identity lookup is passed as a thunk so a cache hit
+   * still costs no session read — the property the old inline version had by
+   * statement order alone.
+   *
+   * The response shapes below are unchanged on purpose: existing web, Expo
+   * and Electron builds parse these exact keys, and a shared implementation
+   * is not a licence to break a shipped client.
+   */
+  let identified: Awaited<ReturnType<typeof identify>> | null = null;
+  const served = await serveSpeech(
+    {
+      text,
+      mode,
+      voice: c.req.query("voice"),
+      kind: c.req.query("kind"),
+      refId: c.req.query("refId"),
+    },
+    async () => {
+      identified = await identify(c);
+      return { subject: identified.subject, plan: identified.plan };
+    },
+  );
 
-  // Quota is checked before synthesis but AFTER the cache read below would
-  // have been free — so the cache lookup happens first and only a real
-  // provider call spends allowance. A replayed lesson line costs nothing.
-  const prepared = prepareSpeech(text, { mode });
-  const voice = c.req.query("voice") || provider?.defaultVoice || "";
-
-  if (provider) {
-    const id = cacheKey({ provider: provider.id, voice, mode, normalizedText: prepared.normalized });
-    const cached = await readCache(id).catch(() => null);
-    if (cached) {
-      return new Response(cached.audio as unknown as BodyInit, {
-        status: 200,
-        headers: {
-          "Content-Type": cached.mimeType,
-          "Cache-Control": "public, max-age=31536000, immutable",
-          "X-Speech-Source": "cache",
-        },
-      });
-    }
+  if (served.outcome === "audio") {
+    return new Response(served.audio as unknown as ResponseBody, {
+      status: 200,
+      headers: {
+        "Content-Type": served.mimeType,
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Speech-Source": served.source,
+      },
+    });
   }
 
-  if (!provider) {
+  if (served.outcome === "not_configured") {
     return c.json(
       {
         error: "no_native_voice",
         message:
           "No Amharic speech provider is configured on the server. Add a provider key to enable native audio.",
-        normalized: prepared.normalized,
-        estimatedMs: estimateDurationMs(prepared),
+        normalized: served.normalized,
+        estimatedMs: served.estimatedMs,
       },
       503,
     );
   }
 
-  // Cache missed: this call will reach the provider and cost money, so it is
-  // metered. Anonymous callers are metered by hashed address, which is what
-  // stops the free tier being bypassed by signing out.
-  const who = await identify(c);
-  const spend = await consume(who.subject, who.plan, "tts_synthesis");
-  if (!spend.consumed) {
+  if (served.outcome === "quota") {
+    // The cast is load-bearing: `identified` is only ever assigned inside the
+    // thunk above, which TypeScript's control flow does not follow, so it
+    // narrows the variable to `null` here and makes every field access an
+    // error. The runtime value is set whenever the spender ran — which a
+    // `quota` outcome proves it did.
+    const who = identified as RequestIdentity | null;
     return c.json(
       {
         error: "quota_exceeded",
-        message: who.userId
-          ? refusalMessage(spend, who.plan)
+        message: who?.userId
+          ? refusalMessage(served.spend, who.plan)
           : "Anonymous playback is limited. Sign in for the full free allowance.",
-        limit: spend.limit,
-        used: spend.used,
-        resets_at: spend.resets_at,
-        normalized: prepared.normalized,
+        limit: served.spend.limit,
+        used: served.spend.used,
+        resets_at: served.spend.resets_at,
+        normalized: served.normalized,
       },
       429,
     );
   }
 
-  try {
-    const result = await provider.synthesize({ text, voice, mode });
-    await writeCache({
-      provider: result.provider,
-      voice: result.voice,
-      mode: result.mode,
-      normalizedText: result.normalized,
-      sourceText: text,
-      mimeType: result.mimeType,
-      audio: result.audio,
-      durationMsEstimate: result.estimatedMs,
-      kind: c.req.query("kind") || "ad_hoc",
-      refId: c.req.query("refId") || null,
-    }).catch(() => undefined);
-
-    return new Response(result.audio as unknown as BodyInit, {
-      status: 200,
-      headers: {
-        "Content-Type": result.mimeType,
-        "Cache-Control": "public, max-age=31536000, immutable",
-        "X-Speech-Source": "synthesized",
-      },
-    });
-  } catch (error) {
-    // The provider failed, so no audio was produced and no money was spent.
-    // Hand the unit back rather than charging for a 502.
-    await refund(who.subject, "tts_synthesis").catch(() => undefined);
-    return c.json(
-      { error: "synthesis_failed", message: error instanceof Error ? error.message : "unknown" },
-      502,
-    );
-  }
+  return c.json({ error: "synthesis_failed", message: served.message }, 502);
 });
 
 /**
@@ -188,36 +196,27 @@ app.get("/api/speech/audio", async (c) => {
  * and scoring stay separate so the scorer remains deterministic.
  */
 app.post("/api/speech/recognize", async (c) => {
-  // Recognizer, not the synthesis provider: our own native voice ranks first
-  // for speaking but does not listen.
-  const provider = activeRecognizer();
-  if (!provider?.recognize) {
-    return c.json(
-      {
-        error: "no_recognizer",
-        message: "No Amharic speech recognizer is configured on the server.",
-      },
-      503,
-    );
-  }
+  const heard = await hearSpeech({
+    audio: new Uint8Array(await c.req.arrayBuffer()),
+    mimeType: c.req.header("content-type") || "audio/webm",
+    expected: c.req.query("expected") || undefined,
+  });
 
-  const mimeType = c.req.header("content-type") || "audio/webm";
-  const audio = new Uint8Array(await c.req.arrayBuffer());
-  if (audio.byteLength === 0) return c.json({ error: "empty audio" }, 400);
-
-  try {
-    const result = await provider.recognize({
-      audio,
-      mimeType,
-      expected: c.req.query("expected") || undefined,
-    });
-    return c.json(result, 200);
-  } catch (error) {
-    return c.json(
-      { error: "recognition_failed", message: error instanceof Error ? error.message : "unknown" },
-      502,
-    );
+  if (heard.outcome === "transcript") {
+    const { transcript, confidence, provider } = heard;
+    return c.json({ transcript, confidence, provider }, 200);
   }
+  if (heard.outcome === "empty") return c.json({ error: "empty audio" }, 400);
+  if (heard.outcome === "failed") {
+    return c.json({ error: "recognition_failed", message: heard.message }, 502);
+  }
+  return c.json(
+    {
+      error: "no_recognizer",
+      message: "No Amharic speech recognizer is configured on the server.",
+    },
+    503,
+  );
 });
 
 /**
