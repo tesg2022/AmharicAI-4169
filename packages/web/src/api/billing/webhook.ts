@@ -295,11 +295,11 @@ async function syncSubscription(code: string | null): Promise<string> {
   /**
    * `until` is only written when Paystack gives a date, and never cleared.
    *
-   * A disabled subscription comes back with `next_payment_date: null`, and
-   * null in that column means "never expires" — it is how lifetime access is
-   * stored. Writing it here would hand a cancelled subscriber permanent
-   * access, so the paid-period end they already have is left standing and
-   * the status alone ends the entitlement.
+   * A disabled subscription comes back with `next_payment_date: null`, and a
+   * row with no end date entitles nobody. Writing it here would cut a
+   * cancelled subscriber off from the period they have already paid for, so
+   * the paid-period end they already have is left standing and the status
+   * alone ends the entitlement.
    */
   await setSubscriptionStatus(code, status, until ?? undefined);
 

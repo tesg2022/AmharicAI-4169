@@ -35,14 +35,14 @@ import {
  * change. `scripts/paypal-setup.ts` creates the plans and prints the exact
  * lines to paste.
  *
- * `premium_lifetime` is absent and must stay absent. A lifetime purchase is a
- * single payment, and PayPal's Subscriptions API — the only PayPal API this
- * integration speaks — cannot express one; it would need the Orders API. A
- * plan id here would sell a recurring subscription to something advertised as
- * one payment, which is the worse of the two possible bugs.
+ * Every option is here, because every option is a subscription and PayPal's
+ * Subscriptions API is the only PayPal API this integration speaks. The
+ * withdrawn `premium_lifetime` was the one product that needed the Orders API
+ * instead; with it gone there is nothing this file has to leave out.
  */
 const PLAN_ID_ENV: Record<string, string> = {
   basic_monthly: "PAYPAL_PLAN_BASIC_MONTHLY",
+  basic_annual: "PAYPAL_PLAN_BASIC_ANNUAL",
   premium_monthly: "PAYPAL_PLAN_PREMIUM_MONTHLY",
   premium_annual: "PAYPAL_PLAN_PREMIUM_ANNUAL",
 };
@@ -68,15 +68,21 @@ export function optionIdForPaypalPlan(planId: string): string | null {
  *
  * Three conditions, all of them load-bearing:
  *
- *   - a USD price, which is also the flag that says "sold on PayPal at all"
  *   - credentials, or there is no API to call
+ *   - the webhook id, or the subscription can never be kept current
  *   - a plan id, or the subscription cannot be created
  *
  * The webhook id is checked at the deployment level rather than per option:
  * it is not per-plan, and its absence blocks everything equally.
+ *
+ * This is the SYNCHRONOUS half of sellability — everything answerable from
+ * the environment, which is what a page render can wait for. It deliberately
+ * does NOT establish that the plan charges the advertised amount: that needs
+ * a call to PayPal, and it lives in `paypal-verify.ts`, on the checkout path.
+ * A `true` here means "a button may be drawn"; only `planVerified()` means
+ * "money may be taken".
  */
 export function paypalOptionSellable(option: BillingOption): boolean {
-  if (option.price_usd === undefined) return false;
   if (!paypalCredentialsPresent()) return false;
   if (!paypalWebhookId()) return false;
   return paypalPlanIdFor(option.id) !== null;

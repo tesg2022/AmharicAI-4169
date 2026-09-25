@@ -8,13 +8,12 @@ import { orpc } from "@/lib/api";
  * `billing.catalogue` is the only place a price is read from, so a price
  * cannot be corrected on the website and left stale in the app. The older
  * mobile screens read `catalog.me`'s monthly-only figure, which knows nothing
- * about annual or lifetime terms — including for Lifetime, which has no
- * monthly figure.
+ * about the annual term and so quoted the wrong number for it.
  *
- * Prices arrive already formatted, in South African rand, with an approximate
- * dollar figure alongside. The app never formats money itself: Paystack
- * charges ZAR, and a screen that quietly printed a dollar sign in front of a
- * rand amount would misstate the price by roughly a factor of eighteen.
+ * Prices arrive already formatted, in South African rand — the currency the
+ * Paystack plans are configured in and the amount actually charged. The app
+ * never formats money itself, so it cannot invent a currency symbol: the
+ * server owns both the figure and the unit it is quoted in.
  *
  * `billing.preflight` is asked immediately before `billing.checkout`. It
  * grants nothing; it says whether opening checkout for this option makes
@@ -49,9 +48,9 @@ export function useCheckout() {
 /**
  * Cancels whatever the account has outgrown, and says what it stopped.
  *
- * A lifetime purchase can land on top of a live monthly subscription of the
- * same tier, and Paystack will happily keep charging both — it has no concept
- * of one product superseding another — so the server closes the loser.
+ * An upgrade can land on top of a live subscription of a lower tier, and
+ * Paystack will happily keep charging both — it has no concept of one product
+ * superseding another — so the server closes the loser.
  * Called when a billing screen opens rather than from a checkout callback,
  * because checkout on a phone happens in a browser this app does not control:
  * the only reliable moment to ask is when the learner is back. Grants

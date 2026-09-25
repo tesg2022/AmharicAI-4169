@@ -27,8 +27,18 @@ import { BILLING_OPTIONS, formatZar } from "./plans";
 export const POLICY_VERSION = "2026-09-12";
 
 export const OPERATOR = {
-  /** The natural person who publishes the app — the Play developer account. */
+  /**
+   * The natural person who publishes the app — the Play developer account.
+   *
+   * Used *only* where identifying the responsible party is legally required:
+   * the POPIA/GDPR "Who we are" disclosure in the Privacy Policy, and the
+   * contracting party in the Terms of Service. Every other surface — About,
+   * Contact, the footer, the FAQ, structured data — names `publicName`
+   * instead, so the public identity of the project is the site, not a person.
+   */
   legalName: "Tesfaye Tessema Gintamo",
+  /** The public-facing publisher identity. Use this unless the law wants a name. */
+  publicName: "amharicai.org",
   tradingAs: "AmharicAI",
   brand: "AmharicAI",
   website: "https://amharicai.org",
@@ -36,16 +46,18 @@ export const OPERATOR = {
   /** Deletion and access requests. Same inbox today; separated so it can move. */
   privacyEmail: "admin@amharicai.org",
   /**
-   * A general location, deliberately not a street address.
+   * No public location is published.
    *
-   * Google Play requires a street-level address on the *developer account*,
-   * which is entered in the Play Console and is a different thing from this.
-   * Publishing an invented or approximated street address here would be worse
-   * than publishing none, so this field is named `location` — not `address` —
-   * so that no page can render it under a "Postal address" heading by
-   * assuming it is one.
+   * AmharicAI is used from anywhere and reached only by email, so a city on
+   * the page told a reader nothing and implied a place of business that does
+   * not exist. Google Play's street-level address requirement is satisfied on
+   * the *developer account* in the Play Console, which is a different thing
+   * from anything rendered here; the same is true of payment-provider
+   * verification and tax records, which hold the real address off-site.
+   *
+   * `jurisdiction` stays: the governing-law clause in the Terms has to name a
+   * legal system, and that is a statement of law rather than of whereabouts.
    */
-  location: "Cape Town, South Africa",
   jurisdiction: "Republic of South Africa",
   /** Under this age an account may not be created. Drives the Play age rating. */
   minimumAge: 13,
@@ -78,30 +90,33 @@ const EFFECTIVE = "12 September 2026";
 const TERM_SUFFIX: Record<string, string> = {
   monthly: "",
   annual: " Annual",
-  lifetime: " Lifetime",
 };
 
 const TERM_BILLING: Record<string, string> = {
   monthly: "Monthly, renews until cancelled",
   annual: "Yearly, renews until cancelled",
-  lifetime: "One payment, no renewal",
 };
 
 /**
  * The price table in the Terms, built from the price list rather than typed out.
  *
- * It was typed out, and it went stale: it still promised "Basic $4.99" and
- * "Premium Lifetime $149" after billing moved to rand, in the one document a
- * customer can hold us to. A contractual price that disagrees with the price
- * charged is the worst kind of drift, so this table now cannot disagree with
- * checkout — both read `BILLING_OPTIONS`.
+ * It was typed out once, and it went stale — a contractual price that
+ * disagrees with the price charged is the worst kind of drift. So this table
+ * cannot disagree with checkout: both read `BILLING_OPTIONS`, and the rand
+ * figure here is the amount Paystack is asked to charge.
+ *
+ * One currency, one column. A dollar column was tried and taken out: no
+ * customer is charged in dollars here, and a second figure in a contract is a
+ * second figure a customer can hold us to.
  */
 const PRICE_TABLE: { columns: string[]; rows: string[][] } = {
   columns: ["Plan", "Price (ZAR)", "Billing"],
   rows: [
     ["Free", formatZar(0), "No payment, no card"],
     ...BILLING_OPTIONS.map((option): string[] => [
-      option.plan === "basic" ? "Basic" : `Premium${TERM_SUFFIX[option.term] ?? ""}`,
+      option.plan === "basic"
+        ? `Basic${TERM_SUFFIX[option.term] ?? ""}`
+        : `Premium${TERM_SUFFIX[option.term] ?? ""}`,
       formatZar(option.price_zar),
       TERM_BILLING[option.term] ?? "",
     ]),
@@ -179,7 +194,7 @@ const PRIVACY: LegalDocument = {
       body: [
         `${OPERATOR.brand} is developed and operated by ${OPERATOR.legalName} ("we," "us," or "our"), operating under the brand name ${OPERATOR.tradingAs}.`,
         `For the purposes of the Protection of Personal Information Act, 2013 (POPIA) and the EU/UK General Data Protection Regulation, we are the responsible party and data controller for the information described here.`,
-        `Privacy and data requests: ${OPERATOR.privacyEmail}. Location: ${OPERATOR.location}.`,
+        `Privacy and data requests: ${OPERATOR.privacyEmail}.`,
       ],
     },
     DATA_TABLE,
@@ -323,8 +338,9 @@ const TERMS: LegalDocument = {
       heading: "Plans, prices and payment",
       body: [
         "The free plan is genuinely free and has monthly limits on AI tutor questions and native audio playback. Paid plans raise or remove those limits.",
-        "All prices are in South African rand (ZAR) and every charge is taken in rand, because our payment provider settles to a South African account. Where we show an approximate amount in another currency it is a convenience conversion and is marked as approximate: it is not the amount charged, and your bank sets its own exchange rate and may add its own conversion fee.",
-        "Subscriptions renew automatically at the end of each period until you cancel. A lifetime purchase is a single payment that grants Premium access for as long as the service operates.",
+        "All prices are in South African rand (ZAR) and every charge is taken in rand, because our payment provider settles to a South African account. The rand figure shown beside a plan is the amount charged: we do not quote a price in one currency and charge another, and we show no approximate conversion, because an approximation is not a price. If your card is not a rand card your bank sets its own exchange rate and may add its own conversion fee; that part is between you and your bank.",
+        "Every paid plan is a subscription: it renews automatically at the end of each period until you cancel, and we do not sell a one-off purchase of permanent access.",
+        "If you hold a plan bought under earlier terms, it continues at exactly the price you agreed. We will not re-price an existing subscription without asking you first.",
       ],
       table: PRICE_TABLE,
     },
@@ -426,7 +442,7 @@ const ABOUT: LegalDocument = {
     {
       heading: "Who makes it",
       body: [
-        `${OPERATOR.brand} is developed and operated by ${OPERATOR.legalName} ("we," "us," or "our"), operating under the brand name ${OPERATOR.tradingAs}, from ${OPERATOR.location}. It is a small independent project rather than a company with a support department, which means the person who reads your email is the person who can fix the bug.`,
+        `${OPERATOR.brand} is developed and operated by ${OPERATOR.publicName}, the independent project behind the ${OPERATOR.tradingAs} course. It is a small project rather than a company with a support department, which means the person who reads your email is the person who can fix the bug. It is built to be used from anywhere, and everything it does happens at ${OPERATOR.website} or in the app.`,
       ],
     },
     {
@@ -469,10 +485,9 @@ const CONTACT: LegalDocument = {
     {
       heading: "Who you are writing to",
       body: [
-        `${OPERATOR.brand} is developed and operated by ${OPERATOR.legalName} ("we," "us," or "our"), operating under the brand name ${OPERATOR.tradingAs}.`,
+        `${OPERATOR.brand} is developed and operated by ${OPERATOR.publicName} ("we," "us," or "our"), operating under the brand name ${OPERATOR.tradingAs}.`,
         `Email: ${OPERATOR.supportEmail}`,
         `Privacy and data requests: ${OPERATOR.privacyEmail}`,
-        `Location: ${OPERATOR.location}`,
         "We are an email-first project and have no public walk-in or postal office. Email reaches us; post does not.",
       ],
     },

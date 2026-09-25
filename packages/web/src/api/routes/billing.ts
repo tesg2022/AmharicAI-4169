@@ -11,10 +11,11 @@ import {
 import { paypalPaymentsFor } from "../billing/paypal-store";
 import { reconcileSubscriptions } from "../entitlements/supersede";
 import {
+  PAYSTACK_CLOSED_MESSAGE,
   checkoutCallbackUrl,
-  isRecurring,
   newReference,
-  optionSellable,
+  optionBuyable,
+  paystackOpenToNewSales,
   planCodeFor,
 } from "../billing/config";
 import {
@@ -25,9 +26,11 @@ import {
   formatMajor,
   fromSubunit,
   initializeTransaction,
+  isTestMode,
   subscriptionManagementLink,
   toSubunit,
 } from "../billing/paystack";
+import { isSandbox } from "../billing/paypal";
 import { fulfilReference } from "../billing/fulfil";
 import {
   ensureCustomer,
@@ -40,14 +43,14 @@ import {
 } from "../billing/store";
 import {
   BILLING_OPTIONS,
+  DISPLAY_CURRENCY,
   FREE_PLAN,
   PLANS,
   billingOptionById,
   billingOptionsFor,
   entryPrice,
-  formatApproxUsd,
-  formatUsd,
   formatZar,
+  isRetiredOption,
   tutorAllowanceLabel,
   type BillingOption,
   type PlanId,
@@ -89,37 +92,35 @@ type InvoiceView = ReturnType<typeof invoiceView> | ReturnType<typeof paypalInvo
  */
 
 /**
- * The customer-facing price: rand, because rand is what is charged, with an
- * indicative dollar figure beside it.
+ * The customer-facing price: rand, and only rand.
  *
- * A South African Paystack account can only charge ZAR — verified against
- * Paystack's own support documentation, not assumed — so showing a dollar
- * price as *the* price would be a lie that the card statement then corrects.
- * The USD figure is carried separately, always marked approximate, and every
- * surface that renders it must also render `billed_in_note`.
+ * One number per option, and it is the number Paystack charges. A dollar
+ * price list was tried here and is parked on the `usd-paypal-pricing` branch;
+ * so was an indicative "≈$X" beside the rand figure, and both are gone for
+ * the same reason. A second figure for the same plan is a figure some
+ * customer reads as the price, and this account can only ever take rand.
+ *
+ * `sellable` is per-option rather than a single deployment-wide flag, so a
+ * missing plan code for the annual option cannot take the monthly one off
+ * sale with it.
  */
 function optionView(o: BillingOption) {
   return {
     id: o.id,
     plan: o.plan,
     term: o.term,
-    /** The real charged amount, in rand. */
+    /** The charged amount, in rand, for one whole term. */
     price_zar: o.price_zar,
     /** What the customer is actually charged. This is the price. */
     price_label: formatZar(o.price_zar),
-    /** Indicative only, for readers who do not think in rand. */
-    price_approx_usd_label: formatApproxUsd(o.price_zar),
-    /** Must be shown wherever the USD figure is. */
-    billed_in_note: `Billed in South African rand (${CURRENCY}).`,
     label_en: o.label_en,
     label_am: o.label_am,
     note_en: o.note_en ?? null,
     /**
-     * Whether THIS option can be bought in this deployment. Per-option, not
-     * per-deployment: a missing plan code for the annual option must not take
-     * the monthly one off sale with it.
+     * Whether THIS option can be bought in this deployment: the price list
+     * knows about it, Paystack has a plan code for it, and checkout is open.
      */
-    sellable: optionSellable(o),
+    sellable: optionBuyable(o),
   };
 }
 
@@ -128,9 +129,9 @@ function planView(plan: (typeof PLANS)[number]) {
   return {
     ...plan,
     tutor_allowance_label: tutorAllowanceLabel(plan.id),
+    /** "from R89" — the cheapest way into the tier, in the charged currency. */
     entry_price_zar: entry?.price_zar ?? 0,
     entry_price_label: formatZar(entry?.price_zar ?? 0),
-    entry_price_approx_usd_label: formatApproxUsd(entry?.price_zar ?? 0),
     billing_options: billingOptionsFor(plan.id).map(optionView),
   };
 }
@@ -148,8 +149,8 @@ export const billing = {
      * Which options they are actually paying for, not just which tier they
      * are on. Without this the pricing card cannot tell "you already bought
      * this" from "you are on this tier by another route", and a Premium
-     * monthly subscriber is shown "your current plan" over the annual and
-     * lifetime options too — locked out of the upgrade they came to make.
+     * monthly subscriber is shown "your current plan" over the annual
+     * option too — locked out of the upgrade they came to make.
      */
     const held = context.user ? await liveGrants(context.user.id) : [];
     const heldOptionIds = held.filter((g) => !g.cancel_pending).map((g) => g.option_id);
@@ -167,13 +168,18 @@ export const billing = {
       free: planView(FREE_PLAN),
       plans: PLANS.map(planView),
       billing_options: BILLING_OPTIONS.map(optionView),
-      currency: CURRENCY,
+      /**
+       * The currency every price above is quoted in, which is also the
+       * currency Paystack charges. One field, because there is one currency:
+       * the price list and the provider agree by construction.
+       */
+      currency: DISPLAY_CURRENCY,
       /**
        * Stated plainly rather than hidden: when this is false the buttons
        * should explain that checkout is unavailable in this deployment, not
        * silently do nothing when tapped.
        */
-      checkout_available: status.configured,
+      checkout_available: status.configured && paystackOpenToNewSales(),
       billing_status: status,
     };
   }),
@@ -192,13 +198,40 @@ export const billing = {
     .handler(async ({ context, input }) => {
       const option = billingOptionById(input.option_id);
       if (!option) {
+        /**
+         * A withdrawn id gets its own message. `premium_lifetime` is gone from
+         * the price list but the string still reaches here — from a pricing tab
+         * left open since before it was withdrawn, from an old mobile build,
+         * from someone replaying the call by hand — and "unknown billing
+         * option" reads as a bug on our side to a person who is looking
+         * straight at the plan on their screen.
+         */
         throw new ORPCError("BAD_REQUEST", {
-          message: `Unknown billing option "${input.option_id}".`,
+          message: isRetiredOption(input.option_id)
+            ? "That plan is no longer sold, so it cannot be bought and nothing has been " +
+              "charged. The monthly and annual subscriptions are the current plans."
+            : `Unknown billing option "${input.option_id}".`,
         });
       }
 
       const status = billingStatus();
       const view = optionView(option);
+
+      /**
+       * Checked before everything else, because it is not a fault and the
+       * other refusals all read as one. `paystackOpenToNewSales()` is true in
+       * this deployment — checkout is open — but the gate stays in the path
+       * rather than being deleted, so that closing sales again is one boolean
+       * and not a re-plumbing of every refusal message.
+       */
+      if (!paystackOpenToNewSales()) {
+        return {
+          ok: false as const,
+          reason: "checkout_closed" as const,
+          message: PAYSTACK_CLOSED_MESSAGE,
+          option: view,
+        };
+      }
 
       if (!status.key_present) {
         return {
@@ -222,7 +255,7 @@ export const billing = {
        * Checked from configuration rather than by calling Paystack, so a slow
        * or unreachable API cannot refuse a purchase that would have worked.
        */
-      if (!optionSellable(option)) {
+      if (!optionBuyable(option)) {
         const tier = PLANS.find((p) => p.id === option.plan)?.name_en ?? option.plan;
         console.error(
           `[billing] "${option.id}" is on the pricing page but has no Paystack plan code ` +
@@ -255,10 +288,10 @@ export const billing = {
 
       // Only this exact option is refused — not the whole tier.
       //
-      // Refusing on tier alone blocked the two upgrades most worth making: a
-      // Premium monthly subscriber could not move to annual, and could not buy
-      // lifetime, because the server told them they were "already subscribed
-      // to Premium". Paying monthly is not the same purchase as paying once.
+      // Refusing on tier alone blocked the upgrade most worth making: a
+      // Premium monthly subscriber could not move to annual, because the
+      // server told them they were "already subscribed to Premium". Paying
+      // monthly is not the same purchase as paying for a year.
       //
       // Someone already on this tier via an access code may still subscribe;
       // that is their call, and the grant simply stops mattering.
@@ -267,24 +300,7 @@ export const billing = {
         return {
           ok: false as const,
           reason: "already_subscribed" as const,
-          message: identical.recurring
-            ? `You are already subscribed to ${option.label_en}.`
-            : `You already own ${option.label_en}, and it does not expire.`,
-          option: view,
-        };
-      }
-
-      // Buying lifetime access to a tier you already own outright is money for
-      // nothing, whichever option it is sold under.
-      if (
-        option.term === "lifetime" &&
-        grants.some((g) => g.plan === option.plan && g.term === "lifetime")
-      ) {
-        const name = PLANS.find((p) => p.id === option.plan)?.name_en ?? option.plan;
-        return {
-          ok: false as const,
-          reason: "already_subscribed" as const,
-          message: `You already own ${name} for life. There is nothing more to buy.`,
+          message: `You are already subscribed to ${option.label_en}.`,
           option: view,
         };
       }
@@ -316,12 +332,34 @@ export const billing = {
     .handler(async ({ context, input }) => {
       const option = billingOptionById(input.option_id);
       if (!option) {
+        /**
+         * A withdrawn id gets its own message. `premium_lifetime` is gone from
+         * the price list but the string still reaches here — from a pricing tab
+         * left open since before it was withdrawn, from an old mobile build,
+         * from someone replaying the call by hand — and "unknown billing
+         * option" reads as a bug on our side to a person who is looking
+         * straight at the plan on their screen.
+         */
         throw new ORPCError("BAD_REQUEST", {
-          message: `Unknown billing option "${input.option_id}".`,
+          message: isRetiredOption(input.option_id)
+            ? "That plan is no longer sold, so it cannot be bought and nothing has been " +
+              "charged. The monthly and annual subscriptions are the current plans."
+            : `Unknown billing option "${input.option_id}".`,
         });
       }
 
-      if (!optionSellable(option)) {
+      /**
+       * The gate on opening checkout at all, kept ahead of every other check
+       * for the same reason it exists: if sales are ever closed again, the
+       * refusal has to happen before any row is written and before Paystack
+       * is called, so nothing is charged and nothing is left half-done. It is
+       * open in this deployment, so this passes.
+       */
+      if (!paystackOpenToNewSales()) {
+        throw new ORPCError("SERVICE_UNAVAILABLE", { message: PAYSTACK_CLOSED_MESSAGE });
+      }
+
+      if (!optionBuyable(option)) {
         throw new ORPCError("SERVICE_UNAVAILABLE", {
           message:
             `${option.label_en} cannot be bought right now: this deployment has no ` +
@@ -341,7 +379,18 @@ export const billing = {
         });
       }
 
-      const planCode = isRecurring(option) ? planCodeFor(option.id) : null;
+      // Every option sold is a subscription, so every checkout carries a plan
+      // code. `optionBuyable` above has already refused the option if this
+      // deployment has no code configured for it.
+      const planCode = planCodeFor(option.id);
+
+      /**
+       * The amount to charge: the option's own rand price, which is the same
+       * figure the price page rendered and the same figure `fulfil.ts` checks
+       * the completed payment against. There is no conversion step and no
+       * second currency to pick the wrong one of.
+       */
+      const amountZar = option.price_zar;
       const reference = newReference(context.user.id, option.id);
 
       try {
@@ -357,18 +406,17 @@ export const billing = {
           optionId: option.id,
           plan: option.plan,
           term: option.term,
-          amountSubunit: toSubunit(option.price_zar),
+          amountSubunit: toSubunit(amountZar),
           currency: CURRENCY,
           planCode,
         });
 
         const initialized = await initializeTransaction({
           email: context.user.email,
-          amountMajor: option.price_zar,
-          // Present for a subscription, absent for the one-off lifetime
-          // purchase. Paystack has no one-off plan type, so attaching a plan
-          // to lifetime would sell a subscription to something advertised as
-          // a single payment.
+          amountMajor: amountZar,
+          // Always present: attaching the plan is what makes Paystack treat
+          // the charge as a subscription and renew it, rather than taking one
+          // payment and stopping.
           plan: planCode ?? undefined,
           currency: CURRENCY,
           reference,
@@ -392,8 +440,9 @@ export const billing = {
           reference: initialized.reference,
           option: optionView(option),
           /** What they will be charged, to show on the way out. */
-          amount_label: formatZar(option.price_zar),
-          recurring: isRecurring(option),
+          amount_label: formatZar(amountZar),
+          /** Always true — every plan sold renews. */
+          recurring: true,
         };
       } catch (error) {
         if (error instanceof PaystackError && error.isIpBlocked) {
@@ -434,9 +483,9 @@ export const billing = {
       try {
         const result = await fulfilReference(input.reference);
 
-        // Reconcile on the way out, so a lifetime buyer's old monthly
-        // subscription is cancelled the moment their purchase lands rather
-        // than on the next page they happen to open.
+        // Reconcile on the way out, so an upgrader's superseded subscription
+        // is cancelled the moment their purchase lands rather than on the next
+        // page they happen to open.
         if (result.kind === "granted") {
           await reconcileSubscriptions(context.user.id);
         }
@@ -458,8 +507,8 @@ export const billing = {
   /**
    * Cancels subscriptions the caller has outgrown, and reports what it did.
    *
-   * Nobody is going to be charged R89 a month for something they bought
-   * outright for R2 599, so the client calls this whenever the subscription
+   * Nobody is going to be charged R89 a month for Basic while they are also
+   * paying for Premium, so the client calls this whenever the subscription
    * page opens: that covers the same-tab purchase and the return leg of a
    * redirect checkout without needing a callback to have fired.
    *
@@ -527,10 +576,34 @@ export const billing = {
      *
      * Refunds and reversals are kept: money that came back is part of the
      * history a customer is owed a view of, and `status` carries which it is.
+     *
+     * Rows raised on test credentials are dropped once the same provider is
+     * running on live ones. They took no money, so on a live deployment they
+     * are not receipts at all — they are leftovers from the cutover, and a
+     * customer cannot reconcile them against a bank statement that has
+     * nothing on it. They are hidden rather than relabelled, and the stored
+     * row keeps its `testMode` flag either way: the amounts must never be
+     * counted as revenue, and rewriting the flag to make the list read
+     * cleanly would do exactly that.
+     *
+     * The test is per provider, not global. Paystack can be live while PayPal
+     * is still on sandbox credentials or the reverse, and each provider's own
+     * rows are judged by its own mode. On a test deployment nothing is hidden
+     * — that is where test payments are the only payments, and a preview with
+     * an empty receipts list would hide the very thing being tested.
      */
+    const hidePaystackTestRows = !isTestMode();
+    const hidePaypalSandboxRows = !isSandbox();
+
     const invoices: InvoiceView[] = [
-      ...payments.filter((p) => p.status === "success").map(invoiceView),
-      ...paypalPayments.filter((p) => p.status !== "failed").map(paypalInvoiceView),
+      ...payments
+        .filter((p) => p.status === "success")
+        .filter((p) => !(hidePaystackTestRows && p.testMode))
+        .map(invoiceView),
+      ...paypalPayments
+        .filter((p) => p.status !== "failed")
+        .filter((p) => !(hidePaypalSandboxRows && p.sandbox))
+        .map(paypalInvoiceView),
     ].sort((a, b) => b.created_at.localeCompare(a.created_at));
 
     return {
@@ -718,20 +791,13 @@ export const billing = {
 function holdingView(grant: LiveGrant) {
   const option = billingOptionById(grant.option_id);
   const tier = PLANS.find((p) => p.id === grant.plan)?.name_en ?? grant.plan;
-  const paypal = grant.provider === "paypal";
   /**
-   * The price this holding is actually billed at, in the currency it is
-   * actually billed in. A PayPal subscriber pays `price_usd` in dollars; the
-   * rand figure beside it is a number nobody ever charged them, and printing
-   * it here is the sort of mistake a customer reads as an overcharge.
+   * The price this holding is billed at, in the currency it is billed in —
+   * one currency, so this is simply the option's rand price. Null only when
+   * the holding names an option the price list no longer has, which is a
+   * state to show honestly as unknown rather than to guess at.
    */
-  const priceLabel = paypal
-    ? option?.price_usd !== undefined
-      ? formatUsd(option.price_usd)
-      : null
-    : option
-      ? formatZar(option.price_zar)
-      : null;
+  const priceLabel = option ? formatZar(option.price_zar) : null;
   return {
     option_id: grant.option_id,
     /**
@@ -744,8 +810,18 @@ function holdingView(grant: LiveGrant) {
     subscription_code: grant.subscription_code,
     plan: grant.plan,
     term: grant.term,
-    /** "Premium — R179 / month" on Paystack, "Premium — US$11.99" on PayPal. */
-    label_en: option ? `${tier} — ${paypal ? (priceLabel ?? option.label_en) : option.label_en}` : tier,
+    /**
+     * "Premium — R179 / month". Built from `priceLabel` rather than printed
+     * from `option.label_en`, so the term suffix is derived once and the
+     * amount shown is always the amount charged.
+     */
+    label_en: option
+      ? `${tier} — ${
+          priceLabel
+            ? `${priceLabel} / ${option.term === "annual" ? "year" : "month"}`
+            : option.label_en
+        }`
+      : tier,
     price_label: priceLabel,
     recurring: grant.recurring,
     cancel_pending: grant.cancel_pending,
@@ -757,9 +833,9 @@ function holdingView(grant: LiveGrant) {
     payment_failed: grant.payment_failed,
     status: grant.status,
     /**
-     * The next renewal for a live subscription, the last day of access for one
-     * that is cancelling, and null for lifetime. The UI must read
-     * `cancel_pending` to know which of the three this date means.
+     * The next renewal for a live subscription, and the last day of access for
+     * one that is cancelling. The UI must read `cancel_pending` to know which
+     * of the two this date means.
      */
     until: grant.until ? new Date(grant.until).toISOString() : null,
   };

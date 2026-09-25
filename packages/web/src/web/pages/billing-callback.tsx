@@ -99,9 +99,9 @@ export default function BillingCallbackPage() {
 
         if (outcome.result.kind === "granted") {
           /**
-           * Close any double billing straight away: someone buying lifetime
-           * while a monthly subscription is live must not be charged for both,
-           * and this is the page they land on.
+           * Close any double billing straight away: someone upgrading to
+           * annual while a monthly subscription is live must not be charged
+           * for both, and this is the page they land on.
            */
           try {
             await reconcileMutate({});

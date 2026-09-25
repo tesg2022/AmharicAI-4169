@@ -5,7 +5,6 @@ import { FontSize, Radius } from "@/constants/theme";
 import { useColors } from "@/hooks/use-colors";
 import { useBuyPlan } from "@/hooks/use-buy-plan";
 import { useCatalogue } from "@/queries/billing";
-import { usePaypalCatalogue } from "@/queries/billing-paypal";
 import { failureMessage } from "@/queries/catalog";
 import { Am, Body, Button, Card, Chip, ErrorState, Loading, Title } from "@/components/ui";
 
@@ -13,9 +12,9 @@ import { Am, Body, Button, Card, Chip, ErrorState, Loading, Title } from "@/comp
  * The paid plans, as one block, used by both Pricing and Your plan.
  *
  * It is a single component on purpose. The two screens previously each carried
- * their own copy of the list, one quoting a dollar-a-month figure for every plan — which
- * is not a thing Lifetime has — and both of them offering a checkout that
- * could not charge. Two copies of a price list is two chances to be wrong.
+ * their own copy of the list, one quoting a per-month figure for an annual
+ * plan, and both of them offering a checkout that could not charge. Two copies
+ * of a price list is two chances to be wrong.
  *
  * What it will not do:
  *
@@ -24,23 +23,19 @@ import { Am, Body, Button, Card, Chip, ErrorState, Loading, Title } from "@/comp
  *   - claim a purchase happened. Only the server says what is held; a returned
  *     checkout triggers a re-read, never a local grant.
  *   - hide the upgrade somebody came for. "You are on Premium" and "you are
- *     paying for Premium monthly" are different facts, so an annual or
- *     lifetime option stays live for a monthly subscriber instead of being
- *     greyed out as "your current plan".
+ *     paying for Premium monthly" are different facts, so the annual option
+ *     stays live for a monthly subscriber instead of being greyed out as
+ *     "your current plan".
  */
 
 function termSuffix(term: string | null | undefined): string {
-  return term === "monthly" ? "/month" : term === "annual" ? "/year" : term === "lifetime" ? " once" : "";
+  return term === "monthly" ? "/month" : term === "annual" ? "/year" : "";
 }
 
 export function PaidPlans() {
   const colors = useColors();
   const catalogue = useCatalogue();
-  // Loaded alongside the rand catalogue, never instead of it. If PayPal is
-  // unconfigured or this call fails, the card path still sells — the screen
-  // simply draws no PayPal button, which is the honest failure.
-  const paypalCatalogue = usePaypalCatalogue();
-  const { buy, buying, buyWithPaypal, buyingPaypal, error, stopped } = useBuyPlan();
+  const { buy, buying, error, stopped } = useBuyPlan();
 
   /** Which billing term is selected per plan — Premium is sold three ways. */
   const [chosen, setChosen] = useState<Record<string, string>>({});
@@ -96,14 +91,6 @@ export function PaidPlans() {
         const selected = options.find((o) => o.id === selectedId) ?? options[0];
         const isCurrentTier = p.id === data.current_plan;
         const holdsThisOption = Boolean(selected && data.held_option_ids.includes(selected.id));
-        // The PayPal view of the same option id — both catalogues are built
-        // from one option list, so the ids line up. Absent for lifetime (no
-        // USD price) and whenever PayPal cannot sell, and then no PayPal
-        // button is drawn rather than one that fails when tapped.
-        const selectedPaypal = selected
-          ? paypalCatalogue.data?.options.find((o) => o.id === selected.id)
-          : undefined;
-        const paypalSellable = Boolean(selectedPaypal?.sellable && selectedPaypal.price_label);
 
         return (
           <Card
@@ -130,16 +117,15 @@ export function PaidPlans() {
                     <Body size={FontSize.caption} color={colors.mutedForeground}>
                       {termSuffix(selected.term)}
                     </Body>
-                    {/* The rand figure above is what Paystack charges. The
-                        dollar one is a conversion at a rate nobody here
-                        controls, so it is labelled as approximate by the
-                        server and shown as secondary — never as the price. */}
-                    <Body size={FontSize.caption} color={colors.mutedForeground}>
-                      {selected.price_approx_usd_label}
-                    </Body>
-                    <Body size={FontSize.caption} color={colors.mutedForeground}>
-                      {selected.billed_in_note}
-                    </Body>
+                    {/* The rand figure above is the amount charged, and the
+                        only price on this card. No per-month equivalent is
+                        drawn under the annual term and no second currency
+                        appears: one plan, one number. */}
+                    {selected.note_en ? (
+                      <Body size={FontSize.caption} color={colors.primary}>
+                        {selected.note_en}
+                      </Body>
+                    ) : null}
                   </>
                 ) : null}
               </View>
@@ -253,10 +239,10 @@ export function PaidPlans() {
                 </Body>
               </View>
             ) : (
-              /* Two ways to pay the same thing, side by side, because which
-                 one works depends on where the learner banks: a card in rand
-                 through Paystack, or PayPal in dollars. Nothing here guesses
-                 at their country — both are offered and they choose. */
+              /* One button, one provider: Paystack, in rand. The
+                 dollar-priced PayPal button that used to sit beneath it is
+                 parked on the `usd-paypal-pricing` branch, so there is no
+                 second currency on this screen to explain. */
               <View style={{ gap: 8 }}>
                 <Button
                   label={
@@ -266,63 +252,30 @@ export function PaidPlans() {
                         ? // Same tier, different term: a change of how they pay,
                           // not a new plan. "Get Premium" to a Premium
                           // subscriber reads as a mistake.
-                          selected?.term === "lifetime"
-                          ? `Buy ${p.name_en} for life — ${selected?.price_label}`
-                          : `Switch to ${selected?.term ?? ""} — ${selected?.price_label}`
+                          `Switch to ${selected?.term ?? ""} — ${selected?.price_label}`
                         : `Get ${p.name_en} — ${selected?.price_label}`
                   }
                   icon="card-outline"
                   full
                   loading={buying === selected?.id}
-                  disabled={
-                    !selected || buying !== null || buyingPaypal !== null || !data.checkout_available
-                  }
+                  disabled={!selected || buying !== null || !data.checkout_available}
                   onPress={() => selected && void buy(selected.id)}
                 />
-                {paypalSellable ? (
-                  <>
-                    <Button
-                      label={
-                        buyingPaypal === selected?.id
-                          ? "Opening PayPal…"
-                          : `Pay with PayPal — ${selectedPaypal!.price_label}`
-                      }
-                      icon="logo-paypal"
-                      variant="secondary"
-                      full
-                      loading={buyingPaypal === selected?.id}
-                      disabled={!selected || buying !== null || buyingPaypal !== null}
-                      onPress={() => selected && void buyWithPaypal(selected.id)}
-                    />
-                    {/* The dollar figure on that button is charged, not
-                        converted — so it is said once, plainly, instead of
-                        leaving somebody to wonder which number applies. */}
-                    <Body
-                      size={FontSize.caption}
-                      color={colors.mutedForeground}
-                      style={{ textAlign: "center" }}
-                    >
-                      Billed in US dollars by PayPal
-                    </Body>
-                  </>
-                ) : null}
               </View>
             )}
           </Card>
         );
       })}
 
-      {/* This used to read "Prices are in US dollars", which was wrong about
-          the card path and is now wrong about only half of a screen that has
-          two currencies on it. Both are stated, each attached to the way of
-          paying that actually charges it. */}
+      {/* One currency on the screen, and it is the one the Paystack plans
+          are configured in. Nothing here quotes a second figure for the same
+          plan, and no conversion is shown. */}
       <Body size={FontSize.caption} color={colors.mutedForeground}>
-        Card payments are charged in South African rand (ZAR) — that is the price shown on each
-        card. Paying with PayPal is charged in US dollars at the dollar price on its own button,
-        which is an amount charged rather than a conversion. Monthly and annual subscriptions
-        renew until you cancel; Lifetime is a single payment, sold by card only. Annual and
-        Lifetime are billing terms for Premium — they unlock exactly what monthly Premium does,
-        no more.
+        Prices are in South African rand (ZAR) and that is the amount charged — no conversion,
+        and no second currency to check. A completed payment is checked against the figure shown
+        before access is granted. Every plan is a subscription and renews until you cancel.
+        Annual is a billing term, not a tier: it unlocks exactly what the monthly price of the
+        same plan does.
       </Body>
 
       {stopped.length > 0 ? (

@@ -44,22 +44,21 @@ function formatDate(iso: string): string {
 /**
  * What an administrator picks from, and what that means underneath.
  *
- * Basic and Premium are the only entitlement tiers the build has. Annual and
- * Lifetime are *billing terms of Premium* — a lifetime holder and a monthly
- * Premium subscriber can do exactly the same things — so they are offered here
- * as ready-made durations of Premium rather than as invented tiers. That keeps
- * every server-side gate working off the same three plan ids it already knows.
+ * Basic and Premium are the only entitlement tiers the build has. Annual is a
+ * *billing term of Premium* — an annual and a monthly Premium subscriber can
+ * do exactly the same things — so it is offered here as a ready-made duration
+ * of Premium rather than as an invented tier. That keeps every server-side
+ * gate working off the same three plan ids it already knows.
+ *
+ * The durations stop at a year on purpose. A code is a granted period of
+ * access, and there is no permanent grant to hand out: billing is
+ * subscription-only, so nothing here should mint something the shop does not
+ * sell. The duration field below is still editable for the odd longer case.
  */
 const PLAN_CHOICES = [
   { id: "basic", plan: "basic" as const, days: 30, label: "Basic — 30 days" },
   { id: "premium", plan: "premium" as const, days: 30, label: "Premium — 30 days" },
   { id: "annual", plan: "premium" as const, days: 365, label: "Annual (Premium) — 365 days" },
-  {
-    id: "lifetime",
-    plan: "premium" as const,
-    days: 3650,
-    label: "Lifetime (Premium) — 3650 days",
-  },
 ] as const;
 
 type PlanChoiceId = (typeof PLAN_CHOICES)[number]["id"];
@@ -286,8 +285,8 @@ export default function AdminPage() {
                   ))}
                 </select>
                 <span className="block text-[11px] text-muted-foreground">
-                  Grants the {selected.plan} tier. Annual and Lifetime are terms of Premium, not
-                  separate tiers — they differ only in how many days they grant.
+                  Grants the {selected.plan} tier. Annual is a term of Premium, not a separate
+                  tier — it differs only in how many days it grants.
                 </span>
               </label>
               <label className="block space-y-1.5">

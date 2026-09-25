@@ -181,13 +181,12 @@ export const paypalCheckouts = sqliteTable(
 /**
  * A paid PayPal entitlement.
  *
- * Every row here is currently recurring, because lifetime is not sold on
- * PayPal — but the table carries `recurring` and a nullable `until` anyway, in
- * the same shape as the Paystack table. That is not speculative generality: it
- * is the specific thing that lets a PayPal lifetime purchase be added later
- * through the Orders API without a migration over rows that represent real
- * money, and the entitling read already says out loud that a null `until` is
- * only ever a lifetime purchase rather than trusting null to mean forever.
+ * Every row here is recurring: billing is subscription-only on both providers.
+ * The table carries `recurring` and a nullable `until` to stay the same shape
+ * as the Paystack table, which is what lets one merged read serve both — but
+ * neither is a way to express permanent access. The entitling read requires an
+ * `until` in the future, so a null there grants nothing rather than meaning
+ * forever.
  */
 export const paypalSubscriptions = sqliteTable(
   "paypal_subscriptions",

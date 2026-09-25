@@ -13,20 +13,23 @@ import { billingOptionById, formatZar } from "../../api/content/plans";
  *
  * Prices are read from `api/content/plans.ts` and never typed in here. This
  * page used to restate them in prose, and they went stale the moment billing
- * moved to rand: it was still quoting "$4.99 a month" and "a single $149
- * payment" for months, on the page people read specifically to find out what
- * they would be charged. A hand-copied price is a wrong price eventually.
+ * changed — it was still quoting dollar prices months later, on the page
+ * people read specifically to find out what they would be charged. Even the
+ * annual saving is computed from the two options rather than written down,
+ * because a hand-copied figure is a wrong figure eventually.
  */
 
 const SUPPORT_EMAIL = "admin@amharicai.org";
 
 /**
- * The rand price of a billing option, as the pricing page shows it.
+ * The price of a billing option, in rand, exactly as the pricing page and the
+ * checkout button show it.
  *
- * Rand only, with no dollar figure beside it. The approximate conversion is
- * worth showing where a buyer is choosing between options and can see it
- * labelled as approximate; dropped into a sentence it reads like the price,
- * and the price is the rand amount.
+ * One currency and one figure, with no dollar conversion beside it: an
+ * approximation dropped into a sentence reads like the price, and the price is
+ * the rand amount. Reading the same number here, on the pricing page, in the
+ * Terms and on Paystack's page is the whole point — they all come from
+ * `BILLING_OPTIONS`, so an answer here cannot quietly go stale.
  */
 function price(optionId: string): string {
   const option = billingOptionById(optionId);
@@ -34,6 +37,17 @@ function price(optionId: string): string {
   // must not render "RNaN" or crash the page somebody is reading to decide.
   if (!option) return "see the pricing page";
   return formatZar(option.price_zar);
+}
+
+/**
+ * What an annual option saves against twelve of the matching monthly one, in
+ * rand, worked out from the price list rather than typed in.
+ */
+function annualSaving(monthlyId: string, annualId: string): string {
+  const monthly = billingOptionById(monthlyId);
+  const annual = billingOptionById(annualId);
+  if (!monthly || !annual) return "money";
+  return formatZar(monthly.price_zar * 12 - annual.price_zar);
 }
 
 interface Qa {
@@ -142,16 +156,20 @@ const SECTIONS: Section[] = [
         ),
       },
       {
-        q: "What are Annual and Lifetime? Are they different plans?",
+        q: "What is Annual? Is it a different plan?",
         a: (
-          <p>
-            No — they are ways of paying for Premium, not extra tiers. Annual is{" "}
-            {price("premium_annual")} a year, which saves R749 against paying{" "}
-            {price("premium_monthly")} twelve times. Lifetime is a single{" "}
-            {price("premium_lifetime")} payment granting Premium for as long as the service
-            operates. A lifetime buyer and a monthly Premium subscriber can do exactly the same
-            things.
-          </p>
+          <>
+            <p>
+              No — it is a way of paying for Premium, not an extra tier. Premium is{" "}
+              {price("premium_annual")} a year instead of {price("premium_monthly")} a month,
+              which saves {annualSaving("premium_monthly", "premium_annual")} against paying
+              monthly twelve times. Basic is monthly only, at {price("basic_monthly")} a month.
+            </p>
+            <p>
+              An annual and a monthly subscriber on the same tier can do exactly the same
+              things. Annual is charged once and renews once a year.
+            </p>
+          </>
         ),
       },
       {
@@ -161,14 +179,15 @@ const SECTIONS: Section[] = [
             <p>
               South African rand, wherever you are. Our payment processor settles to a South
               African account, so rand is the only currency it can charge — there is no dollar
-              or euro option to pick.
+              or euro option to pick, and we show no approximate conversion, because an
+              approximation is not a price. The rand figure on the pricing page is the amount
+              charged, and a completed payment is checked against that same figure before
+              access is granted.
             </p>
             <p>
-              The pricing page shows an approximate dollar figure beside each rand price, marked
-              as approximate, to save you doing the arithmetic. It is a reference conversion at a
-              fixed rate and not what you pay: the rand amount is the price, and your bank
-              converts it at their own rate on the day, sometimes with a currency conversion fee
-              of their own. Any card that accepts international payments works.
+              Your bank converts it into your own currency at their rate on the day, sometimes
+              with a conversion fee of their own. That part is between you and your bank. Any
+              card that accepts international payments works.
             </p>
           </>
         ),
@@ -177,10 +196,11 @@ const SECTIONS: Section[] = [
         q: "Can I cancel?",
         a: (
           <p>
-            Yes, at any time, from the Plan page inside the app. Your plan then runs to the end
-            of the period you have already paid for and is not renewed. A Lifetime purchase is
-            not a subscription, so there is nothing to cancel. If you ever buy through Google
-            Play, cancel it in Google Play rather than here or it will keep renewing.
+            Yes, at any time, from the Plan page inside the app. Every paid plan is a
+            subscription, so there is always something to cancel and cancelling is the only way
+            to stop it renewing. Your plan then runs to the end of the period you have already
+            paid for and is not renewed. If you ever buy through Google Play, cancel it in
+            Google Play rather than here or it will keep renewing.
           </p>
         ),
       },
@@ -311,8 +331,9 @@ const SECTIONS: Section[] = [
             lists every category of data stored, why it is kept, who it is shared with, and when
             it is erased — and that list is derived from the database schema itself rather than
             written from memory. Payment card details never reach our servers; the payment
-            provider handles them. AmharicAI is published by Tesfaye Tessema Gintamo in Cape
-            Town, South Africa, and the service is governed by South African law.
+            provider handles them. AmharicAI is published by amharicai.org and is available
+            wherever you are; the service is governed by South African law, and the Privacy
+            Policy names the responsible party for data-protection purposes.
           </p>
         ),
       },
@@ -341,7 +362,7 @@ export default function FaqPage() {
   useSeo({
     title: "FAQ — plans, refunds, Amharic audio, Android and your data",
     description:
-      "Answers on what AmharicAI teaches, what the Free, Basic, Premium, Annual and Lifetime plans include, cancelling and refunds, offline use, Amharic voice, Android availability, and deleting your account.",
+      "Answers on what AmharicAI teaches, what the Free, Basic, Premium and Annual plans include, cancelling and refunds, offline use, Amharic voice, Android availability, and deleting your account.",
     path: "/faq",
   });
 

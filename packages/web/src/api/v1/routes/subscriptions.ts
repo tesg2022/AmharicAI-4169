@@ -4,8 +4,8 @@ import { billingStatus } from "../../billing/config";
 import {
   BILLING_OPTIONS,
   PLANS,
+  DISPLAY_CURRENCY,
   entitlements,
-  formatApproxUsd,
   formatZar,
   quotasFor,
   tutorAllowanceLabel,
@@ -20,7 +20,7 @@ import { guard } from "../middleware";
  * `/v1/subscriptions` — what the caller is entitled to, and what it cost.
  *
  * Read-only, on purpose. Taking money is a redirect-and-return dance with
- * Paystack or PayPal: a hosted page the customer has to see, a callback URL, a
+ * Paystack: a hosted page the customer has to see, a callback URL, a
  * webhook that is the actual source of truth. None of that survives being
  * reduced to a JSON POST, and an endpoint that pretended otherwise would be a
  * way to create half-finished payments. Checkout, cancel and resume stay on the
@@ -109,7 +109,20 @@ subscriptionRoutes.get("/plans", (c) => {
   return ok(c, {
     current_plan: caller.plan,
     current_plan_is_verified: caller.planVerified,
-    currency: status.currency,
+    /**
+     * The currency every price below is quoted in, and the currency the
+     * customer is charged. One value, because there is one: the price list is
+     * in rand and Paystack settles the charge in rand, so there is no second
+     * "display" currency for an integrator to reconcile against.
+     *
+     * Asserted rather than assumed — if the deployment's Paystack account were
+     * ever configured for another currency, the price list would be quoting
+     * one thing and charging another, and an integrator should see that here
+     * rather than in a customer's complaint.
+     */
+    currency: DISPLAY_CURRENCY,
+    provider_currency: status.currency,
+    currency_matches_provider: status.currency === DISPLAY_CURRENCY,
     /**
      * Stated plainly rather than implied: when this is false, this deployment
      * has no payment provider configured and nothing here can be bought.
@@ -121,21 +134,20 @@ subscriptionRoutes.get("/plans", (c) => {
       name_am: p.name_am,
       price_zar_month: p.price_zar_month,
       price_label: formatZar(p.price_zar_month),
-      price_approx_usd_label: formatApproxUsd(p.price_zar_month),
       max_units: p.max_units,
       quotas: p.quotas,
       tutor_allowance_label: tutorAllowanceLabel(p.id),
       tagline_en: p.tagline_en,
       tagline_am: p.tagline_am,
     })),
-    /** Purchasable terms — monthly, annual, lifetime — keyed by option id. */
+    /** Purchasable terms — monthly and annual — keyed by option id. */
     billing_options: BILLING_OPTIONS.map((o) => ({
       id: o.id,
       plan: o.plan,
       term: o.term,
       price_zar: o.price_zar,
       price_label: formatZar(o.price_zar),
-      price_approx_usd_label: formatApproxUsd(o.price_zar),
+      note_en: o.note_en ?? null,
     })),
     /**
      * Where a purchase actually happens. Spelled out so an integrator does not

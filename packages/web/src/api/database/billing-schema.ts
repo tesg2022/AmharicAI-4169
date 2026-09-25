@@ -111,7 +111,11 @@ export const paystackCheckouts = sqliteTable(
     /** Subunit (cents). What we asked Paystack to charge. */
     amountSubunit: integer("amount_subunit").notNull(),
     currency: text("currency").notNull(),
-    /** Null for the one-off lifetime purchase, which has no plan. */
+    /**
+     * Nullable only because the column has always been. Every option sold is a
+     * subscription and therefore carries a plan code; a null here on a new row
+     * is a bug, not a one-off purchase.
+     */
     planCode: text("plan_code"),
     status: text("status")
       .$type<"pending" | "success" | "failed" | "abandoned">()
@@ -128,16 +132,18 @@ export const paystackCheckouts = sqliteTable(
 );
 
 /**
- * A paid entitlement: a recurring subscription, or a one-off lifetime purchase.
+ * A paid entitlement. Every one of them is a recurring subscription.
  *
- * Both live in one table because `resolve.ts` asks one question of it — "what
- * is live for this user right now" — and splitting recurring from one-off
- * into two tables is how the Autumn build ended up with a `purchases` array
- * that only one of three readers knew about, and a paying lifetime customer
- * resolving to Free.
+ * `recurring` and a nullable `until` are historical: a withdrawn one-off
+ * purchase (`premium_lifetime`) once wrote rows with `recurring: false`, no
+ * subscription code and a null `until`, and two test-mode rows in that shape
+ * still exist. Nothing writes them any more, and the entitling read in
+ * `store.ts` grants nothing for a row without an `until` — a paid row with no
+ * end date is treated as broken rather than as permanent access.
  *
- * `recurring: false` rows have no subscription code, no email token and a null
- * `until`. That is what lifetime means here.
+ * The columns are kept rather than migrated away because they hold rows that
+ * represent real money, and a migration over payment history to tidy a shape
+ * is a bad trade.
  */
 export const paystackSubscriptions = sqliteTable(
   "paystack_subscriptions",
@@ -149,7 +155,10 @@ export const paystackSubscriptions = sqliteTable(
     plan: text("plan").notNull(),
     term: text("term").notNull(),
     recurring: integer("recurring", { mode: "boolean" }).notNull(),
-    /** Paystack's subscription code. Null for a one-off purchase. */
+    /**
+     * Paystack's subscription code. Null only on the withdrawn one-off rows;
+     * every row written now has one, and without it cancel cannot work.
+     */
     subscriptionCode: text("subscription_code"),
     /**
      * Paystack's per-subscription token, required with the code to disable or
@@ -160,9 +169,9 @@ export const paystackSubscriptions = sqliteTable(
     planCode: text("plan_code"),
     status: text("status").$type<PaystackStatus>().notNull(),
     /**
-     * End of the period already paid for, ms since epoch. Null means never —
-     * a lifetime purchase. For a live subscription this is also the next
-     * charge date; the UI must read `status` to know which it is showing.
+     * End of the period already paid for, ms since epoch. Also the next charge
+     * date for a live subscription; the UI must read `status` to know which it
+     * is showing. Null grants nothing — see the table comment above.
      */
     until: integer("until", { mode: "timestamp_ms" }),
     amountSubunit: integer("amount_subunit").notNull(),

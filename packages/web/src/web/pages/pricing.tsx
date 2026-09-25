@@ -3,16 +3,17 @@ import { Link } from "wouter";
 import { ArrowRight, Check, Minus } from "lucide-react";
 import {
   BILLING_OPTIONS,
+  DISPLAY_CURRENCY,
   FEATURES,
   PLANS,
   PLAN_ORDER,
+  STATE_LABELS,
   billingOptionsFor,
   featureState,
-  formatApproxUsd,
-  formatUsd,
   formatZar,
-  tutorAllowanceLabel,
+  highlightState,
   type BillingTerm,
+  type Plan,
   type PlanId,
 } from "../../api/content/plans";
 import { useSession } from "../hooks/use-session";
@@ -27,88 +28,119 @@ import { Am, Card, TibebRule } from "../components/ui/kit";
  * `api/content/plans.ts`, so a price can never be changed on one and left
  * stale on the other, and neither can offer a feature the capability table
  * says does not exist.
+ *
+ * ONE CURRENCY ON THIS PAGE: SOUTH AFRICAN RAND. Every figure below is
+ * `option.price_zar`, which is the amount Paystack is asked to charge and the
+ * amount `billing/fulfil.ts` checks the completed payment against. A dollar
+ * price list was tried and is parked on the `usd-paypal-pricing` branch, and
+ * so was an approximate "≈$X" under each rand figure. Neither is here now:
+ * this account can only take rand, and a second number on a price card is a
+ * number some reader takes for the price.
  */
 
 const TERMS: { id: BillingTerm; label: string; hint: string }[] = [
   { id: "monthly", label: "Monthly", hint: "Cancel any time" },
-  { id: "annual", label: "Annual", hint: "33% less than monthly" },
-  { id: "lifetime", label: "Lifetime", hint: "One payment" },
-];
-
-/** Rows of the comparison table: label, then what each plan gets. */
-function planRowValue(plan: PlanId, row: string): string | boolean {
-  const p = PLANS.find((x) => x.id === plan)!;
-  switch (row) {
-    case "units":
-      return p.max_units === null ? "Every written unit" : `First ${p.max_units} units`;
-    case "fidel":
-      return true;
-    case "tutor":
-      return tutorAllowanceLabel(plan);
-    case "tts":
-      return p.quotas.tts_per_day === null
-        ? "Unmetered"
-        : `${p.quotas.tts_per_day} a day`;
-    case "translate":
-      return p.quotas.translate_chars === null
-        ? false
-        : `${p.quotas.translate_chars.toLocaleString()} characters`;
-    case "practice":
-      return true;
-    default:
-      return false;
-  }
-}
-
-const ROWS: { id: string; label: string; note?: string }[] = [
-  { id: "fidel", label: "ፊደል chart and pronunciation guide" },
-  { id: "units", label: "Written course units" },
-  { id: "tutor", label: "AI tutor questions", note: "Preview — its Amharic is a draft" },
-  { id: "tts", label: "Listen to Amharic lines", note: "Needs a TTS host; not connected yet" },
-  { id: "translate", label: "Translate your own text", note: "Needs a provider key; not set" },
-  { id: "practice", label: "Flashcards, quizzes, streaks and XP" },
+  { id: "annual", label: "Annual", hint: "Save R749 on Premium" },
 ];
 
 /**
- * The rand figure is what a card payment through Paystack takes, and what
- * appears on the statement.
+ * The price and the lines under it, for one plan at the selected term.
  *
- * Underneath it, one of two different dollar figures:
- *   - `usd` — a real price, charged in dollars by PayPal, on options PayPal can
- *     sell (every option carrying `price_usd`). Shown without hedging, because
- *     it is an amount somebody actually pays.
- *   - `approx` — a rough conversion of the rand price at a fixed reference
- *     rate, for options PayPal cannot sell (lifetime). Marked approximate every
- *     time so nobody reads it as an amount being charged.
- *
- * Never both. Two dollar figures on one card, one real and one notional, is a
- * price list nobody can read.
+ * One figure per card, and it is the amount that leaves the customer's
+ * account for one whole term. Anything else worth saying about the price —
+ * the annual saving — comes from `note_en` on the option, which is checked
+ * arithmetic in the price list rather than a sum done here.
  */
 function priceLine(
   plan: PlanId,
   term: BillingTerm,
-): { amount: string; sub: string; approx: string | null; usd: string | null } | null {
+): {
+  amount: string;
+  sub: string;
+  note: string | null;
+  term_used: BillingTerm | null;
+} | null {
   if (plan === "free")
-    return { amount: formatZar(0), sub: "forever, no card", approx: null, usd: null };
+    return {
+      amount: formatZar(0),
+      sub: "forever, no card",
+      note: null,
+      term_used: null,
+    };
+
   const options = billingOptionsFor(plan);
   const exact = options.find((o) => o.term === term);
   const chosen = exact ?? options.find((o) => o.term === "monthly");
   if (!chosen) return null;
-  const suffix =
-    chosen.term === "monthly" ? "per month" : chosen.term === "annual" ? "per year" : "once";
-  const usd = chosen.price_usd;
+
   return {
     amount: formatZar(chosen.price_zar),
-    sub: suffix,
-    approx: usd === undefined ? `${formatApproxUsd(chosen.price_zar)} — approximate` : null,
-    usd:
-      usd === undefined
-        ? null
-        : `or ${formatUsd(usd)} ${
-            chosen.term === "monthly" ? "a month" : chosen.term === "annual" ? "a year" : ""
-          } through PayPal`.trimEnd(),
+    sub: chosen.term === "annual" ? "per year" : "per month",
+    note: chosen.note_en ?? null,
+    term_used: chosen.term,
   };
 }
+
+/** The chip beside a bullet, or nothing at all when the bullet just works. */
+function BulletState({ state, caveat }: { state: string; caveat?: string }) {
+  if (state === "available") return null;
+  const label = STATE_LABELS[state as keyof typeof STATE_LABELS]?.en ?? state;
+  return (
+    <span className="block text-xs text-muted-foreground">
+      {label}
+      {caveat ? ` — ${caveat}` : ""}
+    </span>
+  );
+}
+
+/**
+ * Every bullet across all three plans, de-duplicated, grouped by the plan it
+ * first appears on and marked CUMULATIVELY.
+ *
+ * Cumulative matters: the plans are nested, so everything Free opens is also
+ * open on Basic and Premium. Marking each row against only the card it is
+ * printed on produced a table that said Basic does not include the ፈደል chart,
+ * which is both untrue and the sort of thing a person notices after paying.
+ *
+ * Built from `PLANS` rather than typed out, so the table cannot promise a row
+ * the cards do not, or miss one they do.
+ */
+function comparisonGroups(): {
+  plan: PlanId;
+  heading: string;
+  rows: { label: string; plans: Record<PlanId, boolean> }[];
+}[] {
+  const rank: Record<PlanId, number> = { free: 0, basic: 1, premium: 2 };
+  const seen = new Set<string>();
+
+  return PLANS.map((plan) => {
+    const rows: { label: string; plans: Record<PlanId, boolean> }[] = [];
+    for (const h of plan.highlights) {
+      // First appearance only: a label repeated on a higher plan is the same
+      // row, already listed under the plan that introduces it.
+      if (seen.has(h.label_en)) continue;
+      seen.add(h.label_en);
+      rows.push({
+        label: h.label_en,
+        plans: {
+          free: rank.free >= rank[plan.id],
+          basic: rank.basic >= rank[plan.id],
+          premium: rank.premium >= rank[plan.id],
+        },
+      });
+    }
+    return {
+      plan: plan.id,
+      heading:
+        plan.id === "free"
+          ? "In Free — and in every paid plan"
+          : `Added on ${plan.name_en}`,
+      rows,
+    };
+  }).filter((group) => group.rows.length > 0);
+}
+
+const COMPARISON_GROUPS = comparisonGroups();
 
 export default function PricingPage() {
   const [term, setTerm] = useState<BillingTerm>("monthly");
@@ -117,7 +149,7 @@ export default function PricingPage() {
   useSeo({
     title: "Pricing — free to start, R89 a month for the full course",
     description:
-      "AmharicAI plans: Free (ፊደል, pronunciation and the first two units), Basic at R89 a month, and Premium at R179 a month, R1,399 a year or R2,599 once. Card payments in South African rand; PayPal in US dollars.",
+      "AmharicAI plans: Free (ፊደል, pronunciation and the first two units), Basic at R89 a month, and Premium at R179 a month or R1 399 a year. Charged in South African rand through Paystack.",
     path: "/pricing",
   });
 
@@ -127,22 +159,19 @@ export default function PricingPage() {
     <div className="space-y-12">
       <header className="max-w-3xl space-y-4">
         <h1 className="font-display text-3xl font-bold leading-tight md:text-5xl">
-          Pay once you have decided it works
+          Start free. Subscribe when it works for you
         </h1>
         <TibebRule className="max-w-56" />
         <p className="text-base leading-relaxed text-muted-foreground">
           The free plan is not a trial. It does not expire and it does not ask for a card — you
           get the ፊደል, the pronunciation guide and the first two units for as long as you want
-          them. Card payments are charged in South African rand (ZAR) through Paystack. If you
-          would rather pay with PayPal, the monthly and annual plans are also sold in US dollars
-          at the dollar price shown on each card — that is the amount PayPal charges, not a
-          conversion. Only the lifetime purchase is rand-only, and its dollar figure is an
-          approximate conversion for reference.
+          them. Paid plans are priced in South African rand ({DISPLAY_CURRENCY}) and charged
+          in rand through Paystack — the figure on each card is the amount that leaves your
+          account, with no conversion and no second currency to check.
         </p>
       </header>
 
-      {/* Billing term switch — only Premium has more than one term, and the
-          cards say so rather than pretending every plan changes. */}
+      {/* Billing term switch. */}
       <fieldset className="inline-flex flex-wrap gap-1 rounded-full border border-border bg-card p-1">
         <legend className="sr-only">Billing term</legend>
         {TERMS.map((t) => (
@@ -167,12 +196,11 @@ export default function PricingPage() {
 
       {/* Plan cards */}
       <section className="grid gap-5 lg:grid-cols-3">
-        {PLANS.map((plan) => {
+        {PLANS.map((plan: Plan) => {
           const price = priceLine(plan.id, term);
           const options = billingOptionsFor(plan.id);
           const hasTerm = plan.id === "free" || options.some((o) => o.term === term);
-          const featured = plan.id === "premium";
-          const chosen = options.find((o) => o.term === term) ?? options[0];
+          const featured = plan.most_popular === true;
           return (
             <Card
               key={plan.id}
@@ -185,7 +213,7 @@ export default function PricingPage() {
                   <h2 className="font-display text-xl font-bold">{plan.name_en}</h2>
                   {featured ? (
                     <span className="rounded-full bg-primary/12 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
-                      Most complete
+                      Most popular
                     </span>
                   ) : null}
                 </div>
@@ -197,44 +225,37 @@ export default function PricingPage() {
               <div>
                 <p className="font-display text-4xl font-bold">{price?.amount ?? "—"}</p>
                 <p className="text-sm text-muted-foreground">{price?.sub ?? ""}</p>
-                {price?.approx ? (
-                  <p className="text-xs text-muted-foreground">{price.approx}</p>
-                ) : null}
-                {/* A real charged price, in the currency PayPal takes. */}
-                {price?.usd ? (
-                  <p className="text-xs font-medium text-muted-foreground">{price.usd}</p>
+                {price?.note ? (
+                  <p className="mt-1.5 text-xs font-medium text-primary">{price.note}</p>
                 ) : null}
                 {!hasTerm ? (
                   <p className="mt-1.5 text-xs text-muted-foreground">
-                    {plan.name_en} is billed monthly only — the {term} term applies to Premium.
+                    {plan.name_en} has no {term} term — the price shown is the monthly one.
                   </p>
-                ) : null}
-                {chosen?.note_en && chosen.term === term ? (
-                  <p className="mt-1.5 text-xs font-medium text-primary">{chosen.note_en}</p>
                 ) : null}
               </div>
 
-              <p className="text-sm leading-relaxed text-muted-foreground">{plan.tagline_en}</p>
+              <div className="space-y-1">
+                <p className="font-medium">{plan.headline_en}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {plan.audience_en}
+                </p>
+              </div>
 
               <ul className="space-y-2 text-sm">
-                {ROWS.map((row) => {
-                  const value = planRowValue(plan.id, row.id);
-                  if (value === false) {
-                    return (
-                      <li key={row.id} className="flex items-start gap-2 text-muted-foreground/70">
-                        <Minus className="mt-0.5 size-4 shrink-0" />
-                        <span className="line-through">{row.label}</span>
-                      </li>
-                    );
-                  }
+                {plan.highlights.map((h) => {
+                  const resolved = highlightState(h);
+                  const built = resolved.state === "available";
                   return (
-                    <li key={row.id} className="flex items-start gap-2">
-                      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <li key={h.label_en} className="flex items-start gap-2">
+                      {built ? (
+                        <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                      ) : (
+                        <Minus className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                      )}
                       <span>
-                        {row.label}
-                        {typeof value === "string" ? (
-                          <span className="block text-xs text-muted-foreground">{value}</span>
-                        ) : null}
+                        {h.label_en}
+                        <BulletState state={resolved.state} caveat={resolved.caveat_en} />
                       </span>
                     </li>
                   );
@@ -249,16 +270,75 @@ export default function PricingPage() {
                     : "border border-border hover:bg-muted"
                 }`}
               >
-                {plan.id === "free"
-                  ? "Start free"
-                  : isSignedIn
-                    ? `Choose ${plan.name_en}`
-                    : `Sign up for ${plan.name_en}`}
+                {plan.id === "free" || isSignedIn
+                  ? plan.cta_en
+                  : `Sign up for ${plan.name_en}`}
                 <ArrowRight className="size-4" />
               </Link>
             </Card>
           );
         })}
+      </section>
+
+      {/* Feature comparison, built from the same bullets as the cards. */}
+      <section className="space-y-4">
+        <div className="space-y-1">
+          <h2 className="font-display text-xl font-bold md:text-2xl">Compare every feature</h2>
+          <p className="text-sm text-muted-foreground">
+            Free = Explore · Basic = Learn · Premium = Speak + AI
+          </p>
+        </div>
+        <div className="overflow-x-auto rounded-2xl border border-border">
+          <table className="w-full min-w-[34rem] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/50 text-left">
+                <th scope="col" className="px-4 py-3 font-semibold">
+                  Feature
+                </th>
+                {PLAN_ORDER.map((id) => (
+                  <th key={id} scope="col" className="px-4 py-3 text-center font-semibold">
+                    {PLANS.find((p) => p.id === id)?.name_en ?? id}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            {COMPARISON_GROUPS.map((group) => (
+              <tbody key={group.plan}>
+                <tr className="border-b border-border/60 bg-muted/30">
+                  <th
+                    scope="colgroup"
+                    colSpan={PLAN_ORDER.length + 1}
+                    className="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                  >
+                    {group.heading}
+                  </th>
+                </tr>
+                {group.rows.map((row) => (
+                  <tr key={row.label} className="border-b border-border/60">
+                    <th scope="row" className="px-4 py-2.5 text-left font-normal">
+                      {row.label}
+                    </th>
+                    {PLAN_ORDER.map((id) => (
+                      <td key={id} className="px-4 py-2.5 text-center">
+                        {row.plans[id] ? (
+                          <Check
+                            className="mx-auto size-4 text-primary"
+                            aria-label={`Included in ${id}`}
+                          />
+                        ) : (
+                          <Minus
+                            className="mx-auto size-4 text-muted-foreground/60"
+                            aria-label={`Not in ${id}`}
+                          />
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            ))}
+          </table>
+        </div>
       </section>
 
       {/* What paying does not buy — stated here rather than in the footnotes. */}
@@ -288,29 +368,36 @@ export default function PricingPage() {
         </Link>
       </section>
 
-      {/* Billing terms, in the same words as the Terms of Service. */}
+      {/* Subscriptions and payment, in the same words as the Terms of Service. */}
       <section className="space-y-4">
-        <h2 className="font-display text-xl font-bold md:text-2xl">Billing, plainly</h2>
-        <div className="grid gap-4 md:grid-cols-3">
+        <h2 className="font-display text-xl font-bold md:text-2xl">Subscriptions and payment</h2>
+        <div className="grid gap-4 md:grid-cols-2">
           <Card className="space-y-1.5">
-            <p className="font-medium">Subscriptions renew</p>
+            <p className="font-medium">You need an account</p>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Monthly and annual plans renew automatically until you cancel. Cancel from the
-              Plan page and your access runs to the end of the period you have already paid for.
+              A subscription is attached to an AmharicAI account, so you sign in — or sign up —
+              before checkout. That is what your plan, your progress and your receipts hang on.
             </p>
           </Card>
           <Card className="space-y-1.5">
-            <p className="font-medium">Refunds</p>
+            <p className="font-medium">Paystack handles the payment</p>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              We do not pro-rate refunds for partial periods. If we discontinue a paid feature
-              you have already paid for, we refund the unused part.
+              Payment is handled entirely by Paystack on their own hosted page. Card details
+              are never stored or handled by AmharicAI.
             </p>
           </Card>
           <Card className="space-y-1.5">
-            <p className="font-medium">Lifetime</p>
+            <p className="font-medium">Cancel whenever you like</p>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              A single payment granting Premium for as long as the service operates. It is not a
-              subscription and there is nothing to cancel.
+              Cancel from Account &amp; data and the subscription stops renewing. No email,
+              no waiting for a reply.
+            </p>
+          </Card>
+          <Card className="space-y-1.5">
+            <p className="font-medium">You keep what you paid for</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              After you cancel, access continues to the end of the period you have already paid
+              for. We do not cut it short, and we do not pro-rate refunds for partial periods.
             </p>
           </Card>
         </div>
@@ -328,9 +415,10 @@ export default function PricingPage() {
       </section>
 
       <p className="text-xs text-muted-foreground">
-        {BILLING_OPTIONS.length} purchasable options across {PLAN_ORDER.length} plans. Every
-        price on this page is read from the same file the checkout uses, so what you are quoted
-        is what you are charged.{" "}
+        {BILLING_OPTIONS.length} purchasable options across {PLAN_ORDER.length} plans, all priced
+        in {DISPLAY_CURRENCY}. Every price on this page is read from the same file checkout
+        uses, and a completed payment is checked against that same figure before access is
+        granted — so the amount you were shown is the amount you are charged.{" "}
         {FEATURES.filter((f) => featureState("premium", f.id) === "available").length} features
         are verified working on Premium today.
       </p>

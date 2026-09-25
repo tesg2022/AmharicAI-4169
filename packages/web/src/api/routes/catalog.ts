@@ -12,7 +12,6 @@ import {
 import {
   entitlements,
   entryPrice,
-  formatApproxUsd,
   formatZar,
   planById,
   planFromInput,
@@ -203,7 +202,7 @@ export const catalog = {
       const blockers = billing.blockers;
       const entry = entryPrice(target);
       const priceNote = entry
-        ? `${planById(target).name_en} starts at ${formatZar(entry.price_zar)} (${formatApproxUsd(entry.price_zar)}, approximate — billed in ZAR).`
+        ? `${planById(target).name_en} starts at ${formatZar(entry.price_zar)} a ${entry.term === "annual" ? "year" : "month"}.`
         : `${planById(target).name_en} has no purchasable option configured.`;
 
       /**
@@ -211,7 +210,7 @@ export const catalog = {
        * a browser to complete the hosted payment page and a callback URL to
        * return to. The mobile client has neither wired yet, so this stays a
        * refusal rather than returning a URL the app cannot finish. It reports
-       * the real ZAR price so the app can still show what a plan costs, and it
+       * the real rand price so the app can still show what a plan costs, and it
        * never implies a charge was attempted.
        */
       throw new ORPCError("SERVICE_UNAVAILABLE", {

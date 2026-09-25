@@ -8,10 +8,10 @@
  *   billing     — how they PAY for that tier              (`BillingOption`)
  *   capability  — whether the feature physically EXISTS   (`CapabilityStatus`)
  *
- * Annual (R1 399/yr) and Lifetime (R2 599) are *billing terms of Premium*, not
- * extra entitlement tiers. A lifetime buyer and a monthly Premium subscriber
- * can do exactly the same things, so they share one `PlanId` and every gate in
- * the codebase keeps working without learning about billing at all.
+ * Annual is a *billing term*, not an extra entitlement tier. An annual and a
+ * monthly subscriber on the same tier can do exactly the same things, so they
+ * share one `PlanId` and every gate in the codebase keeps working without
+ * learning about billing at all.
  *
  * Capability still overrides everything: there is no trained Amharic voice yet
  * and no speech recognizer in this build, so a paid plan *grants* those and
@@ -102,14 +102,33 @@ export interface PlanQuotas {
   translate_chars: number | null;
 }
 
+/**
+ * One marketing bullet on the price list, carrying its own honesty.
+ *
+ * The bullets are the sales copy; `FEATURES` is the capability matrix. They
+ * are joined here rather than written twice, because a bullet that promises
+ * something the build does not have is the one thing this file exists to
+ * prevent. Where a bullet corresponds to a `FEATURES` entry it names it in
+ * `feature`, and the UI resolves the chip from that entry's capability. Where
+ * it does not — a bullet describing course material rather than a gated
+ * capability — it carries its own `capability` instead.
+ */
+export interface PlanHighlight {
+  label_en: string;
+  /** `FEATURES` id whose capability governs this bullet, when one does. */
+  feature?: string;
+  /** Capability for bullets with no `FEATURES` entry. Defaults to available. */
+  capability?: CapabilityStatus;
+}
+
 export interface Plan {
   id: PlanId;
   name_en: string;
   name_am: string;
   /**
-   * Headline monthly price in rand. Premium's other terms live in
-   * BILLING_OPTIONS. Rand because rand is what is charged — see the currency
-   * note above BILLING_OPTIONS.
+   * Headline monthly price in South African rand — the canonical
+   * customer-facing figure, and the currency Paystack actually charges. The
+   * other terms live in BILLING_OPTIONS. See the currency note above it.
    */
   price_zar_month: number;
   /** Units of the 20-unit scope this plan may open. null = every written unit. */
@@ -117,6 +136,16 @@ export interface Plan {
   quotas: PlanQuotas;
   tagline_en: string;
   tagline_am: string;
+  /** The price-list headline, e.g. "Build your Amharic foundation". */
+  headline_en: string;
+  /** Who the plan is for, shown under the headline. */
+  audience_en: string;
+  /** The bullet list on the price list, in order. */
+  highlights: PlanHighlight[];
+  /** Call to action on this plan's button. */
+  cta_en: string;
+  /** Exactly one plan may carry this. */
+  most_popular?: true;
 }
 
 export const FREE_PLAN: Plan = {
@@ -133,6 +162,18 @@ export const FREE_PLAN: Plan = {
   },
   tagline_en: "Fidel, pronunciation and the first two units, with 10 tutor questions a month.",
   tagline_am: "ፊደል፣ አጠራር እና የመጀመሪያዎቹ ሁለት ምዕራፎች፤ በወር 10 ጥያቄ።",
+  headline_en: "Start learning Amharic",
+  audience_en: "For learners who want to explore AmharicAI before subscribing.",
+  highlights: [
+    { label_en: "ፊደል Amharic alphabet", feature: "course_units_1_2" },
+    { label_en: "Basic pronunciation", feature: "course_units_1_2" },
+    { label_en: "Introductory vocabulary" },
+    { label_en: "Selected beginner lessons", feature: "course_units_1_2" },
+    { label_en: "Selected listening exercises", feature: "tts_playback" },
+    { label_en: "Basic translation", feature: "lesson_gloss" },
+    { label_en: "Limited interactive activities" },
+  ],
+  cta_en: "Start learning",
 };
 
 export const PLANS: Plan[] = [
@@ -151,6 +192,22 @@ export const PLANS: Plan[] = [
     },
     tagline_en: "The full written course, Amharic translation and 300 tutor questions a month.",
     tagline_am: "ሙሉው የተጻፈ ኮርስ፣ የአማርኛ ትርጉም እና በወር 300 ጥያቄ።",
+    headline_en: "Build your Amharic foundation",
+    audience_en: "For learners who want structured lessons and regular practice.",
+    highlights: [
+      { label_en: "Full beginner curriculum", feature: "course_full" },
+      { label_en: "Reading and writing practice" },
+      { label_en: "Grammar lessons" },
+      { label_en: "Vocabulary exercises" },
+      { label_en: "Listening practice", feature: "tts_playback" },
+      { label_en: "Native Amharic audio", feature: "custom_voice" },
+      { label_en: "Speaking exercises", feature: "speech_recognition" },
+      { label_en: "Pronunciation practice", feature: "speech_recognition" },
+      { label_en: "Progress tracking" },
+      { label_en: "Translation tools", feature: "translate_free_text" },
+      { label_en: "Cultural lessons" },
+    ],
+    cta_en: "Choose Basic",
   },
   {
     id: "premium",
@@ -172,91 +229,123 @@ export const PLANS: Plan[] = [
     tagline_en:
       "Everything currently available, unmetered audio, long-form translation — plus the custom voice and speaking feedback when they ship.",
     tagline_am: "በአሁኑ ጊዜ ያለው ሁሉም፣ ያልተገደበ ድምፅ እና ረጅም ትርጉም፤ ብጁ ድምፅም ሲደርስ።",
+    headline_en: "Speak Amharic with confidence",
+    audience_en:
+      "For serious learners who want AI-powered speaking and personalised practice.",
+    highlights: [
+      { label_en: "Full AmharicAI curriculum", feature: "course_full" },
+      { label_en: "AI Amharic Tutor", feature: "tutor_limited" },
+      { label_en: "AI conversation practice", feature: "tutor_limited" },
+      { label_en: "Native Amharic pronunciation", feature: "custom_voice" },
+      { label_en: "Text-to-Speech", feature: "tts_playback" },
+      { label_en: "Personalised learning", capability: "coming_soon" },
+      { label_en: "Advanced speaking practice", feature: "speech_recognition" },
+      { label_en: "Advanced progress analytics", capability: "preview" },
+      { label_en: "Premium cultural content" },
+      { label_en: "Learning certificates", capability: "coming_soon" },
+      { label_en: "Priority support" },
+    ],
+    cta_en: "Choose Premium",
+    most_popular: true,
   },
 ];
 
-/* -------------------------------------------------------------- billing */
-
-export type BillingTerm = "monthly" | "annual" | "lifetime";
-
 /**
- * TWO PROVIDERS, TWO CURRENCIES, AND THE PRICE DEPENDS ON WHICH IS USED.
+ * The resolved state of one price-list bullet: the chip the UI shows beside it.
  *
- * Paystack charges in SOUTH AFRICAN RAND, and that is a constraint rather than
- * a preference: Paystack's currency support is per country, and a South
- * African account may charge in ZAR and nothing else. There is no setting to
- * change this and no plan shape that works around it.
- *
- * PayPal charges in US DOLLARS, at the `price_usd` figure on each option. Not
- * a conversion performed at checkout — a real, separately set retail price, so
- * the amount a PayPal customer approves is a round number they recognise
- * rather than a rand amount their bank converted for them.
- *
- * So each option can carry two prices, and both are real:
- *
- *   - `price_zar` is charged by Paystack, to anyone paying by card or by a
- *     local South African method.
- *   - `price_usd` is charged by PayPal, to anyone paying from a PayPal
- *     balance or from outside South Africa. Absent means the option is not
- *     sold on PayPal at all.
- *
- * They are close to each other but they are not equal, and they are not meant
- * to be: a currency's retail price is a decision, not an exchange-rate output.
- *
- * `approxUsd()` / `formatApproxUsd()` below remain what they always were — an
- * indicative conversion of a RAND price, for a learner in Chicago reading a
- * rand price list and needing to know roughly what it costs. That is a
- * different number from `price_usd`, which is a price actually charged, and
- * the two must never be mixed up in the UI: one carries a "≈", the other does
- * not.
+ * A bullet naming a `FEATURES` entry inherits that entry's capability and its
+ * caveat, so "Native Amharic audio" on the price list and "Custom Amharic
+ * voice" in the comparison table can never disagree about whether the voice
+ * exists. This is the function the comparison section and the plan cards both
+ * call, which is what makes them consistent by construction.
  */
-
-/**
- * The reference rate the displayed USD figures are derived from.
- *
- * One constant, not four hand-written dollar prices, so the four can never
- * drift out of proportion to each other or to the rand prices they claim to
- * approximate. Display only: nothing is ever charged in USD, and this number
- * being stale costs a customer nothing because the rand amount is the price.
- *
- * Source: open.er-api.com, 14 September 2026. Worth refreshing when it has
- * moved far enough that the approximations mislead — roughly 10%.
- */
-export const ZAR_PER_USD_REFERENCE = 16.16;
-
-/** The rand price as an indicative USD figure. Display only, never charged. */
-export function approxUsd(zar: number): number {
-  return Math.round((zar / ZAR_PER_USD_REFERENCE) * 100) / 100;
+export function highlightState(h: PlanHighlight): {
+  state: CapabilityStatus;
+  caveat_en?: string;
+} {
+  if (h.feature) {
+    const f = FEATURES.find((x) => x.id === h.feature);
+    if (f) return { state: f.capability, caveat_en: f.caveat_en };
+  }
+  return { state: h.capability ?? "available" };
 }
 
-/** "R179", "R1 399" — no cents, because none of these prices have any. */
+/* -------------------------------------------------------------- billing */
+
+/**
+ * Every term is recurring. There is no one-off purchase: billing is
+ * subscription-only, so anything the codebase reads out of the database has
+ * an end date and a renewal, and `until: null` is never a valid paid state.
+ */
+export type BillingTerm = "monthly" | "annual";
+
+/**
+ * Option ids that were once sold and are not sold any more.
+ *
+ * `premium_lifetime` was a single R2 599 payment. It is withdrawn, and the
+ * withdrawal has to survive more than deleting it from the list below,
+ * because an id is a string and a string can arrive in a request body from
+ * anywhere — a stale price page in a browser tab left open since last week,
+ * an old mobile build, somebody reading the network tab and retrying the call
+ * by hand. `billingOptionById` returns nothing for these, which is what every
+ * purchase path already treats as a hard error, and `isRetiredOption` lets
+ * checkout say *why* rather than "unknown option".
+ *
+ * Nobody outside the test accounts ever bought it, so there is no grandfather
+ * case here: this list exists to refuse the sale, not to honour it.
+ */
+export const RETIRED_OPTION_IDS = new Set(["premium_lifetime"]);
+
+export function isRetiredOption(id: string | null | undefined): boolean {
+  return id !== null && id !== undefined && RETIRED_OPTION_IDS.has(id);
+}
+
+/**
+ * ONE CUSTOMER-FACING CURRENCY: SOUTH AFRICAN RAND.
+ *
+ * Every price quoted to a customer — price list, app, checkout, receipt,
+ * structured data — is the rand figure on the option, and Paystack is the
+ * provider that charges it. There is exactly one number per option and it is
+ * the number that leaves the customer's account.
+ *
+ * WHY RAND AND NOT DOLLARS
+ *
+ * This deployment's Paystack account is a South African one, and a South
+ * African Paystack account may charge ZAR and nothing else. That is probed
+ * against the live account rather than taken from documentation: a USD
+ * `transaction/initialize` comes back `"Currency not supported by merchant"`
+ * while the identical ZAR call succeeds. So rand is not a presentation
+ * choice here, it is the only amount this account can take.
+ *
+ * A dollar price list was built against PayPal and is parked on the
+ * `usd-paypal-pricing` branch. It never went live — PayPal was never
+ * configured, so no dollar payment was ever taken and no subscriber was ever
+ * affected — and it is recoverable from there rather than half-present here.
+ *
+ * THERE IS DELIBERATELY NO CONVERSION FUNCTION IN THIS FILE.
+ *
+ * An approximate "≈$X" beside each rand price was tried and removed. It is a
+ * second number for the same plan that nobody is ever charged, it goes stale
+ * with the exchange rate, and a customer reading the dollar figure as the
+ * price is a customer surprised by their card statement. One price, in the
+ * currency of the charge, is the whole rule.
+ */
+
+/** The currency every customer-facing price is quoted and charged in. */
+export const DISPLAY_CURRENCY = "ZAR";
+
+/**
+ * "R89", "R1 399" — the price, so no approximation mark, ever.
+ *
+ * Whole rand where the amount is whole, because every price on the list is,
+ * and "R89.00" on a price page reads like a conversion of something else.
+ */
 export function formatZar(zar: number): string {
   return new Intl.NumberFormat("en-ZA", {
     style: "currency",
     currency: "ZAR",
     minimumFractionDigits: Number.isInteger(zar) ? 0 : 2,
   }).format(zar);
-}
-
-/** "≈US$11.08" — always with the approximation mark and the currency, never bare. */
-export function formatApproxUsd(zar: number): string {
-  return `≈US$${approxUsd(zar).toFixed(2)}`;
-}
-
-/**
- * "US$11.99" — a price PayPal really charges, so NO approximation mark.
- *
- * Deliberately shaped so it cannot be confused with `formatApproxUsd` at a
- * glance in the UI or in a diff: the "≈" is the entire difference between "we
- * think this is about what it costs" and "this is the number that will leave
- * your account", and putting one where the other belongs is a
- * misrepresentation either way round.
- *
- * Cents are always shown. $5.99 with the cents dropped is $6, which is not
- * the price, and PayPal will show the customer the cents regardless.
- */
-export function formatUsd(usd: number): string {
-  return `US$${usd.toFixed(2)}`;
 }
 
 /**
@@ -276,20 +365,17 @@ export interface BillingOption {
   plan: PlanId;
   term: BillingTerm;
   /**
-   * What a Paystack customer is actually charged, in rand, for one term. Not a
-   * monthly rate for the annual or lifetime options.
+   * THE price: what the customer is charged, in rand, for one whole term.
+   * Not a monthly rate for the annual option — R1 399 is the amount that
+   * leaves their account once a year.
+   *
+   * Required, and required for a reason. This is the number the price list,
+   * the app, the checkout button, the receipt and the structured data all
+   * render, and it is the amount Paystack is asked to charge. An option with
+   * no rand price is an option nothing can sell.
    */
   price_zar: number;
-  /**
-   * What a PayPal customer is actually charged, in US dollars, for one term.
-   *
-   * Absent means this option is NOT sold on PayPal, and the PayPal button must
-   * not be offered for it. `premium_lifetime` is the case: a one-off payment
-   * needs PayPal's Orders API rather than its Subscriptions API, which is a
-   * separate integration and is not built. Absent here is what stops it being
-   * half-sold.
-   */
-  price_usd?: number;
+  /** The price, formatted. */
   label_en: string;
   label_am: string;
   /** Marketing note, e.g. the saving against paying monthly. Honest arithmetic only. */
@@ -297,19 +383,21 @@ export interface BillingOption {
 }
 
 /**
- * The price list.
+ * The price list. Three options, in rand, and nothing else is a price.
  *
- * These rand figures are NOT conversions of the old dollar prices. They carry
- * a deliberate buffer, because the exchange rate moves and a price list that
- * tracked it would either have to be edited every quarter or quietly lose
- * margin — and re-pricing an existing subscriber on Paystack means cancelling
- * their subscription and asking them to buy a new one, which is a far worse
- * thing to do to somebody than charging a little above spot from the start.
+ * The savings copy is checked arithmetic, because it is the easiest place in
+ * a price list to publish a number nobody can reproduce:
  *
- * At the 14 September 2026 reference rate that buffer works out at roughly
- * 8-10% above the previous dollar prices ($4.99 → ≈$5.51, $9.99 → ≈$11.08).
- * Intentional, and the reason the USD figures shown are labelled approximate
- * rather than presented as the price.
+ *   premium  R179 x 12 = R2 148;  R1 399 is R749 less  →  34.9% off
+ *
+ * These are the live Paystack plans, at exactly the amounts they have always
+ * been. Paystack cannot re-price a subscription in place — changing the
+ * amount means cancelling the subscriber and asking them to buy again — so
+ * every figure here is also what the existing subscribers keep paying.
+ *
+ * Basic is monthly-only, as it always has been: there is no Paystack annual
+ * plan for it, and inventing a price without a plan code behind it would put
+ * a button on the page that checkout cannot honour.
  */
 export const BILLING_OPTIONS: BillingOption[] = [
   {
@@ -317,10 +405,6 @@ export const BILLING_OPTIONS: BillingOption[] = [
     plan: "basic",
     term: "monthly",
     price_zar: 89,
-    // ≈R97 at the reference rate: a little above the rand price, which is the
-    // right direction — PayPal's fees on a cross-border subscription are
-    // higher than Paystack's on a local card.
-    price_usd: 5.99,
     label_en: "R89 / month",
     label_am: "R89 በወር",
   },
@@ -329,7 +413,6 @@ export const BILLING_OPTIONS: BillingOption[] = [
     plan: "premium",
     term: "monthly",
     price_zar: 179,
-    price_usd: 11.99,
     label_en: "R179 / month",
     label_am: "R179 በወር",
   },
@@ -338,30 +421,10 @@ export const BILLING_OPTIONS: BillingOption[] = [
     plan: "premium",
     term: "annual",
     price_zar: 1399,
-    // 11.99 * 12 = 143.88; 89.99 is 37% less, so the saving the rand copy
-    // claims holds in dollars too and no second note is needed.
-    price_usd: 89.99,
     label_en: "R1 399 / year",
     label_am: "R1 399 በዓመት",
     // 179 * 12 = 2148; 2148 - 1399 = 749 saved, which is 34.9% off.
     note_en: "Save R749 a year — 35% less than paying monthly.",
-  },
-  {
-    id: "premium_lifetime",
-    plan: "premium",
-    term: "lifetime",
-    price_zar: 2599,
-    // No `price_usd`, and that is the switch that keeps lifetime off PayPal.
-    // A lifetime purchase is a single payment, which on PayPal means the
-    // Orders API; this integration only speaks Subscriptions. Adding a price
-    // here without building that path would put a button on the page that
-    // cannot take the money.
-    label_en: "R2 599 once",
-    label_am: "R2 599 አንዴ",
-    // 2599 / 1399 = 1.86 years against annual; 2599 / 179 = 14.5 months
-    // against monthly. "Under two years" is the annual comparison, which is
-    // the honest one to make against the cheapest recurring route.
-    note_en: "One payment. Pays for itself against annual in under two years.",
   },
 ];
 
@@ -373,7 +436,13 @@ export function billingOptionById(id: string | null | undefined): BillingOption 
   return BILLING_OPTIONS.find((o) => o.id === id);
 }
 
-/** The cheapest way into a tier, used for "from R89" copy. */
+/**
+ * The cheapest way into a tier, used for "from R89" copy.
+ *
+ * Cheapest by the amount charged per term, which for every tier here is the
+ * monthly option — an annual term is a lower rate but a larger single
+ * charge, and "from" copy is about the smallest amount that gets you in.
+ */
 export function entryPrice(plan: PlanId): BillingOption | undefined {
   return billingOptionsFor(plan).reduce<BillingOption | undefined>(
     (best, o) => (best === undefined || o.price_zar < best.price_zar ? o : best),

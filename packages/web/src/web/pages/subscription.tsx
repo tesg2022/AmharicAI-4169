@@ -28,12 +28,6 @@ import {
   useRefreshEntitlements,
   useResumeSubscription,
 } from "../queries/billing";
-import {
-  useCancelPaypalSubscription,
-  usePaypalCatalogue,
-  usePaypalCheckout,
-  usePaypalPreflight,
-} from "../queries/billing-paypal";
 import { Am, Card, Chip, Loading, TibebRule } from "../components/ui/kit";
 import { useSeo } from "../hooks/use-seo";
 
@@ -103,17 +97,12 @@ export default function SubscriptionPage() {
   const resumeSubscription = useResumeSubscription();
   const cardUpdateLink = useCardUpdateLink();
 
-  /**
-   * The PayPal half. Every paid option that PayPal can sell gets a second
-   * button beside the card one, because only the customer knows which of the
-   * two they can actually pay with: Paystack takes cards and South African
-   * methods, PayPal takes PayPal balances and most international payments.
-   * Both land on this same account, so the plan that comes back is identical.
+  /*
+   * There is deliberately no second provider here. Checkout is Paystack, in
+   * South African rand, and the dollar-priced PayPal buttons that once sat
+   * beside the card one are parked on the `usd-paypal-pricing` branch. One
+   * provider means one price per option and nothing to reconcile on screen.
    */
-  const paypalCatalogue = usePaypalCatalogue();
-  const paypalPreflight = usePaypalPreflight();
-  const paypalCheckout = usePaypalCheckout();
-  const cancelPaypal = useCancelPaypalSubscription();
 
   const [code, setCode] = useState("");
   const [redeemError, setRedeemError] = useState<string | null>(null);
@@ -121,13 +110,6 @@ export default function SubscriptionPage() {
   const [chosenOption, setChosenOption] = useState<Record<string, string>>({});
   /** The option currently being taken to checkout, so only its button spins. */
   const [buying, setBuying] = useState<string | null>(null);
-  /**
-   * The same, for the PayPal button. Separate state rather than one shared
-   * flag: the two buttons sit side by side on the same option, and a single
-   * `buying` would spin both and leave the customer unable to tell which
-   * checkout was opening.
-   */
-  const [buyingPaypal, setBuyingPaypal] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<{
     message: string;
     blockers: string[];
@@ -148,9 +130,9 @@ export default function SubscriptionPage() {
   /**
    * Close any double billing the moment this page is open.
    *
-   * A lifetime purchase does not cancel the monthly subscription underneath
-   * it — Paystack will keep charging both quite happily — so the server is
-   * asked to reconcile on arrival. Here rather than in the checkout handler
+   * Buying Premium does not cancel the Basic subscription underneath it —
+   * Paystack will keep charging both quite happily — so the server is asked
+   * to reconcile on arrival. Here rather than in the checkout handler
    * because a redirect checkout returns as a brand-new page load: the code
    * that opened it is long gone, and this is where both routes back from
    * Paystack land.
@@ -341,76 +323,15 @@ export default function SubscriptionPage() {
     }
   }
 
-  /**
-   * The same two steps against PayPal: ask permission, then ask the server to
-   * create the subscription and hand back PayPal's approval URL.
-   *
-   * One difference from `buy` matters enough to state here. Paystack's page is
-   * a payment that either happens or does not. PayPal's page is an APPROVAL of
-   * a subscription that already exists by the time the browser leaves — so a
-   * customer who abandons it leaves a real, unpaid, unapproved subscription at
-   * PayPal, and nothing is granted for it. That is handled server-side (a
-   * grant requires reading `ACTIVE` back from PayPal), and it is why this
-   * function promises nothing on the way out.
+  /*
+   * `buyWithPaypal` and `cancelPaypalSubscription` used to live here, beside
+   * their Paystack equivalents. Both are parked on the `usd-paypal-pricing`
+   * branch along with the dollar price list they depended on: a PayPal
+   * subscription is approved rather than paid, and cancelled immediately
+   * rather than at the period end, so neither could be folded into the
+   * functions above. Nothing is lost by their absence while the only way to
+   * buy is Paystack in rand.
    */
-  async function buyWithPaypal(optionId: string) {
-    setCheckoutError(null);
-    setBuyingPaypal(optionId);
-    try {
-      const check = await paypalPreflight.mutateAsync({ option_id: optionId });
-      if (!check.ok) {
-        setCheckoutError({ message: check.message, blockers: [] });
-        setBuyingPaypal(null);
-        return;
-      }
-
-      const opened = await paypalCheckout.mutateAsync({ option_id: optionId });
-      // Left busy on purpose, exactly as the card button is: cleared state
-      // here would let a second press create a second subscription.
-      window.location.assign(opened.approval_url);
-    } catch (error) {
-      setCheckoutError({
-        message:
-          error instanceof Error && error.message
-            ? error.message
-            : "PayPal checkout could not be opened. Nothing was charged.",
-        blockers: [],
-      });
-      setBuyingPaypal(null);
-    }
-  }
-
-  /**
-   * Cancels a PayPal subscription. Deliberately not folded into
-   * `changeSubscription`, because the two providers do opposite things and the
-   * copy has to differ: Paystack stops the next renewal, PayPal cancels
-   * immediately and irreversibly, and this app is what honours the rest of the
-   * period the customer already paid for. There is no resume to offer.
-   */
-  async function cancelPaypalSubscription(subscriptionId: string, label: string) {
-    setManageError(null);
-    setManageNotice(null);
-    setManaging(subscriptionId);
-    try {
-      const result = await cancelPaypal.mutateAsync({ subscription_id: subscriptionId });
-      setManageNotice(
-        result.until
-          ? `${label} has been cancelled at PayPal. You keep it until ${formatDate(result.until)}, and it cannot be resumed — subscribe again if you change your mind.`
-          : `${label} has been cancelled at PayPal. It cannot be resumed — subscribe again if you change your mind.`,
-      );
-      setConfirmCancel(null);
-      refreshEntitlements();
-      await account.refetch();
-    } catch (error) {
-      setManageError(
-        error instanceof Error && error.message
-          ? error.message
-          : "That cancellation could not be made. Your subscription is unchanged.",
-      );
-    } finally {
-      setManaging(null);
-    }
-  }
 
   const inputClass =
     "w-full rounded-xl border border-border bg-background px-4 py-2.5 text-[15px] outline-none transition focus:border-primary";
@@ -565,19 +486,17 @@ export default function SubscriptionPage() {
                         <div className="space-y-1">
                           <p className="text-sm font-semibold">{h.label_en}</p>
                           <p className="text-xs text-muted-foreground">
-                            {/* One date, three meanings — so it is always
-                                labelled rather than printed bare. */}
-                            {!h.recurring
+                            {/* One date, two meanings — the next renewal, or
+                                the last day of access on something that is
+                                cancelling — so it is always labelled rather
+                                than printed bare. */}
+                            {h.cancel_pending
                               ? h.until
-                                ? `One payment. Access until ${formatDate(h.until)}.`
-                                : "One payment. Yours for life — nothing renews and nothing expires."
-                              : h.cancel_pending
-                                ? h.until
-                                  ? `Cancelled. Runs until ${formatDate(h.until)} (${daysLeft(h.until)} days left), then stops.`
-                                  : "Cancelled. It will not renew."
-                                : h.until
-                                  ? `Renews on ${formatDate(h.until)}.`
-                                  : "Renews automatically."}
+                                ? `Cancelled. Runs until ${formatDate(h.until)} (${daysLeft(h.until)} days left), then stops.`
+                                : "Cancelled. It will not renew."
+                              : h.until
+                                ? `Renews on ${formatDate(h.until)}.`
+                                : "Renews automatically."}
                           </p>
                         </div>
                         {h.payment_failed ? (
@@ -588,14 +507,12 @@ export default function SubscriptionPage() {
                           />
                         ) : h.cancel_pending ? (
                           <Chip label="Ending" icon={Clock} className="bg-muted text-warning" />
-                        ) : h.recurring ? (
+                        ) : (
                           <Chip
                             label="Active"
                             icon={BadgeCheck}
                             className="bg-primary/10 text-primary"
                           />
-                        ) : (
-                          <Chip label="Owned" icon={BadgeCheck} className="bg-primary/10 text-primary" />
                         )}
                       </div>
 
@@ -623,81 +540,19 @@ export default function SubscriptionPage() {
                           subscription with no stored code cannot be managed
                           through the gateway either, so no button is shown
                           that would only fail. */}
-                      {/* PayPal's holding gets its own branch, because the
-                          Paystack one above would lie about it in three ways:
-                          `h.subscription_code` is a PayPal subscription id that
-                          `billing.cancel` does not recognise, PayPal's
-                          cancellation is immediate and irreversible so there is
-                          no resume to offer, and the card on it lives at PayPal
-                          rather than anywhere this app can reach. */}
-                      {h.recurring && h.subscription_code && h.provider === "paypal" ? (
-                        confirmCancel === h.subscription_code ? (
-                          <div className="space-y-2 rounded-xl border-l-[3px] border-warning bg-accent/15 p-3">
-                            <p className="text-xs text-warning">
-                              Cancel {h.label_en}? PayPal ends the subscription straight away,
-                              so nothing will be charged again. You keep everything it gives you
-                              until{" "}
-                              {h.until ? formatDate(h.until) : "the end of the paid period"}, and
-                              after that this account returns to Free.{" "}
-                              <strong className="font-semibold">
-                                A cancelled PayPal subscription cannot be resumed
-                              </strong>{" "}
-                              — you would have to subscribe again.
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  cancelPaypalSubscription(h.subscription_code!, h.label_en)
-                                }
-                                disabled={managing !== null}
-                                className="rounded-full bg-destructive px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
-                              >
-                                {managing === h.subscription_code
-                                  ? "Cancelling…"
-                                  : "Yes, cancel at PayPal"}
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setConfirmCancel(null)}
-                                disabled={managing !== null}
-                                className="rounded-full border border-border px-4 py-2 text-xs font-semibold transition hover:bg-muted disabled:opacity-50"
-                              >
-                                Keep it
-                              </button>
-                            </div>
-                          </div>
-                        ) : h.cancel_pending ? (
-                          <p className="text-xs text-muted-foreground">
-                            This subscription is cancelled at PayPal and cannot be resumed.
-                            Subscribe again below whenever you want it back.
-                          </p>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setManageError(null);
-                              setManageNotice(null);
-                              setConfirmCancel(h.subscription_code!);
-                            }}
-                            disabled={managing !== null}
-                            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold transition hover:bg-muted disabled:opacity-50"
-                          >
-                            <CircleSlash className="size-3.5" />
-                            Cancel subscription
-                          </button>
-                        )
-                      ) : null}
-
-                      {/* The payment method on a PayPal subscription is changed
-                          inside the customer's own PayPal account. There is no
-                          API for it and no page this app can open, so it says
-                          where to go instead of showing a button that cannot
-                          work. */}
+                      {/* A PayPal-held subscription, if any account still has
+                          one, is managed inside the customer's own PayPal
+                          account: this app no longer has a PayPal path to
+                          cancel it or to change what funds it, so it says
+                          where to go rather than drawing buttons that cannot
+                          work. The grant itself is still honoured — the read
+                          side of PayPal stays wired up. */}
                       {h.recurring && h.provider === "paypal" ? (
                         <p className="text-xs text-muted-foreground">
-                          To change the card or bank account funding this subscription, open it
-                          under Payments → Automatic payments in your PayPal account.
+                          This subscription is held at PayPal. To cancel it, or to change the
+                          card or bank account funding it, open it under Payments → Automatic
+                          payments in your PayPal account. Everything it gives you continues
+                          {h.until ? ` until ${formatDate(h.until)}` : ""} either way.
                         </p>
                       ) : null}
 
@@ -1008,13 +863,6 @@ export default function SubscriptionPage() {
                 const selectedId =
                   chosenOption[p.id] ?? heldHere?.id ?? options[0]?.id ?? null;
                 const selected = options.find((o) => o.id === selectedId) ?? options[0];
-                // The PayPal view of the *same* option id — both catalogues are
-                // built from one BILLING_OPTIONS list, so the ids line up. It is
-                // absent whenever PayPal is unconfigured or the option has no USD
-                // price (lifetime), and then no PayPal button is drawn at all.
-                const selectedPaypal = selected
-                  ? paypalCatalogue.data?.options.find((o) => o.id === selected.id)
-                  : undefined;
 
                 return (
                   <Card key={p.id} className="flex flex-col gap-3 p-4">
@@ -1029,17 +877,15 @@ export default function SubscriptionPage() {
                         <span className="text-sm font-normal text-muted-foreground"> /month</span>
                       ) : selected?.term === "annual" ? (
                         <span className="text-sm font-normal text-muted-foreground"> /year</span>
-                      ) : selected?.term === "lifetime" ? (
-                        <span className="text-sm font-normal text-muted-foreground"> once</span>
                       ) : null}
                     </p>
-                    {/* The rand figure above is the charged one. This is a
-                        conversion at a fixed reference rate, and it is never
-                        shown without the approximation mark or the note. */}
-                    {selected ? (
-                      <p className="-mt-2 text-xs text-muted-foreground">
-                        {selected.price_approx_usd_label} approximate · {selected.billed_in_note}
-                      </p>
+                    {/* The rand figure above is the charged one, and it is
+                        the only price on this card. No per-month equivalent is
+                        drawn beside the annual option and no second currency
+                        appears anywhere: the amount shown is the amount that
+                        leaves the account. */}
+                    {selected?.note_en ? (
+                      <p className="text-xs font-medium text-primary">{selected.note_en}</p>
                     ) : null}
 
                     <p className="text-xs text-muted-foreground">{p.tagline_en}</p>
@@ -1101,8 +947,8 @@ export default function SubscriptionPage() {
 
                     {/* "You are on this tier" and "you are paying for exactly
                         this" are different facts. Treating them as one hid the
-                        annual and lifetime options from the people most likely
-                        to want them: Premium monthly subscribers. */}
+                        annual option from the people most likely to want it:
+                        Premium monthly subscribers. */}
                     {selected && catalogue.data.held_option_ids.includes(selected.id) ? (
                       <span className="mt-auto rounded-full bg-primary/10 px-3 py-2 text-center text-xs font-semibold text-primary">
                         Your current plan
@@ -1116,13 +962,11 @@ export default function SubscriptionPage() {
                         Free, always
                       </span>
                     ) : (
-                      /* Two ways to pay, side by side, because only the
-                         customer knows which they have. The card button is
-                         first and full-strength: it takes the local methods
-                         most of this audience pays with, and it is the only
-                         one that can sell Lifetime. The PayPal button appears
-                         beside it whenever PayPal can actually sell the
-                         selected option, and never when it cannot. */
+                      /* One way to pay: Paystack, in rand. The dollar-priced
+                         PayPal button that used to sit beside this one is
+                         parked on the `usd-paypal-pricing` branch, so there is
+                         no second button, no second currency, and no choice to
+                         explain. */
                       <div className="mt-auto space-y-1.5">
                         <button
                           type="button"
@@ -1130,7 +974,6 @@ export default function SubscriptionPage() {
                           disabled={
                             !selected ||
                             buying !== null ||
-                            buyingPaypal !== null ||
                             !catalogue.data.checkout_available ||
                             // Per option, not per deployment: a missing Paystack
                             // plan for the annual term must not take monthly off
@@ -1146,47 +989,13 @@ export default function SubscriptionPage() {
                               : selected && !selected.sellable
                                 ? "Not available yet"
                                 : isCurrent
-                                ? // Same tier, different term: this is a change of
-                                  // how they pay, not a new plan, and saying "Get
-                                  // Premium" to a Premium subscriber reads as a
-                                  // mistake.
-                                  selected?.term === "lifetime"
-                                  ? `Buy ${p.name_en} for life — ${selected?.price_label}`
-                                  : `Switch to ${selected?.term ?? ""} — ${selected?.price_label}`
-                                : `Get ${p.name_en} — ${selected?.price_label}`}
+                                  ? // Same tier, different term: this is a change of
+                                    // how they pay, not a new plan, and saying "Get
+                                    // Premium" to a Premium subscriber reads as a
+                                    // mistake.
+                                    `Switch to ${selected?.term ?? ""} — ${selected?.price_label}`
+                                  : `Get ${p.name_en} — ${selected?.price_label}`}
                         </button>
-
-                        {/* Drawn only when this exact option is sellable
-                            through PayPal. Premium lifetime therefore has no
-                            PayPal button at all — it is a one-off payment,
-                            which needs PayPal's Orders API rather than
-                            Subscriptions — and an option with no PayPal plan
-                            configured in this deployment has none either. A
-                            button that cannot complete is worse than no
-                            button. */}
-                        {selectedPaypal?.sellable && selectedPaypal.price_label ? (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => selected && buyWithPaypal(selected.id)}
-                              disabled={!selected || buying !== null || buyingPaypal !== null}
-                              className="flex w-full items-center justify-center gap-1.5 rounded-full border border-[#003087] bg-white px-3 py-2 text-xs font-semibold text-[#003087] transition hover:bg-[#f5f7fa] disabled:opacity-50"
-                            >
-                              <Wallet className="size-3.5" />
-                              {buyingPaypal === selected?.id
-                                ? "Opening PayPal…"
-                                : `Pay with PayPal — ${selectedPaypal.price_label}`}
-                            </button>
-                            {/* The dollar price is a different price, not a
-                                conversion of the rand one, and PayPal bills in
-                                dollars. Saying so under the button is cheaper
-                                than a support email asking why the amounts
-                                differ. */}
-                            <p className="text-center text-[11px] leading-snug text-muted-foreground">
-                              Billed in US dollars by PayPal
-                            </p>
-                          </>
-                        ) : null}
                       </div>
                     )}
                   </Card>
@@ -1196,10 +1005,11 @@ export default function SubscriptionPage() {
 
             <p className="text-xs text-muted-foreground">
               Every price here is charged in South African rand ({catalogue.data.currency}) — the
-              dollar figures beside them are approximate conversions shown for reference and are
-              not what is taken. Monthly and annual subscriptions renew until you cancel;
-              Lifetime is a single payment. Annual and Lifetime are billing terms for Premium — they
-              unlock exactly what monthly Premium does, no more.
+              figure on the button is the amount that leaves your account, with no conversion and
+              no second currency, and a completed payment is checked against that same figure
+              before access is granted. Every plan is a subscription and renews until you cancel.
+              Annual is a billing term, not a tier: it unlocks exactly what the monthly price of
+              the same plan does.
             </p>
           </>
         )}

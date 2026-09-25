@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, isNull, or, gt, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, gt, sql } from "drizzle-orm";
 import { db } from "../database";
 import {
   ENTITLING_STATUSES,
@@ -52,14 +52,18 @@ export interface LiveGrant {
    * kind of Premium subscriber.
    */
   provider: GrantProvider;
-  /** The BILLING_OPTIONS id, e.g. "premium_lifetime". */
+  /** The BILLING_OPTIONS id, e.g. "premium_annual". */
   option_id: string;
   plan: PlanId;
-  /** "monthly" | "annual" | "lifetime". */
+  /** "monthly" | "annual". */
   term: string;
-  /** When access runs out, ms since epoch. null means never (lifetime). */
+  /**
+   * When access runs out, ms since epoch. Never null on a row that entitles:
+   * `liveGrants` drops a paid row with no end date rather than reading it as
+   * permanent access.
+   */
   until: number | null;
-  /** True for a subscription that renews, false for a one-off purchase. */
+  /** True for a subscription that renews. Everything sold is one. */
   recurring: boolean;
   /** True when it is already set to stop at the end of the paid period. */
   cancel_pending: boolean;
@@ -305,45 +309,6 @@ export async function upsertSubscriptionGrant(input: {
     });
 }
 
-/**
- * Writes the grant for a one-off purchase — lifetime, and only lifetime.
- *
- * Keyed on the transaction reference. A replayed `charge.success` for the same
- * reference is therefore a no-op rather than a second lifetime grant, which
- * matters because the redirect return and the webhook both fulfil the same
- * payment.
- */
-export async function upsertOneOffGrant(input: {
-  userId: string;
-  optionId: string;
-  plan: PlanId;
-  term: string;
-  amountSubunit: number;
-  currency: string;
-  reference: string;
-}): Promise<void> {
-  await db
-    .insert(paystackSubscriptions)
-    .values({
-      id: crypto.randomUUID(),
-      recurring: false,
-      subscriptionCode: null,
-      emailToken: null,
-      planCode: null,
-      status: "active",
-      // Lifetime. A date here would be a lie with a deadline on it.
-      until: null,
-      ...input,
-    })
-    // No conflict target on purpose. `uq_paystack_sub_reference` is a partial
-    // index, so a targeted clause would have to repeat its `where` predicate —
-    // and drizzle's SQLite `onConflictDoNothing` emits `where` *after*
-    // `do nothing`, which SQLite rejects as a syntax error. The untargeted form
-    // covers every unique index on the table, which is what is wanted here: the
-    // only collision this insert can hit is a replayed reference.
-    .onConflictDoNothing();
-}
-
 /** Marks a subscription's new status, from a webhook or a cancel call. */
 export async function setSubscriptionStatus(
   subscriptionCode: string,
@@ -395,10 +360,20 @@ export async function paystackLiveGrants(userId: string): Promise<LiveGrant[]> {
       and(
         eq(paystackSubscriptions.userId, userId),
         inArray(paystackSubscriptions.status, [...ENTITLING_STATUSES]),
-        // Null `until` is lifetime and never expires; a date in the past is
-        // a period that has run out and grants nothing, whatever its status
-        // still says — a webhook we never received must not extend access.
-        or(isNull(paystackSubscriptions.until), gt(paystackSubscriptions.until, nowMs)),
+        /**
+         * Access runs to a date, and only to a date.
+         *
+         * A null `until` used to mean the lifetime purchase and therefore
+         * access forever. Billing is subscription-only now, so nothing legit
+         * writes a null here, and the reading has to flip with the product: a
+         * paid row with no end date is a row whose end date was never set,
+         * which is a bug and must not entitle anybody. This matches what the
+         * PayPal side has always done.
+         *
+         * A date in the past grants nothing either, whatever the status still
+         * says — a webhook we never received must not extend access.
+         */
+        gt(paystackSubscriptions.until, nowMs),
       ),
     );
 

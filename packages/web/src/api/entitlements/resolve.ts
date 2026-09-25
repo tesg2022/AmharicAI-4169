@@ -52,7 +52,7 @@ export interface ResolvedPlan {
   plan: PlanId;
   plan_source: PlanSource;
   plan_is_verified: boolean;
-  /** When a verified grant lapses, ISO 8601. null for Free, lifetime, previews. */
+  /** When a verified grant lapses, ISO 8601. null for Free and for previews. */
   expires_at: string | null;
   /**
    * Set when the user's most recent access-code grant has run out and nothing
@@ -86,18 +86,18 @@ export const FREE_RESULT: ResolvedPlan = {
  * believes nothing the client says.
  *
  * Maps an option id back to an entitlement tier via BILLING_OPTIONS inside
- * `liveGrants`, so `premium_annual` and `premium_lifetime` both resolve to
+ * `liveGrants`, so `premium_monthly` and `premium_annual` both resolve to
  * `premium` without this function knowing what a billing term is.
  */
 /**
- * How far a grant holds access open, ms since epoch, or null for never.
+ * How far a grant holds access open, ms since epoch.
  *
- * A lifetime grant is stored with a null `until`, but the term is checked too
- * so that a lifetime row written with a date on it cannot be turned into an
- * expiry — the purchase was for forever and no stray column decides otherwise.
+ * Every grant has an end date now that billing is subscription-only, and
+ * `liveGrants` has already dropped any row without one — a paid row with no
+ * expiry is a row whose expiry was never written, not access forever.
  */
 function coverageOf(grant: LiveGrant): number | null {
-  return grant.term === "lifetime" ? null : grant.until;
+  return grant.until;
 }
 
 async function activeSubscription(userId: string): Promise<{
@@ -109,8 +109,8 @@ async function activeSubscription(userId: string): Promise<{
   if (grants.length === 0) return null;
 
   // Highest tier wins when several are live — never the lowest, which would
-  // silently downgrade someone who upgraded mid-cycle or who holds a
-  // lifetime Premium alongside a legacy Basic subscription.
+  // silently downgrade someone who upgraded mid-cycle or who holds Premium
+  // alongside a legacy Basic subscription.
   //
   // A subscription set to cancel at period end still counts until that date.
   // It has been paid for, and cutting access off the moment somebody upgrades
@@ -122,25 +122,23 @@ async function activeSubscription(userId: string): Promise<{
   if (bestPlan === "free") return null;
 
   // Tier alone does not settle the expiry date. Somebody can hold several
-  // grants at the same tier — a lifetime Premium bought on top of a Premium
-  // monthly, or an annual taken out mid-month — and the one that decides when
-  // access ends is the one that reaches furthest, not whichever the database
-  // happened to return first. Comparing only across tiers (the previous
-  // behaviour) let a monthly grant set the expiry and then skipped the
-  // lifetime row entirely as "not higher", so a lifetime buyer was told their
-  // Premium expired in a month.
+  // grants at the same tier — an annual taken out mid-month on top of a live
+  // monthly — and the one that decides when access ends is the one that
+  // reaches furthest, not whichever the database happened to return first.
+  // Comparing only across tiers (the previous behaviour) let a monthly grant
+  // set the expiry and then skipped the annual row entirely as "not higher",
+  // so an annual subscriber was told their Premium expired in a month.
   //
-  // `null` means never, so it wins outright over every date.
+  // A null coverage counts as no coverage rather than as "forever". Nothing
+  // writes one any more, and reading it the other way is what used to hand
+  // out permanent access by accident.
   let covering: LiveGrant | null = null;
   for (const grant of grants) {
     if (grant.plan !== bestPlan) continue;
-    if (covering === null) {
-      covering = grant;
-      continue;
-    }
-    if (coverageOf(covering) === null) continue;
     const next = coverageOf(grant);
-    if (next === null || next > (coverageOf(covering) as number)) covering = grant;
+    if (next === null) continue;
+    const current = covering === null ? null : coverageOf(covering);
+    if (current === null || next > current) covering = grant;
   }
   if (covering === null) return null;
 
@@ -150,7 +148,7 @@ async function activeSubscription(userId: string): Promise<{
     expires_at: until === null ? null : new Date(until).toISOString(),
     // Read off the grant that is actually holding the access open. A failed
     // renewal on a superseded monthly is not a warning worth showing to
-    // somebody whose lifetime purchase already covers them forever.
+    // somebody whose annual subscription already covers the year.
     payment_failed: covering.payment_failed,
   };
 }

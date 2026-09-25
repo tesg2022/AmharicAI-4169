@@ -25,12 +25,11 @@ export const legal = {
     version: POLICY_VERSION,
     documents: LEGAL_INDEX,
     operator: {
-      legal_name: OPERATOR.legalName,
+      public_name: OPERATOR.publicName,
       trading_as: OPERATOR.tradingAs,
       website: OPERATOR.website,
       support_email: OPERATOR.supportEmail,
       privacy_email: OPERATOR.privacyEmail,
-      location: OPERATOR.location,
       jurisdiction: OPERATOR.jurisdiction,
       minimum_age: OPERATOR.minimumAge,
     },

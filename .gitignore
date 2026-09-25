@@ -85,9 +85,14 @@ packages/web/scripts/*
 !packages/web/scripts/speech-pipeline-check.ts
 !packages/web/scripts/pregenerate-audio.ts
 !packages/web/scripts/extract-textbook.py
+!packages/web/scripts/make-og-image.py
 
 # The template ignores every `out/` dir as build output, but the QA gate's
 # three artifacts are evidence the user asked to preserve, not build output —
 # rejected samples in particular must never be silently dropped.
 !tts/qa/out/
 !tts/recording/out/
+
+# Local-only secret drop files and .env backups — never commit.
+.env.paystack-fix
+.env.bak-*

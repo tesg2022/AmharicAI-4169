@@ -1,4 +1,4 @@
-import { and, desc, eq, gt, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, desc, eq, gt, inArray, sql } from "drizzle-orm";
 import { db } from "../database";
 import {
   PAYPAL_ENTITLING_STATUSES,
@@ -205,9 +205,8 @@ export async function paypalPaymentsFor(userId: string) {
  * `until` is only overwritten when a date is supplied, and NEVER cleared. That
  * single rule is what makes PayPal's immediate cancellation survivable: at
  * cancellation PayPal stops reporting a next billing time, and writing that
- * null here would either be read as "lifetime, access forever" — the null
- * convention this column inherits from the Paystack table — or force access to
- * end at once, destroying a paid period the customer is owed.
+ * null here would end access at once, destroying a paid period the customer
+ * is owed.
  */
 export async function upsertPaypalGrant(input: {
   userId: string;
@@ -257,8 +256,8 @@ export async function upsertPaypalGrant(input: {
  *
  * `until` follows the same never-clear rule as the upsert: pass a date to
  * extend the paid period, pass nothing to leave it exactly where it was. There
- * is deliberately no way to set it to null through this function — a null
- * `until` on a PayPal row means lifetime, which PayPal does not sell.
+ * is deliberately no way to set it to null through this function — a row with
+ * no end date entitles nobody, so clearing it would revoke a paid period.
  */
 export async function setPaypalStatus(
   subscriptionId: string,
@@ -307,17 +306,10 @@ export async function paypalLiveGrants(userId: string): Promise<LiveGrant[]> {
         eq(paypalSubscriptions.userId, userId),
         inArray(paypalSubscriptions.status, [...PAYPAL_ENTITLING_STATUSES]),
         /**
-         * A null `until` is only ever a one-off lifetime purchase, which is
-         * not sold on PayPal today — so in practice this arm matches nothing,
-         * and it is written explicitly rather than left implicit because the
-         * alternative reading of null is "access forever". The `recurring`
-         * check is what says so out loud: a recurring row with no billing date
-         * is a bug, not a lifetime grant, and it must not entitle anybody.
+         * Access runs to a date. A row with no billing date is a row whose
+         * date was never written, which is a bug — never "access forever".
          */
-        or(
-          and(isNull(paypalSubscriptions.until), eq(paypalSubscriptions.recurring, false)),
-          gt(paypalSubscriptions.until, nowMs),
-        ),
+        gt(paypalSubscriptions.until, nowMs),
       ),
     );
 

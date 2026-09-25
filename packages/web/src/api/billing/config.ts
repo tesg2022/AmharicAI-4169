@@ -25,11 +25,10 @@ import { CURRENCY, isTestMode, paystackSecretKey } from "./paystack";
  * code change. `scripts/paystack-setup.ts` creates the plans and prints the
  * exact lines to paste.
  *
- * `premium_lifetime` is absent on purpose and must stay absent. Every Paystack
- * Plan is recurring — the interval field has no "once" — so a lifetime
- * purchase is a plain transaction with an amount, handled by the one-off path.
- * Giving it a plan code would sell a subscription to something advertised as a
- * single payment.
+ * Every option is here, because every option is a subscription. There is no
+ * one-off purchase to leave out: the withdrawn `premium_lifetime` was the only
+ * one, and a missing entry now means a deployment that forgot to set a plan
+ * code rather than a product sold a different way.
  */
 const PLAN_CODE_ENV: Record<string, string> = {
   basic_monthly: "PAYSTACK_PLAN_BASIC_MONTHLY",
@@ -45,21 +44,76 @@ export function planCodeFor(optionId: string): string | null {
   return code ? code : null;
 }
 
-/** True when this option is a recurring subscription rather than a one-off. */
-export function isRecurring(option: BillingOption): boolean {
-  return option.term !== "lifetime";
+/**
+ * True when this option is a recurring subscription.
+ *
+ * Every option is, now that the one-off lifetime purchase is withdrawn. Kept
+ * as a function rather than inlined as `true` because the fulfilment and
+ * entitlement paths branch on it, and those branches are what would have to
+ * be found again if a non-recurring product is ever sold.
+ */
+export function isRecurring(_option: BillingOption): boolean {
+  return true;
 }
 
 /**
  * Can this exact option be bought right now?
  *
- * A recurring option needs its plan code; a one-off needs only a key, because
- * its amount is sent with the transaction and there is nothing on Paystack's
- * side that has to exist first.
+ * It needs a secret key to reach Paystack at all, and a plan code, because a
+ * subscription is created against a Plan that has to already exist on the
+ * account.
  */
 export function optionSellable(option: BillingOption): boolean {
   if (!paystackSecretKey()) return false;
-  return isRecurring(option) ? planCodeFor(option.id) !== null : true;
+  return planCodeFor(option.id) !== null;
+}
+
+/**
+ * PAYSTACK IS OPEN TO NEW SUBSCRIPTIONS. It is the only provider that sells.
+ *
+ * This was briefly false. A dollar price list was built against PayPal, and
+ * while it stood Paystack had to be closed to new sales, because this
+ * account cannot charge dollars — probed against the live account, not
+ * inferred from documentation: a USD `transaction/initialize` comes back
+ * `"Currency not supported by merchant"` while the identical ZAR call
+ * succeeds — so a checkout opened from a dollar page would have shown $4.99
+ * and charged R89.
+ *
+ * The price list is rand again, which removes the contradiction at its
+ * source: the amount shown is the amount charged, in the currency charged,
+ * by the one provider that can charge it. So this is open.
+ *
+ * It is kept as a function rather than inlined because it is the single
+ * switch that decides whether the business is taking new money, and that is
+ * worth being able to find, read and flip in one place.
+ *
+ * What the round trip through dollars deliberately did NOT do, and still has
+ * not done: it never touched the currency, the key, or the plan codes, and
+ * it never cancelled, suspended or re-priced anything. Every existing
+ * subscriber has been renewing at the price they agreed to throughout.
+ */
+export function paystackOpenToNewSales(): boolean {
+  return true;
+}
+
+/**
+ * Why a Paystack checkout was refused, for a customer, in one sentence.
+ *
+ * Reachable again only if `paystackOpenToNewSales()` is flipped back to
+ * false. It says nothing about which provider or currency replaces it,
+ * because nothing does: the honest message for a closed till is that the
+ * till is closed and no money moved.
+ */
+export const PAYSTACK_CLOSED_MESSAGE =
+  "Checkout is not open to new subscriptions at the moment. Nothing has been " +
+  "charged, and existing subscriptions are unaffected.";
+
+/**
+ * Can this option be bought through Paystack right now? The gate every new
+ * sale must pass — configuration AND the account still being open to sales.
+ */
+export function optionBuyable(option: BillingOption): boolean {
+  return paystackOpenToNewSales() && optionSellable(option);
 }
 
 export interface BillingStatus {

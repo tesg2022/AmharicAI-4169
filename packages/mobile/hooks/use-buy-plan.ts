@@ -7,11 +7,6 @@ import {
   useRefreshEntitlements,
   useVerifyPayment,
 } from "@/queries/billing";
-import {
-  usePaypalCheckout,
-  usePaypalPreflight,
-  useVerifyPaypalSubscription,
-} from "@/queries/billing-paypal";
 import { useSession } from "@/hooks/use-session";
 
 /**
@@ -34,8 +29,8 @@ import { useSession } from "@/hooks/use-session";
  *   - billing.verify, because closing the payment browser tells this app
  *     nothing at all. Paid, abandoned and back-gestured all look identical
  *     from here, so the reference goes to the server and Paystack is asked.
- *   - reconcile, because a lifetime purchase can land on top of a live monthly
- *     subscription for the same tier and Paystack will keep charging both.
+ *   - reconcile, because an upgrade can land on top of a live subscription of
+ *     a lower tier and Paystack will keep charging both.
  *   - refresh, because the entitlement lives on the server. Nothing here
  *     grants a plan locally, ever.
  */
@@ -46,18 +41,9 @@ export function useBuyPlan() {
   const verify = useVerifyPayment();
   const reconcile = useReconcile();
   const refreshEntitlements = useRefreshEntitlements();
-  const paypalPreflight = usePaypalPreflight();
-  const paypalCheckout = usePaypalCheckout();
-  const paypalVerify = useVerifyPaypalSubscription();
 
   /** The option currently being taken to checkout, so only its button spins. */
   const [buying, setBuying] = useState<string | null>(null);
-  /**
-   * The same, for the PayPal button. Separate state rather than a shared flag
-   * because both buttons sit on one option: one spinner driving two buttons
-   * would show a PayPal payment in progress to somebody who tapped the card.
-   */
-  const [buyingPaypal, setBuyingPaypal] = useState<string | null>(null);
   const [error, setError] = useState<{ message: string; blockers: string[] } | null>(null);
   /** Subscriptions this visit stopped, so the screen can say so out loud. */
   const [stopped, setStopped] = useState<string[]>([]);
@@ -66,9 +52,6 @@ export function useBuyPlan() {
   const checkoutMutate = checkout.mutateAsync;
   const verifyMutate = verify.mutateAsync;
   const reconcileMutate = reconcile.mutateAsync;
-  const paypalPreflightMutate = paypalPreflight.mutateAsync;
-  const paypalCheckoutMutate = paypalCheckout.mutateAsync;
-  const paypalVerifyMutate = paypalVerify.mutateAsync;
 
   /**
    * Ask the server to close anything outgrown, and report what it closed.
@@ -147,74 +130,12 @@ export function useBuyPlan() {
     [preflightMutate, checkoutMutate, verifyMutate, refreshEntitlements, reconcileNow],
   );
 
-  /**
-   * The same sequence against PayPal, and it is a separate function for the
-   * same reason the queries are a separate file: the two providers agree on
-   * nothing except the entitlement at the end.
-   *
-   *   preflight → billingPaypal.checkout → approval page → verify → reconcile
-   *
-   * Three differences from `buy` are load-bearing:
-   *
-   *   - The subscription exists at PayPal before the customer approves it, so
-   *     what comes back is an `approval_url` and a `subscription_id` rather
-   *     than a reference to a payment attempt.
-   *   - `verify` therefore answers `pending` as a matter of course — PayPal
-   *     often still reads `APPROVAL_PENDING` the instant the browser returns.
-   *     That is not a failure and is never surfaced as one; the webhook and
-   *     the next `refreshEntitlements` settle it.
-   *   - There is no card-update or resume path to promise afterwards. PayPal
-   *     owns the funding source and its cancellation is irreversible.
+  /*
+   * `buyWithPaypal` used to sit here, running the same sequence against
+   * PayPal. It is parked on the `usd-paypal-pricing` branch together with the
+   * dollar price list it charged from: checkout is Paystack in rand, so there
+   * is one purchase sequence again rather than two.
    */
-  const buyWithPaypal = useCallback(
-    async (optionId: string) => {
-      setError(null);
-      setBuyingPaypal(optionId);
-      try {
-        const check = await paypalPreflightMutate({ option_id: optionId });
-        if (!check.ok) {
-          // The server's wording, verbatim — as with the card path.
-          setError({ message: check.message, blockers: [] });
-          return;
-        }
-
-        const opened = await paypalCheckoutMutate({ option_id: optionId });
-
-        const result = await openCheckout(opened.approval_url);
-        // On web the tab is gone; the return leg is the website's
-        // /billing/callback/paypal page, and nothing below this runs.
-        if (result === "left") return;
-
-        try {
-          await paypalVerifyMutate({ subscription_id: opened.subscription_id });
-        } catch {
-          // Verification was unreachable. The webhook still covers it, and
-          // claiming a failure here would be a guess.
-        }
-
-        refreshEntitlements();
-        await reconcileNow();
-      } catch (err) {
-        const blockers = (err as { data?: { blockers?: string[] } }).data?.blockers;
-        setError({
-          message:
-            err instanceof Error && err.message
-              ? err.message
-              : "PayPal checkout could not be opened. Nothing was charged.",
-          blockers: Array.isArray(blockers) ? blockers : [],
-        });
-      } finally {
-        setBuyingPaypal(null);
-      }
-    },
-    [
-      paypalPreflightMutate,
-      paypalCheckoutMutate,
-      paypalVerifyMutate,
-      refreshEntitlements,
-      reconcileNow,
-    ],
-  );
 
   /**
    * Close any double billing the moment a billing screen is open.
@@ -233,8 +154,6 @@ export function useBuyPlan() {
   return {
     buy,
     buying,
-    buyWithPaypal,
-    buyingPaypal,
     error,
     stopped,
     clearError: useCallback(() => setError(null), []),

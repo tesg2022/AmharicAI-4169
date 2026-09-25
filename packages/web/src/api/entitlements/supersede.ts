@@ -10,18 +10,21 @@ import type { GrantProvider, LiveGrant } from "../billing/store";
  * Cancels paid subscriptions a customer has outgrown.
  *
  * No payment provider does this on its own, and the failure it prevents is
- * expensive in the only direction that matters: a Basic subscriber who buys
- * Premium lifetime ends up holding an active R89/month subscription *and* the
- * R2 599 purchase, and goes on paying monthly forever for something they have
- * already bought outright. Charging somebody for what they have superseded is
- * not an edge case to note in a comment and leave running.
+ * expensive in the only direction that matters: a Basic subscriber who takes
+ * out Premium ends up holding an active R89/month subscription *and* the
+ * R179/month one, and goes on paying for the tier they have outgrown.
+ * Charging somebody for what they have superseded is not an edge case to note
+ * in a comment and leave running.
  *
- * Two rules, and nothing else:
- *   - a subscription on a strictly lower tier than the best live grant is
- *     superseded (Basic monthly under a Premium anything)
- *   - a subscription on the *same* tier as a lifetime purchase of that tier is
- *     superseded (Premium monthly under Premium lifetime) — the whole point of
- *     buying lifetime is to stop paying
+ * One rule, and nothing else: a subscription on a strictly lower tier than
+ * the best live grant is superseded — Basic monthly under a Premium anything.
+ *
+ * Two subscriptions on the SAME tier are left alone, which matters for the
+ * monthly-to-annual move: the annual charge starts a second Premium
+ * subscription, and the monthly one underneath it has to be stopped by the
+ * customer or by the upgrade path, not here. Guessing which of two equal-tier
+ * subscriptions is the wanted one is how somebody's new annual subscription
+ * gets cancelled instead of their old monthly.
  *
  * Both rules are provider-blind, and now that there are two providers that is
  * the whole reason this file reads `liveGrants` rather than either provider's
@@ -63,7 +66,6 @@ export async function reconcileSubscriptions(userId: string): Promise<Superseded
 
   const rank = (p: PlanId) => PLAN_ORDER.indexOf(p);
   const bestRank = Math.max(...grants.map((g) => rank(g.plan)));
-  const lifetimeTiers = new Set(grants.filter((g) => g.term === "lifetime").map((g) => g.plan));
 
   const doomed = grants.filter(
     (g) =>
@@ -76,7 +78,7 @@ export async function reconcileSubscriptions(userId: string): Promise<Superseded
        */
       !g.cancel_pending &&
       g.subscription_code !== null &&
-      (rank(g.plan) < bestRank || lifetimeTiers.has(g.plan)),
+      rank(g.plan) < bestRank,
   );
 
   if (doomed.length === 0) return [];

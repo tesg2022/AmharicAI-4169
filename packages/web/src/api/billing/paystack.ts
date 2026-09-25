@@ -285,18 +285,19 @@ export interface InitializedTransaction {
 /**
  * Opens a checkout page.
  *
- * Two shapes, one endpoint, and the difference is the whole design:
+ * Two shapes, one endpoint. Everything sold here uses the first:
  *
  *   - pass `plan` and the customer is charged the plan's amount now and
  *     auto-subscribed, renewing on the plan's interval. `amount` is ignored.
  *   - pass `amount` with no plan and it is a single charge that renews
- *     nothing. This is the only way to sell lifetime access, because a
- *     Paystack Plan is recurring by definition — there is no one-off plan
- *     type, so `premium_lifetime` deliberately has no plan code.
+ *     nothing. Nothing in this app takes that shape any more — billing is
+ *     subscription-only — and `fulfilReference` refuses to grant access for a
+ *     charge that carries no plan, so a transaction opened this way would
+ *     take money and entitle nobody.
  */
 export async function initializeTransaction(input: {
   email: string;
-  /** Major unit. Required for a one-off; ignored by Paystack when `plan` is set. */
+  /** Major unit. Ignored by Paystack when `plan` is set, which it always is. */
   amountMajor: number;
   plan?: string | undefined;
   currency?: string | undefined;

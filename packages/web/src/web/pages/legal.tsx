@@ -134,7 +134,7 @@ export function LegalPage({ slug }: { slug: LegalSlug }) {
         <Card className="mt-12">
           <p className="font-display text-base font-bold">Who publishes AmharicAI</p>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            {operator.legal_name}, trading as {operator.trading_as} · {operator.location}
+            {operator.trading_as} — {operator.public_name}
           </p>
           <a
             href={`mailto:${operator.support_email}`}

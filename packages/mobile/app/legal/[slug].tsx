@@ -139,7 +139,7 @@ export default function LegalScreen() {
             <Card style={{ gap: 8 }}>
               <Title size={FontSize.body}>Who publishes AmharicAI</Title>
               <Body size={FontSize.small} color={colors.mutedForeground}>
-                {operator.legal_name}, trading as {operator.trading_as} · {operator.location}
+                {operator.trading_as} — {operator.public_name}
               </Body>
               <Button
                 label={operator.support_email}

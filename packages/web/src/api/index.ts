@@ -5,14 +5,12 @@ import { hearSpeech, serveSpeech, type ResponseBody } from "./speech/serve";
 import { VOICE_MODES, type VoiceMode } from "./speech/ssml";
 import { tutorAgent } from "./agent";
 import { auth } from "./auth";
-import { paypalWebhook } from "./billing/paypal-webhook";
 import { paystackWebhook } from "./billing/webhook";
 import { identify, type RequestIdentity } from "./entitlements/request";
 import { consume, refusalMessage } from "./entitlements/usage";
 import { mountV1 } from "./v1";
 import { account } from "./routes/account";
 import { billing } from "./routes/billing";
-import { billingPaypal } from "./routes/billing-paypal";
 import { usage } from "./routes/usage";
 import { waitlist } from "./routes/waitlist";
 import { access } from "./routes/access";
@@ -41,7 +39,6 @@ export const router = {
   account,
   admin,
   billing,
-  billingPaypal,
   catalog,
   content,
   legal,
@@ -86,20 +83,17 @@ mountV1(app);
  */
 app.post("/api/webhooks/paystack", (c) => paystackWebhook(c));
 
-/**
- * PayPal webhooks — subscription activation, renewals, cancellations, refunds.
+/*
+ * There is deliberately no PayPal webhook route here. Checkout is Paystack in
+ * rand, and the dollar-priced PayPal path — router, webhook, fulfilment and
+ * plan-id price verification — is parked on the `usd-paypal-pricing` branch
+ * rather than mounted. Nothing dollar-priced can be sold while that is true,
+ * which is the point: one currency, one provider, one price per plan.
  *
- * Also a plain route, for a different reason than Paystack's: PayPal has no
- * local HMAC. Verification is a call back to PayPal's
- * /v1/notifications/verify-webhook-signature with the parsed event plus the
- * PAYPAL-* headers, so this handler parses JSON first and verifies second.
- * An unverifiable result answers 500 on purpose, so PayPal retries rather
- * than dropping the event.
- *
- * This URL goes in PayPal Developer Dashboard → your app → Webhooks, in both
- * sandbox and live, and the resulting webhook id in PAYPAL_WEBHOOK_ID.
+ * The read side stays: `billing/paypal-store.ts` and the grant merge still
+ * resolve any PayPal grant already recorded, so no past access can vanish
+ * because the sales path was withdrawn.
  */
-app.post("/api/webhooks/paypal", (c) => paypalWebhook(c));
 
 /**
  * Native Amharic audio. A plain route because `<audio src>` and the mobile

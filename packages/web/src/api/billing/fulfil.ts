@@ -1,8 +1,9 @@
-import { billingOptionById, type PlanId } from "../content/plans";
-import { isRecurring } from "./config";
+import { billingOptionById, isRetiredOption, type PlanId } from "../content/plans";
 import {
+  CURRENCY,
   fetchSubscription,
   listSubscriptions,
+  toSubunit,
   verifyTransaction,
   type PaystackSubscriptionStatus as ApiStatus,
   type PaystackSubscription,
@@ -12,7 +13,6 @@ import {
   checkoutByReference,
   recordPayment,
   settleCheckout,
-  upsertOneOffGrant,
   upsertSubscriptionGrant,
 } from "./store";
 import type { PaystackStatus } from "../database/schema";
@@ -153,20 +153,97 @@ export async function fulfilReference(reference: string): Promise<FulfilResult> 
 
   const plan = (option?.plan ?? checkout?.plan ?? "free") as PlanId;
   const term = option?.term ?? checkout?.term ?? "monthly";
-  const recurring = option ? isRecurring(option) : term !== "lifetime";
 
-  if (!recurring) {
-    await upsertOneOffGrant({
-      userId,
-      optionId,
-      plan,
-      term,
-      amountSubunit: txn.amount,
-      currency: txn.currency,
-      reference: txn.reference,
-    });
-    await settleCheckout(reference, "success");
-    return { kind: "granted", optionId, plan, recurring: false };
+  /**
+   * Everything sold is a subscription, so a paid transaction that is not one
+   * has to be handled as an accident rather than fulfilled.
+   *
+   * This can only be a charge for the withdrawn lifetime option, opened
+   * before it was withdrawn and completed after. Granting it would sell a
+   * product that no longer exists at a price no longer on the page; silently
+   * dropping it would take the money and give nothing. So it is recorded —
+   * `recordPayment` above already ran — the checkout is settled as needing a
+   * human, and the customer is told plainly that they are owed a refund.
+   */
+  if (isRetiredOption(optionId) || !option) {
+    console.error(
+      `[paystack] REFUND OWED: reference ${reference} paid ${txn.currency} ` +
+        `${txn.amount} subunit for "${optionId}", which is withdrawn and cannot be ` +
+        `fulfilled. Payment is recorded; no access has been granted. Refund by hand ` +
+        `in the Paystack dashboard.`,
+    );
+    await settleCheckout(reference, "failed");
+    return {
+      kind: "unknown_reference",
+      message:
+        "That payment was for a plan we no longer sell, so nothing has been activated " +
+        "and you are owed a full refund. Contact support with your reference and it " +
+        "will be returned — or subscribe monthly or annually instead.",
+    };
+  }
+
+  /**
+   * What was actually paid has to match what the option costs, because
+   * nothing so far has checked it.
+   *
+   * `status: "success"` only says Paystack collected the amount it was asked
+   * for — not that it was asked for the right one. Our own checkout route
+   * always initialises from the plan code, so a legitimate payment is always
+   * correct here. But the public key can initialise a transaction from
+   * anywhere, with any amount and any `metadata`, and the attribution above
+   * deliberately falls back to `metadata` when there is no local checkout
+   * row. Without this check, a hand-rolled R1 transaction carrying
+   * `app_user_id` and `option_id` in its metadata would be fulfilled as a
+   * full-price subscription.
+   *
+   * Underpayment is therefore refused outright. Overpayment is granted and
+   * logged instead: the customer is not at fault and withholding access
+   * would be the worse failure, but it should never happen silently.
+   */
+  if (txn.currency !== CURRENCY) {
+    console.error(
+      `[paystack] CURRENCY MISMATCH: reference ${reference} paid in ${txn.currency} ` +
+        `but "${optionId}" is sold in ${CURRENCY}. Payment is recorded; no access ` +
+        `granted. Refund by hand in the Paystack dashboard.`,
+    );
+    await settleCheckout(reference, "failed");
+    return {
+      kind: "unknown_reference",
+      message:
+        "That payment was taken in the wrong currency, so nothing has been activated " +
+        "and you are owed a full refund. Contact support with your reference.",
+    };
+  }
+
+  /**
+   * What the option costs, in rand — the price list and the charge are the
+   * same number and the same currency, so there is one figure to compare
+   * against and no chance of checking a payment against a price nobody is
+   * billed. `price_zar` is required on every option, so an option that
+   * reached this far always has an amount to verify.
+   */
+  const expectedSubunit = toSubunit(option.price_zar, txn.currency);
+  if (txn.amount < expectedSubunit) {
+    console.error(
+      `[paystack] UNDERPAID: reference ${reference} paid ${txn.currency} ${txn.amount} ` +
+        `subunit for "${optionId}", which costs ${expectedSubunit}. No access granted. ` +
+        `This cannot come from our own checkout route — treat it as tampering and ` +
+        `refund by hand.`,
+    );
+    await settleCheckout(reference, "failed");
+    return {
+      kind: "unknown_reference",
+      message:
+        "That payment does not cover the price of the plan, so nothing has been " +
+        "activated. Contact support with your reference and it will be refunded.",
+    };
+  }
+  if (txn.amount > expectedSubunit) {
+    console.error(
+      `[paystack] OVERPAID: reference ${reference} paid ${txn.currency} ${txn.amount} ` +
+        `subunit for "${optionId}", which costs ${expectedSubunit}. Access IS granted; ` +
+        `refund the difference by hand.`,
+    );
   }
 
   /**
