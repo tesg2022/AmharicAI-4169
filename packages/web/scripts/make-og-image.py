@@ -24,7 +24,9 @@ is where Debian's fonts-noto package puts it.
 
 Sizing note: 1200x630 is the size every scraper crops to, and text below about
 28px renders illegibly in a Slack or iMessage thumbnail, which is where most of
-these are actually seen. Nothing here is smaller than that.
+these are actually seen. Nothing here is smaller than 27px, and the two
+smallest lines are the two least important ones, so what a thumbnail softens
+first is the detail rather than the name.
 """
 
 from __future__ import annotations
@@ -59,8 +61,15 @@ W, H = 1200, 630
 # afterthought.
 FOLD = int(W * 0.53)
 
-TITLE = "AmharicAI – Learn Amharic with AI"
-SUBLINE = "The syllabary first, then the sounds English does not have, then a written beginner course."
+# The text, in the order it is read, largest first. Four runs and no more: a
+# scraper thumbnail is about 260px wide in a Slack sidebar, and every line
+# added past this takes size away from the brand rather than adding meaning.
+TITLE = "AmharicAI"
+SUBLINE = "Learn Amharic Online"
+# Mixed Ethiopic and Latin on one line, which is the whole reason
+# `draw_runs()` exists — see the note there.
+SCRIPT_LINE = "አማርኛ • ፊደል • Speak • Read • Write"
+OFFER_LINE = "Lessons • Dictionary • Translation • Practice"
 FOOTER_URL = "amharicai.org"
 FOOTER_NOTE = "Free to start"
 
@@ -119,6 +128,73 @@ def text_width(draw: ImageDraw.ImageDraw, s: str, font: ImageFont.FreeTypeFont) 
     return int(draw.textbbox((0, 0), s, font=font)[2])
 
 
+def is_ethiopic(ch: str) -> bool:
+    """Ethiopic block, plus its supplement and extended ranges."""
+    return "ሀ" <= ch <= "፿" or "ᎀ" <= ch <= "᎟" or "ⶀ" <= ch <= "⷟"
+
+
+def split_runs(s: str) -> list[tuple[str, bool]]:
+    """Break a string into consecutive runs of Ethiopic / not-Ethiopic."""
+    runs: list[tuple[str, bool]] = []
+    for ch in s:
+        eth = is_ethiopic(ch)
+        if runs and runs[-1][1] == eth:
+            runs[-1] = (runs[-1][0] + ch, eth)
+        else:
+            runs.append((ch, eth))
+    return runs
+
+
+def draw_runs(
+    draw: ImageDraw.ImageDraw,
+    xy: tuple[int, int],
+    s: str,
+    latin: ImageFont.FreeTypeFont,
+    ethiopic: ImageFont.FreeTypeFont,
+    colour: str,
+    measure_only: bool = False,
+) -> int:
+    """
+    Draw one line that mixes Amharic and Latin, and return its width.
+
+    Pillow renders a whole string in a single font and does no fallback: a
+    `ለ` drawn in Manrope comes out as a tofu box, silently, in a PNG nobody
+    opens before it ships. So the line is split into script runs and each run
+    is drawn in the face that actually has the glyphs, with the pen carried
+    across by the measured width of what came before.
+
+    The two faces are optically different sizes at the same nominal px —
+    Ethiopic sits larger — so the caller passes an already-shrunk Ethiopic
+    instance rather than the same size as the Latin one. Baselines are shared
+    by drawing both runs from the same y, which is what `anchor="ls"` gives.
+    """
+    x, y = xy
+    for run, eth in split_runs(s):
+        font = ethiopic if eth else latin
+        if not measure_only:
+            draw.text((x, y), run, font=font, fill=colour, anchor="ls")
+        x += int(draw.textlength(run, font=font))
+    return x - xy[0]
+
+
+def fit_font(
+    draw: ImageDraw.ImageDraw, s: str, path: Path, weight: int, limit: int, start: int
+) -> ImageFont.FreeTypeFont:
+    """
+    The largest size at or below `start` that keeps `s` on one line.
+
+    The brand word is the loudest thing on the card, so it is set as large as
+    the measure allows rather than at a number picked by eye — and if the word
+    is ever changed to a longer one, it shrinks to fit instead of running off
+    the fold into the green panel.
+    """
+    for size in range(start, 23, -2):
+        font = weighted(path, size, weight)
+        if draw.textlength(s, font=font) <= limit:
+            return font
+    return weighted(path, 24, weight)
+
+
 def wrap(
     draw: ImageDraw.ImageDraw, s: str, font: ImageFont.FreeTypeFont, limit: int
 ) -> list[str]:
@@ -154,7 +230,7 @@ def zigzag(
     draw.line(points, fill=colour, width=5, joint="curve")
 
 
-def render(title: str) -> Image.Image:
+def render(title: str, subline: str = SUBLINE) -> Image.Image:
     sora = google_font("Sora.ttf")
     manrope = google_font("Manrope.ttf")
     ethiopic = system_font("Noto Sans Ethiopic")
@@ -191,69 +267,92 @@ def render(title: str) -> Image.Image:
             fill=AMBER,
         )
 
-    # The headline. The brand token leads it in green and the rest is ink, so
-    # the card reads as the title without needing a separate wordmark.
+    # THE LEFT COLUMN, IN FOUR STEPS OF LOUDNESS
+    #
+    # The card has one job at thumbnail size: say who this is and what it is.
+    # So the brand is set as large as the measure allows and everything under
+    # it steps down hard — 100/42/28/27 rather than a gentle ramp, because a
+    # gentle ramp at 260px wide reads as four lines of the same grey text and
+    # the brand stops being the thing you see first.
+    #
+    #   AmharicAI                                    brand, green, as big as fits
+    #   ~~~~~~                                       the amber rule
+    #   Learn Amharic Online                         what it is, in ink
+    #   አማርኛ • ፊደል • Speak • Read • Write            the languages and the skills
+    #   Lessons • Dictionary • Translation • Practice what you get, muted
     pad = 58
     measure = FOLD - pad - 40
-    head_font = weighted(sora, 62, 700)
-    brand_font = weighted(sora, 62, 800)
 
-    # Split on the dash, whichever kind the title uses. The token before it is
-    # the brand; everything after is the claim.
-    dash = next((d for d in ("–", "—", "-") if d in title), None)
-    if dash:
-        brand, rest = (part.strip() for part in title.split(dash, 1))
-    else:
-        brand, rest = title.strip(), ""
+    brand = title.strip()
+    brand_font = fit_font(draw, brand, sora, 800, measure, 100)
+    sub_font = weighted(sora, 42, 700)
+    script_latin = weighted(manrope, 28, 600)
+    # Noto Sans Ethiopic runs optically larger than Manrope at the same px, so
+    # it is set a touch smaller to make the two halves of the line match.
+    script_eth = weighted(ethiopic, 27, 600)
+    offer_font = weighted(manrope, 27, 500)
 
-    head_lines: list[tuple[str, ImageFont.FreeTypeFont, str]] = [
-        (f"{brand} {dash}" if dash else brand, brand_font, GREEN)
-    ]
-    head_lines += [(line, head_font, INK) for line in wrap(draw, rest, head_font, measure)]
-
-    sub_font = weighted(manrope, 29, 500)
-    sub_lines = wrap(draw, SUBLINE, sub_font, measure)
+    sub_lines = wrap(draw, subline, sub_font, measure)
 
     # The stack is measured before anything is drawn, then centred in the space
     # above a reserved footer zone.
     #
     # This is the part worth keeping: laying it out by stepping a cursor down
-    # from a hand-picked start meant a title one line longer silently pushed
-    # the subline through the footer, and the only way to notice was to look at
-    # the PNG. Measure first and the overlap cannot happen — a longer title
-    # eats the slack, and if there is none left the guard below says so instead
-    # of writing a broken card.
-    HEAD_LEADING = 76
-    SUB_LEADING = 40
-    RULE_GAP, RULE_BAND, SUB_GAP = 22, 24, 26
+    # from a hand-picked start meant one line more silently pushing the bottom
+    # line through the footer, and the only way to notice was to look at the
+    # PNG. Measure first and the overlap cannot happen — a longer subline eats
+    # the slack, and if there is none left the guard below says so instead of
+    # writing a broken card.
+    BRAND_LEADING = brand_font.size + 16
+    SUB_LEADING = 54
+    RULE_GAP, RULE_BAND, SUB_GAP = 20, 24, 24
+    SCRIPT_GAP, SCRIPT_LEADING = 26, 34
+    OFFER_GAP, OFFER_LEADING = 20, 32
     FOOTER_ZONE = 104
 
     stack_h = (
-        len(head_lines) * HEAD_LEADING
+        BRAND_LEADING
         + RULE_GAP
         + RULE_BAND
         + SUB_GAP
         + len(sub_lines) * SUB_LEADING
+        + SCRIPT_GAP
+        + SCRIPT_LEADING
+        + OFFER_GAP
+        + OFFER_LEADING
     )
     top, bottom = 44, H - FOOTER_ZONE
     if stack_h > bottom - top:
         raise SystemExit(
-            f"Title {title!r} needs {stack_h}px of a {bottom - top}px column. "
-            "Shorten it, or drop the headline size in render()."
+            f"The text needs {stack_h}px of a {bottom - top}px column. "
+            "Shorten the subline, or drop a size in render()."
         )
 
     y = top + (bottom - top - stack_h) // 2
-    for text, font, colour in head_lines:
-        draw.text((pad, y), text, font=font, fill=colour)
-        y += HEAD_LEADING
+
+    draw.text((pad, y), brand, font=brand_font, fill=GREEN)
+    y += BRAND_LEADING
 
     y += RULE_GAP
     zigzag(draw, pad, y + RULE_BAND // 2, 148, 7, 18, AMBER)
     y += RULE_BAND + SUB_GAP
 
     for line in sub_lines:
-        draw.text((pad, y), line, font=sub_font, fill=MUTED)
+        draw.text((pad, y), line, font=sub_font, fill=INK)
         y += SUB_LEADING
+
+    # Both of the bottom two lines are drawn from their baseline, which is what
+    # keeps the Amharic and Latin runs of the script line sitting on the same
+    # line rather than each on its own box's top edge.
+    y += SCRIPT_GAP
+    draw_runs(
+        draw, (pad, y + SCRIPT_LEADING - 8), SCRIPT_LINE, script_latin, script_eth, GREEN
+    )
+    y += SCRIPT_LEADING
+
+    y += OFFER_GAP
+    draw.text((pad, y + OFFER_LEADING - 8), OFFER_LINE, font=offer_font, fill=MUTED, anchor="ls")
+    y += OFFER_LEADING
 
     # Footer, pinned to the bottom rather than following the text, so it sits
     # in the same place whatever the title does to the block above it.
@@ -273,7 +372,8 @@ def render(title: str) -> Image.Image:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--title", default=TITLE, help="Headline; should match og:title.")
+    ap.add_argument("--title", default=TITLE, help="The brand word: the loudest line.")
+    ap.add_argument("--subline", default=SUBLINE, help="What it is, under the brand.")
     ap.add_argument("--out", default=str(OUT), help="Where to write the PNG.")
     ap.add_argument(
         "--check",
@@ -282,7 +382,7 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    img = render(args.title)
+    img = render(args.title, args.subline)
     out = Path(args.out)
 
     if args.check:
@@ -294,13 +394,23 @@ def main() -> int:
         same = hashlib.sha256(fresh).digest() == hashlib.sha256(current).digest()
         print(
             f"{'OK    ' if same else 'STALE '}{out.name} "
-            f"{'matches' if same else 'does not match'} title {args.title!r}"
+            f"{'matches' if same else 'does not match'} "
+            f"{args.title!r} / {args.subline!r}"
         )
         return 0 if same else 1
 
     out.parent.mkdir(parents=True, exist_ok=True)
     img.save(out, "PNG", optimize=True)
-    print(json.dumps({"wrote": str(out), "size": out.stat().st_size, "title": args.title}))
+    print(
+        json.dumps(
+            {
+                "wrote": str(out),
+                "size": out.stat().st_size,
+                "title": args.title,
+                "subline": args.subline,
+            }
+        )
+    )
     return 0
 
 
