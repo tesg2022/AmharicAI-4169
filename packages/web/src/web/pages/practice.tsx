@@ -31,7 +31,7 @@ import {
   TibebRule,
   Translit,
 } from "../components/ui/kit";
-import { useSeo } from "../hooks/use-seo";
+import { ORIGIN, useSeo } from "../hooks/use-seo";
 
 /**
  * Practice hub: the review deck, pronunciation drills and the word list.
@@ -39,12 +39,31 @@ import { useSeo } from "../hooks/use-seo";
  * duplicated here — this page is for the cross-lesson practice modes.
  */
 
+/**
+ * Described as a practice resource rather than as a graded assessment, and
+ * deliberately silent on speech recognition: the recognizer ladder ends in a
+ * typed self-check when no provider key is configured, which is the case here.
+ */
+const PRACTICE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "@id": `${ORIGIN}/practice#resource`,
+  name: "Amharic pronunciation practice and review drills",
+  url: `${ORIGIN}/practice`,
+  learningResourceType: "Practice exercise",
+  educationalLevel: "Beginner",
+  teaches: "Amharic pronunciation, vocabulary recall and reading the Fidel",
+  inLanguage: ["en", "am"],
+  isPartOf: { "@id": `${ORIGIN}/app#course` },
+};
+
 export default function PracticePage() {
   useSeo({
-    title: "Practice — quizzes, flashcards and speaking drills",
+    title: "Amharic pronunciation practice — drills, flashcards and quizzes",
     description:
-      "Practise what you have studied: lesson quizzes, spaced-repetition flashcards and speaking drills.",
+      "Practise Amharic out loud with a read, listen, repeat and speak loop, then hold the words with spaced-repetition flashcards and lesson quizzes.",
     path: "/practice",
+    jsonLd: PRACTICE_JSON_LD,
   });
 
   const outline = useOutline();
@@ -70,6 +89,11 @@ export default function PracticePage() {
         </div>
         <h1 className="text-3xl font-bold md:text-4xl">Drill what you have learnt</h1>
         <TibebRule className="max-w-44" />
+        <p className="max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
+          Three ways to practise Amharic, all drawing on the same course material: a pronunciation
+          loop that walks one phrase from reading to speaking, a spaced-repetition deck that brings
+          words back before you forget them, and the quiz at the end of each lesson.
+        </p>
       </header>
 
       {/* Review deck */}
@@ -106,6 +130,59 @@ export default function PracticePage() {
       <QuizLauncher lessons={lessons} />
 
       <WordList />
+
+      {/* Explanatory content + the Practice → Dictionary link in the chain. */}
+      <section className="space-y-4">
+        <h2 className="font-display text-xl font-bold">
+          How Amharic pronunciation practice works here
+        </h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="space-y-2">
+            <h3 className="font-semibold">One phrase, five stages</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Each prompt withholds the next step until the one before it is done: read the Fidel,
+              hear it, shadow it, then say it alone. Recording before listening only records a
+              guess, so the microphone appears last.
+            </p>
+          </Card>
+          <Card className="space-y-2">
+            <h3 className="font-semibold">Scored against the target text</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Your take is compared with the written Amharic and scored on how far apart they are.
+              When no speech recognizer is available — which is the case in this build — the same
+              scorer runs on a typed self-check instead, so the score is still real.
+            </p>
+          </Card>
+          <Card className="space-y-2">
+            <h3 className="font-semibold">Review that spaces itself</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Words added from a lesson page enter the review deck and come back at widening
+              intervals. Signing in keeps the schedule; without an account the drills still run,
+              they just are not saved.
+            </p>
+          </Card>
+        </div>
+        <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          Practice only works on material you have already met, so if a prompt looks unfamiliar go
+          back to the{" "}
+          <Link to="/fidel" className="font-medium text-primary hover:underline">
+            Amharic Fidel chart
+          </Link>{" "}
+          or the{" "}
+          <Link to="/app" className="font-medium text-primary hover:underline">
+            Amharic lessons
+          </Link>{" "}
+          first. To check a single word rather than drill it, search the{" "}
+          <Link to="/dictionary" className="font-medium text-primary hover:underline">
+            Amharic dictionary online
+          </Link>
+          , and see{" "}
+          <Link to="/features" className="font-medium text-primary hover:underline">
+            what is configured
+          </Link>{" "}
+          for the current status of audio and speech recognition.
+        </p>
+      </section>
     </div>
   );
 }

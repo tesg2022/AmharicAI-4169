@@ -3,8 +3,40 @@ import { ArrowRight, BookOpen, CheckCircle2, Flame, GraduationCap, Layers, Spark
 import { useCourseStats, useOutline } from "../queries/content";
 import { useLessonProgress, useMyProgress } from "../queries/progress";
 import { useSession } from "../hooks/use-session";
-import { useSeo } from "../hooks/use-seo";
+import { ORIGIN, useSeo } from "../hooks/use-seo";
 import { Am, Card, Chip, ErrorState, Loading, ProgressBar, TibebRule } from "../components/ui/kit";
+
+/**
+ * The course, as structured data. Kept to what is true of the deployed build:
+ * the course is written and the first units are free, so `isAccessibleForFree`
+ * is stated on the free part rather than on the whole thing.
+ */
+const COURSE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "@id": `${ORIGIN}/app#course`,
+  url: `${ORIGIN}/app`,
+  name: "Amharic Language — Beginner",
+  description:
+    "Amharic lessons for beginners: the ፊደል syllabary, pronunciation for English speakers, everyday vocabulary, dialogue and grammar, unit by unit.",
+  inLanguage: "en",
+  teaches: "Reading, pronouncing and using beginner Amharic, the Ethiopian language",
+  educationalLevel: "Beginner",
+  provider: { "@type": "Organization", name: "AmharicAI", url: `${ORIGIN}/` },
+  hasCourseInstance: {
+    "@type": "CourseInstance",
+    courseMode: "online",
+    courseWorkload: "PT30M",
+    inLanguage: "en",
+  },
+  offers: {
+    "@type": "Offer",
+    category: "Free",
+    price: "0",
+    priceCurrency: "ZAR",
+    description: "The ፊደል, the pronunciation guide and the first two units are free.",
+  },
+};
 
 /**
  * Course browser — the unit path.
@@ -20,10 +52,11 @@ export default function IndexPage() {
   const lessonProgress = useLessonProgress(isSignedIn);
 
   useSeo({
-    title: "The course — every unit, lesson by lesson",
+    title: "Amharic lessons for beginners — the full course, unit by unit",
     description:
-      "Browse the AmharicAI beginner course: the ፊደል syllabary, pronunciation, vocabulary and grammar, unit by unit.",
+      "Work through Amharic lessons written for beginners: the ፊደል syllabary, pronunciation, everyday vocabulary, dialogue and grammar, one unit at a time. Each lesson carries an English gloss, and the first two units are free.",
     path: "/app",
+    jsonLd: COURSE_JSON_LD,
   });
 
   const doneIds = new Set(
@@ -124,6 +157,98 @@ export default function IndexPage() {
             <Stat label="Drills" value={stats.data?.practiceQuestions} />
           </div>
         </Card>
+      </section>
+
+      {/* What a lesson is made of, plus the honest state of translation. Both
+          are here because this is the page a visitor searching for "Amharic
+          lessons" lands on, and neither is obvious from a list of unit cards. */}
+      <section className="space-y-5">
+        <div>
+          <h2 className="text-xl font-bold">What each Amharic lesson contains</h2>
+          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Lessons are written, not filmed — you read them at your own pace and come back to
+            them as reference. Every one is built from the same beginner textbook and keeps the
+            source wording rather than paraphrasing it.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Card className="space-y-2">
+            <h3 className="font-display text-base font-bold">Words with English glosses</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Each vocabulary row shows the <Am>ፊደል</Am> spelling, a transliteration and the
+              English meaning, so nothing depends on guessing.
+            </p>
+          </Card>
+          <Card className="space-y-2">
+            <h3 className="font-display text-base font-bold">Dialogue you can replay</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Short exchanges — greeting someone, introducing yourself, ordering food — line by
+              line, with the English beside them.
+            </p>
+          </Card>
+          <Card className="space-y-2">
+            <h3 className="font-display text-base font-bold">Grammar, stated as rules</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Pronouns, verb stems and the patterns behind them, written out with the examples
+              the source uses rather than invented ones.
+            </p>
+          </Card>
+          <Card className="space-y-2">
+            <h3 className="font-display text-base font-bold">A quiz at the end</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Questions generated from that lesson's own material, so passing means you read the
+              lesson and not a general knowledge round.
+            </p>
+          </Card>
+        </div>
+
+        {/* Amharic translation, as it actually exists in this build. */}
+        <Card className="space-y-2.5">
+          <h3 className="font-display text-lg font-bold">Amharic translation inside the course</h3>
+          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            Every Amharic line in a lesson — vocabulary, dialogue, grammar examples — carries its
+            English translation alongside it, on every plan including the free one. That is what
+            translation means here: the course material is glossed for you as you read, so you are
+            never left staring at a sentence with no way in.
+          </p>
+          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            Translating your own arbitrary text is a separate, paid-plan feature, and it is
+            currently listed as not configured — it needs a translation provider this deployment
+            has not been given. We say so rather than shipping a box that silently returns
+            nothing.
+          </p>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 pt-0.5">
+            <Link
+              to="/features"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+            >
+              Check the translation status <ArrowRight className="size-3.5" />
+            </Link>
+            <Link
+              to="/dictionary"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+            >
+              Search the Amharic dictionary <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
+        </Card>
+
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          New to the script? Start on the{" "}
+          <Link to="/fidel" className="font-medium text-primary hover:underline">
+            Amharic Fidel chart
+          </Link>
+          , then the{" "}
+          <Link to="/pronunciation" className="font-medium text-primary hover:underline">
+            pronunciation guide
+          </Link>
+          . Once a unit is behind you, drill it on the{" "}
+          <Link to="/practice" className="font-medium text-primary hover:underline">
+            practice page
+          </Link>
+          .
+        </p>
       </section>
 
       {/* Unit path */}

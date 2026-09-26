@@ -12,7 +12,10 @@ import { useEffect } from "react";
  */
 
 const SITE_NAME = "AmharicAI";
-const ORIGIN = "https://amharicai.org";
+export const ORIGIN = "https://amharicai.org";
+
+/** The one script tag this hook owns, so a route change replaces it rather than stacking. */
+const JSON_LD_ID = "seo-json-ld";
 
 function upsertMeta(selector: string, attr: "name" | "property", key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(selector);
@@ -34,6 +37,25 @@ function upsertLink(rel: string, href: string) {
   el.setAttribute("href", href);
 }
 
+/**
+ * Writes the page's structured data, replacing whatever the previous route
+ * left behind. The static Organization block in index.html is deliberately
+ * left alone: it describes the site, this describes the page.
+ */
+function upsertJsonLd(data: unknown) {
+  const existing = document.getElementById(JSON_LD_ID);
+  if (data === undefined || data === null) {
+    existing?.remove();
+    return;
+  }
+  const el =
+    (existing as HTMLScriptElement | null) ?? document.createElement("script");
+  el.id = JSON_LD_ID;
+  el.setAttribute("type", "application/ld+json");
+  el.textContent = JSON.stringify(data);
+  if (!existing) document.head.appendChild(el);
+}
+
 export interface Seo {
   title: string;
   description: string;
@@ -47,9 +69,20 @@ export interface Seo {
    * "AmharicAI — ..." rather than burying the brand at the end.
    */
   exactTitle?: boolean;
+  /**
+   * schema.org JSON-LD for this page — an object or an array of them. Only
+   * ever describe what the deployed build really does: a Course entry for a
+   * course that is not written, or an FAQ answer the page does not give, is a
+   * structured-data penalty waiting to happen.
+   *
+   * Pass a stable value (module constant, or memoised) — it is serialised on
+   * every change, and a fresh object literal per render would rewrite the tag
+   * on every render.
+   */
+  jsonLd?: unknown;
 }
 
-export function useSeo({ title, description, path, noIndex, exactTitle }: Seo) {
+export function useSeo({ title, description, path, noIndex, exactTitle, jsonLd }: Seo) {
   useEffect(() => {
     const full =
       exactTitle || title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
@@ -82,5 +115,7 @@ export function useSeo({ title, description, path, noIndex, exactTitle }: Seo) {
       // URL can never resolve against a non-canonical host.
       upsertMeta('meta[name="twitter:url"]', "name", "twitter:url", `${ORIGIN}${path}`);
     }
-  }, [title, description, path, noIndex, exactTitle]);
+
+    upsertJsonLd(jsonLd);
+  }, [title, description, path, noIndex, exactTitle, jsonLd]);
 }

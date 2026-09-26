@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
+import { Link } from "wouter";
 import { Search, Type } from "lucide-react";
 import { useFidel } from "../queries/content";
-import { useSeo } from "../hooks/use-seo";
+import { ORIGIN, useSeo } from "../hooks/use-seo";
 import {
   Am,
   Card,
@@ -21,15 +22,37 @@ import {
  * point — learners read down a column to hear one vowel across consonants.
  */
 
+/**
+ * The chart is a real, free-to-read learning resource, so it is described as
+ * one. Nothing here claims audio always plays — that depends on a TTS host
+ * being configured, and /features reports the truth about it.
+ */
+const FIDEL_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "@id": `${ORIGIN}/fidel#resource`,
+  name: "Amharic Fidel chart — the complete ፊደል alphabet",
+  url: `${ORIGIN}/fidel`,
+  learningResourceType: "Reference chart",
+  educationalLevel: "Beginner",
+  teaches: "Amharic Fidel (ፊደል), the alphabet of the Ethiopian language",
+  inLanguage: ["en", "am"],
+  isAccessibleForFree: true,
+  isPartOf: { "@id": `${ORIGIN}/app#course` },
+};
+
 export default function FidelPage() {
   const fidel = useFidel();
   const [query, setQuery] = useState("");
 
   useSeo({
-    title: "The ፊደል — all 34 consonants across seven vowel orders",
+    // No "with audio" here: playback needs a TTS host this build has not been
+    // given, so the title promises only what the page certainly shows.
+    title: "Amharic Fidel — the complete ፊደል alphabet chart",
     description:
-      "The full Amharic syllabary as a grid: every base consonant through its seven vowel orders, with transliteration and audio.",
+      "Read the Amharic alphabet as it is actually written: all 34 Fidel consonants across their seven vowel orders, each with transliteration, in one scrollable chart.",
     path: "/fidel",
+    jsonLd: FIDEL_JSON_LD,
   });
 
   const [selected, setSelected] = useState<{
@@ -69,8 +92,10 @@ export default function FidelPage() {
         </h1>
         <TibebRule className="max-w-44" />
         <p className="max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-          Amharic is written in an abugida: every symbol is a consonant plus a vowel. Each row below
-          is one consonant, each column one of the seven vowel orders. Tap any letter to hear it.
+          The Amharic alphabet is not an alphabet in the European sense — it is an abugida, where
+          every symbol carries a consonant and a vowel together. Each row below is one consonant,
+          each column one of the seven vowel orders. Tap any letter to see it enlarged with its
+          transliteration.
         </p>
       </header>
 
@@ -183,6 +208,56 @@ export default function FidelPage() {
         />
         <span>Ordered as the source manual presents them.</span>
       </Card>
+
+      {/* Explanatory content + the Fidel link in the Learn → Fidel → Lessons chain. */}
+      <section className="space-y-4">
+        <h2 className="font-display text-xl font-bold">How to read the Amharic Fidel chart</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="space-y-2">
+            <h3 className="font-semibold">Read across for one consonant</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              A row takes a single sound — say <Translit>h</Translit> — through all seven vowels:{" "}
+              <Am>ሀ ሁ ሂ ሃ ሄ ህ ሆ</Am>. The consonant never changes; only the small marks hanging off
+              it do.
+            </p>
+          </Card>
+          <Card className="space-y-2">
+            <h3 className="font-semibold">Read down for one vowel</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              A column holds one vowel order across every consonant. Reading down is the fastest way
+              to hear what a vowel order does, because the vowel is the only thing held constant.
+            </p>
+          </Card>
+          <Card className="space-y-2">
+            <h3 className="font-semibold">Learn the sixth order early</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              The sixth order is the bare consonant — no vowel, or a very short one. It turns up
+              constantly in real words, so it is worth recognising before you memorise the rest.
+            </p>
+          </Card>
+        </div>
+        <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          The Fidel is the first thing to learn in the Ethiopian language, because every lesson after
+          it is written in this script rather than in transliteration. Once the shapes stop being
+          unfamiliar, work through the{" "}
+          <Link to="/pronunciation" className="font-medium text-primary hover:underline">
+            pronunciation guide
+          </Link>{" "}
+          for the sounds the chart cannot show you, then start the{" "}
+          <Link to="/app" className="font-medium text-primary hover:underline">
+            Amharic lessons for beginners
+          </Link>
+          . To drill the letters instead of reading them, use{" "}
+          <Link to="/practice" className="font-medium text-primary hover:underline">
+            Amharic pronunciation practice
+          </Link>
+          , and to look a word up in the script, search the{" "}
+          <Link to="/dictionary" className="font-medium text-primary hover:underline">
+            Amharic dictionary
+          </Link>
+          .
+        </p>
+      </section>
     </div>
   );
 }

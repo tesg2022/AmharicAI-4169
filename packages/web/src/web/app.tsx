@@ -13,6 +13,7 @@ import PronunciationPage from "./pages/pronunciation";
 import QuizPage from "./pages/quiz";
 import FlashcardsPage from "./pages/flashcards";
 import PracticePage from "./pages/practice";
+import DictionaryPage from "./pages/dictionary";
 import TutorPage from "./pages/tutor";
 import ProgressPage from "./pages/progress";
 import SignInPage from "./pages/sign-in";
@@ -38,6 +39,7 @@ function App() {
           <Route path="/fidel" component={FidelPage} />
           <Route path="/pronunciation" component={PronunciationPage} />
           <Route path="/practice" component={PracticePage} />
+          <Route path="/dictionary" component={DictionaryPage} />
           <Route path="/flashcards" component={FlashcardsPage} />
           <Route path="/quiz/:lessonId" component={QuizPage} />
           <Route path="/tutor" component={TutorPage} />

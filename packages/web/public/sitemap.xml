@@ -49,6 +49,18 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://amharicai.org/practice</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amharicai.org/dictionary</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://amharicai.org/about</loc>
     <lastmod>2026-09-12</lastmod>
     <changefreq>yearly</changefreq>

@@ -6,6 +6,7 @@ import {
   BookOpen,
   Flame,
   Globe,
+  Library,
   LogIn,
   MessageCircle,
   Smartphone,
@@ -30,6 +31,7 @@ const APP_NAV: NavItem[] = [
   { to: "/fidel", label: "ፊደል", icon: Type, amharic: true },
   { to: "/pronunciation", label: "Pronunciation", icon: AudioLines },
   { to: "/practice", label: "Practice", icon: Sparkles },
+  { to: "/dictionary", label: "Dictionary", icon: Library },
   { to: "/tutor", label: "AI Tutor", icon: MessageCircle },
   { to: "/progress", label: "Progress", icon: User },
   { to: "/subscription", label: "Plan", icon: BadgeCheck },
@@ -55,6 +57,10 @@ const SHARED_ROUTES = new Set(["/privacy", "/terms", "/about", "/contact"]);
 
 const LEGAL_LINKS = [
   { to: "/features", label: "Features" },
+  // In the footer as well as the study nav: the footer is on every page,
+  // including the marketing pages that never show the study nav, so this is
+  // the one internal link that reaches the dictionary from anywhere.
+  { to: "/dictionary", label: "Amharic dictionary" },
   { to: "/pricing", label: "Pricing" },
   { to: "/faq", label: "FAQ" },
   { to: "/download", label: "Get the app" },
